@@ -9,8 +9,8 @@
  *
  * @author smarkoski
  */
-define('URI_COMMAND', 0);
-define('URI_ARG0', 1);
+define('URI_COMMAND', 1);
+define('URI_ARG0', 2);
 
 class URIHelper {
 

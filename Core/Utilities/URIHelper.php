@@ -9,8 +9,11 @@
  *
  * @author smarkoski
  */
+define('URI_COMMAND', 0);
+define('URI_ARG0', 1);
+
 class URIHelper {
-    
+
     /**
      * Get a sanitized version of the request URI
      * 
@@ -24,16 +27,28 @@ class URIHelper {
     public static function getURIArray()
     {
         $uri = self::getRequestURI();
-        $uri = preg_replace('@\/$@', '', $uri);
+        $uri = preg_replace('@^\/|\/$@', '', $uri);
         $array = explode('/', $uri);
 
         return $array;
     }
 
+    /**
+     *
+     * @param int $index
+     * @throws URIAccessException If the specified element index does not exist
+     */
     public static function getURIElementAtIndex($index)
     {
         $uri = self::getURIArray();
-
+        try
+        {
+            $element = $uri[$index];
+        } catch (Exception $e)
+        {
+            throw new URIAccessException('The URI element '.$index.' does not exist');
+        }
+        return $element;
     }
 
 }

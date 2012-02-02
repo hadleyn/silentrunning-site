@@ -13,7 +13,24 @@ class Loader {
 
     public static function loadException($e)
     {
+        $file = 'Core/Exceptions/'.$e.'.php';
+        if (file_exists($file))
+        {
+            require_once $file;
+        }
+    }
 
+    public static function loadUtility($e)
+    {
+        $file = 'Core/Utilities/'.$e.'.php';
+        if (file_exists($file))
+        {
+            require_once $file;
+        }
+        else
+        {
+            return false;
+        }
     }
 
 }

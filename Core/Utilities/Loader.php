@@ -27,14 +27,17 @@ class Loader {
     }
 
     public static function loadController($e) {
-        $file = 'Core/Controllers/' . $e . '.php';
+        $file = 'App/Controllers/' . $e . '.controller.php';
         if (file_exists($file)) {
             require_once $file;
-        } else {
-            $file = 'App/Controllers/' . $e . '.php';
-            if (file_exists($file)) {
-                require_once $file;
-            }
+        }
+    }
+
+    public static function loadView($v) {
+        $file = 'App/Views/' . $v . '.view.php';
+        if (file_exists($file))
+        {
+            require_once $file;
         }
     }
 

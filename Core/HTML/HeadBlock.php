@@ -1,6 +1,7 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <title><?php echo $htmlTitle; ?></title>
+    <title><?php echo $title; ?></title>
     <?php foreach ($css as $c): ?>
         <link type="text/css" media="screen" rel="stylesheet" href="<?php echo $c; ?> "/>
     <?php endforeach; ?>

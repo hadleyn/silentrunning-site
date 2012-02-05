@@ -1,3 +1,3 @@
 #!/bin/bash
 cd ..
-rsync -va --exclude=".git" sr/ /var/www/sr/
+rsync -va --delete --exclude=".git" sr/ /var/www/sr/

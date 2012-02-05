@@ -4,6 +4,8 @@
  * This is the main bootstrap for the SilentRunning Framework
  */
 require_once 'Core/Controllers/CoreController.php';
+require_once 'Core/Utilities/Configuration.php';
+require_once 'Core/Config/core_config.php';
 require_once 'Core/Utilities/Loader.php';
 require_once 'App/Config/config.php';
 
@@ -12,15 +14,16 @@ spl_autoload_extensions('.php');
 spl_autoload_register(array('Loader', 'loadException'));
 spl_autoload_register(array('Loader', 'loadUtility'));
 spl_autoload_register(array('Loader', 'loadController'));
+spl_autoload_register(array('Loader', 'loadTask'));
 
 $uriArray = URIHelper::getURIArray();
 
 //Shift off the basepath and discard it
-foreach ($config['basepath'] as $c) {
+foreach (Configuration::read('basepath') as $c) {
     $devnull = array_shift($uriArray);
 }
 
-if (!$config['mod_rewrite_enabled']) {
+if (!Configuration::read('mod_rewrite_enabled')) {
     $devnull = array_shift($uriArray);
 }
 
@@ -28,19 +31,31 @@ $controller = array_shift($uriArray);
 $method = array_shift($uriArray);
 $arguments = $uriArray;
 
-echo 'controller: ' . $controller;
 $controllerFile = 'App/Controllers/' . $controller . '.controller.php';
 
 if (file_exists($controllerFile)) {
     $mainController = new $controller();
 } else if (empty($controller)) {
     //Load the default controller
-    $mainController = new $config['defaultController']();
+    $defaultController = Configuration::read('defaultController');
+    $mainController = new $defaultController();
 } else {
     die('Missing controller: ' . $controllerFile);
 }
 
 //Now begin the controller chain
+
+/*
+ * Look for any pre-launch tasks
+ */
+$preLaunch = scandir('App/Tasks');
+foreach ($preLaunch as $pre){
+    if (preg_match('/prelaunch\.php$/', $pre) > 0){
+        $pre = preg_replace('/\..*$/', '', $pre);
+        $task = new $pre();
+        $task->execute();
+    }
+}
 
 /*
  * Precontroller methods are first. These methods are expected to do any work that

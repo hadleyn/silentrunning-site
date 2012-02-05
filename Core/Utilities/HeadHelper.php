@@ -21,18 +21,27 @@ class HeadHelper {
         $this->css = array();
         $this->script = array();
         $this->meta = array();
+        $this->htmlTitle = '';
     }
 
     public function setTitle($title) {
         $this->htmlTitle = $title;
     }
 
-    public function addCSS($css) {
-        $this->css[] = $css;
+    public function addCSS($css, $absolute=FALSE) {
+        if (!$absolute) {
+            $this->css[] = 'Webroot/css/' . $css . '.css';
+        } else {
+            $this->css[] = $css;
+        }
     }
 
-    public function addScript($script) {
-        $this->script[] = $script;
+    public function addScript($script, $absolute=FALSE) {
+        if (!$absolute) {
+            $this->script[] = 'Webroot/js/'.$script.'.js';
+        } else {
+            $this->script[] = $script;
+        }
     }
 
     public function addMeta($name, $data) {
@@ -46,7 +55,7 @@ class HeadHelper {
         $temp['meta'] = $this->meta;
         $temp['title'] = $this->htmlTitle;
         extract($temp);
-        include 'Core/HTML/HeaderBlock.php';
+        include 'Core/HTML/HeadBlock.php';
         $head = ob_get_contents();
         ob_end_clean();
 

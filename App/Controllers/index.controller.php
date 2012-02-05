@@ -11,14 +11,17 @@
  */
 class index extends CoreController implements ICoreController {
 
-
-    public function invoke(){
-        echo '<h2>Welcome to the silentrunning framework!</h2>';
-        print_r(func_get_args());
+    protected function header(){
+        $this->loadView('includes/header');
     }
 
-    public function method_invoke(){
-        echo 'an overriden method!';
+    protected function footer(){
+        $this->loadView('includes/footer');
+    }
+
+
+    public function invoke(){
+        $this->loadView('index');
     }
 
 

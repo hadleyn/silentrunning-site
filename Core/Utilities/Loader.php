@@ -13,30 +13,41 @@
 class Loader {
 
     public static function loadException($e) {
-        $file = 'Core/Exceptions/' . $e . '.php';
+        $file = Configuration::read('exception_path') . $e . '.php';
         if (file_exists($file)) {
             require_once $file;
         }
     }
 
     public static function loadUtility($e) {
-        $file = 'Core/Utilities/' . $e . '.php';
+        $file = Configuration::read('utility_path') . $e . '.php';
         if (file_exists($file)) {
             require_once $file;
         }
     }
 
     public static function loadController($e) {
-        $file = 'App/Controllers/' . $e . '.controller.php';
+        $file = Configuration::read('controller_path') . $e . '.controller.php';
         if (file_exists($file)) {
             require_once $file;
         }
     }
 
-    public static function loadView($v) {
-        $file = 'App/Views/' . $v . '.view.php';
-        if (file_exists($file))
-        {
+    public static function loadView($v, $viewData=NULL, $absolutePath=FALSE) {
+        $file = Configuration::read('view_path') . $v . '.view.php';
+        if (file_exists($file)) {
+            extract($viewData);
+            include $file;
+        }
+    }
+
+    public static function loadTask($t) {
+        $file = Configuration::read('task_path') . $t . '.precontroller.php';
+        if (file_exists($file)) {
+            require_once $file;
+        }
+        $file = Configuration::read('task_path') . $t . '.postcontroller.php';
+        if (file_exists($file)) {
             require_once $file;
         }
     }

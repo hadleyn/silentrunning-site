@@ -55,8 +55,8 @@ abstract class CoreController implements ICoreController {
             ob_start();
             call_user_func_array(array($this, $method), $arguments);
             $result = ob_get_contents();
-            ob_end_clean();
         }
+        ob_clean();
         return $result;
     }
 

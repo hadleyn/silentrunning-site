@@ -12,8 +12,13 @@
  */
 class FooterBuilder implements Task {
 
+    public function __construct(){
+        
+    }
+
     public function execute() {
         $indexController = new index();
+        echo $indexController->bufferedControllerCall('sidebar');
         echo $indexController->bufferedControllerCall('footer');
     }
 

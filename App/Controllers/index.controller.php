@@ -19,6 +19,10 @@ class index extends CoreController implements ICoreController {
         $this->loadView('includes/footer');
     }
 
+    protected function sidebar(){
+        $this->loadView('includes/sidebar');
+    }
+
 
     public function invoke(){
         $this->loadView('index');

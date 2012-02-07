@@ -19,7 +19,7 @@ spl_autoload_register(array('Loader', 'loadTask'));
 $uriArray = URIHelper::getURIArray();
 
 //Shift off the basepath and discard it
-foreach (Configuration::read('basepath') as $c) {
+if (Configuration::read('basepath') != '') {
     $devnull = array_shift($uriArray);
 }
 

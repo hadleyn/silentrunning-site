@@ -10,8 +10,6 @@
 				</div>
 				<!-- end #sidebar -->
 				<div style="clear: both;">&nbsp;</div>
-			</div>
-		</div>
 	</div>
 	<!-- end #page -->
 </div> <!-- end the wrapper> -->

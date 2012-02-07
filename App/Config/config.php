@@ -7,9 +7,9 @@
  * The basepath configuration variable represents the directory where the 
  * bootstrap will be located. Leave blank if the bootstrap is in the root.
  */
-$basepath = array();
+$basepath = '';
 if (preg_match('/localhost/i', $_SERVER['SERVER_NAME']) > 0){
-    $basepath = array('sr');
+    $basepath = 'sr/';
 }
 Configuration::write('basepath', $basepath);
 

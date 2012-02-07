@@ -14,7 +14,7 @@ Configuration::write('basepath', array('sr'));
  * If you rewrite the URLs to remove the index.php from them, you should set
  * this to TRUE.
  */
-Configuration::write('mod_rewrite_enabled', FALSE);
+Configuration::write('mod_rewrite_enabled', TRUE);
 
 /**
  * Default Controller is the controller that is loaded when no controller

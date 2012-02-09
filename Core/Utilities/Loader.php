@@ -50,6 +50,14 @@ class Loader {
         if (file_exists($file)) {
             require_once $file;
         }
+        $file = Configuration::read('task_path') . $t . '.prelaunch.php';
+        if (file_exists($file)) {
+            require_once $file;
+        }
+        $file = Configuration::read('task_path') . $t . '.postlaunch.php';
+        if (file_exists($file)) {
+            require_once $file;
+        }
     }
 
 }

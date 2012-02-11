@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : core_config.xml
+    Created on : February 11, 2012, 4:16 PM
+    Author     : smarkoski
+    Description:
+        Purpose of the document follows.
+-->
+
+<!DOCTYPE Base PUBLIC '-//DTD XCatalog//EN' 'null'>
+<coreconfig>
+    
+    <paths>
+        <path name="view_path">App/Views/</path>
+    </paths>
+
+
+</coreconfig>

@@ -27,6 +27,8 @@ class Bootstrap {
     public function __construct() {
         $this->createSPLAutoloaders();
 
+        $this->loadCoreConfig();
+
         $this->uri = URIHelper::getURIArray();
 
         $this->prepareURI();
@@ -148,6 +150,15 @@ class Bootstrap {
             default: call_user_func_array(array($c, $a), $p);
                 break;
         }
+    }
+
+    private function loadCoreConfig() {
+        $filename = 'Core/Config/core_config.xml';
+        $fp = fopen($filename, 'r');
+        $xmlstr = fread($fp, filesize($filename));
+        fclose($fp);
+        $sxml = new SimpleXMLElement($xmlstr);
+        print_r($sxml->paths->path['view_path']);
     }
 
 }

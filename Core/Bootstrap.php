@@ -157,12 +157,22 @@ class Bootstrap {
         $xmlstr = fread($fp, filesize($filename));
         fclose($fp);
         $sxml = new SimpleXMLElement($xmlstr);
-        $this->writePaths($sxml);
+        $this->pathsConfig($sxml);
+        $this->databaseConfig($sxml);
     }
 
-    private function writePaths($sxml) {
+    private function pathsConfig($sxml) {
         foreach ($sxml->paths->path as $path) {
             Configuration::write((string)$path['name'], $path);
+        }
+    }
+
+    private function databaseConfig($sxml) {
+        foreach ($sxml->database as $db){
+            Configuration::write('db_host', $db->host);
+            Configuration::write('db_name', $db->databasename);
+            Configuration::write('db_username', $db->username);
+            Configuration::write('db_password', $db->password);
         }
     }
 

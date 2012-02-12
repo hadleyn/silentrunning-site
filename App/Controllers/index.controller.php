@@ -25,6 +25,8 @@ class index extends CoreController implements ICoreController {
 
 
     public function invoke(){
+        $db = DB::instance();
+        $db->query('INSERT INTO test (val) VALUES (?)', array('s'), array('hello'));
         $this->loadView('index');
     }
 

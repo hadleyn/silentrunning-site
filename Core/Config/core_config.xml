@@ -10,10 +10,13 @@
 
 <!DOCTYPE Base PUBLIC '-//DTD XCatalog//EN' 'null'>
 <coreconfig>
-    
+
     <paths>
         <path name="view_path">App/Views/</path>
+        <path name="controller_path">App/Controllers/</path>
+        <path name="utility_path">Core/Utilities/</path>
+        <path name="task_path">App/Tasks/</path>
+        <path name="exception_path">Core/Exceptions/</path>
     </paths>
-
 
 </coreconfig>

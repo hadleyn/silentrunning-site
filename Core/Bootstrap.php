@@ -6,7 +6,6 @@
  */
 require_once 'Core/Controllers/CoreController.php';
 require_once 'Core/Utilities/Configuration.php';
-require_once 'Core/Config/core_config.php';
 require_once 'Core/Utilities/Loader.php';
 require_once 'App/Config/config.php';
 
@@ -158,7 +157,13 @@ class Bootstrap {
         $xmlstr = fread($fp, filesize($filename));
         fclose($fp);
         $sxml = new SimpleXMLElement($xmlstr);
-        print_r($sxml->paths->path['view_path']);
+        $this->writePaths($sxml);
+    }
+
+    private function writePaths($sxml) {
+        foreach ($sxml->paths->path as $path) {
+            Configuration::write((string)$path['name'], $path);
+        }
     }
 
 }

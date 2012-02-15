@@ -29,7 +29,7 @@ class URIHelper {
 
     public static function getURIArray() {
         $uri = self::getRequestURI();
-        $uri = preg_replace('@^\/|\/|\?.*$@', '', $uri);
+        $uri = preg_replace('@^\/|\/$|\?.*$@', '', $uri);
         $array = explode('/', $uri);
 
         return $array;

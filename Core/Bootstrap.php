@@ -78,7 +78,7 @@ class Bootstrap {
     }
 
     private function instantiateController() {
-        $this->controllerFile = 'App/Controllers/' . $this->controller . '.controller.php';
+        $this->controllerFile = Configuration::read('controller_path') . $this->controller . '.controller.php';
 
         if (file_exists($this->controllerFile)) {
             $this->controllerObject = new $this->controller();
@@ -95,7 +95,7 @@ class Bootstrap {
         /*
          * Look for any pre-launch tasks
          */
-        $preLaunch = scandir('App/Tasks');
+        $preLaunch = scandir(Configuration::read('task_path'));
         foreach ($preLaunch as $pre) {
             if (preg_match('/prelaunch\.php$/', $pre) > 0) {
                 $pre = preg_replace('/\..*$/', '', $pre);

@@ -24,7 +24,7 @@ abstract class CoreController implements ICoreController {
     }
 
     public function precontroller() {
-        $preController = scandir('App/Tasks');
+        $preController = scandir(Configuration::read('task_path'));
         foreach ($preController as $pre) {
             if (preg_match('/precontroller\.php$/', $pre) > 0) {
                 $pre = preg_replace('/\..*$/', '', $pre);
@@ -39,7 +39,7 @@ abstract class CoreController implements ICoreController {
     }
 
     public function postcontroller() {
-        $postController = scandir('App/Tasks');
+        $postController = scandir(Configuration::read('task_path'));
         foreach ($postController as $post) {
             if (preg_match('/postcontroller.php$/', $post) > 0) {
                 $post = preg_replace('/\..*$/', '', $post);

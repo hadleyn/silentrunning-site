@@ -7,7 +7,6 @@
 require_once 'Core/Controllers/CoreController.php';
 require_once 'Core/Utilities/Configuration.php';
 require_once 'Core/Utilities/Loader.php';
-require_once 'App/Config/config.php';
 
 /**
  * Description of Bootstrap
@@ -24,9 +23,11 @@ class Bootstrap {
     private $controllerObject;
 
     public function __construct() {
-        $this->createSPLAutoloaders();
-
         $this->loadCoreConfig();
+
+        $this->loadUserConfig();
+
+        $this->createSPLAutoloaders();
 
         $this->uri = URIHelper::getURIArray();
 
@@ -83,7 +84,7 @@ class Bootstrap {
             $this->controllerObject = new $this->controller();
         } else if (empty($this->controller)) {
             //Load the default controller
-            $defaultController = Configuration::read('defaultController');
+            $defaultController = Configuration::read('default_controller');
             $this->controllerObject = new $defaultController();
         } else {
             die('Missing controller: ' . $this->controllerFile);
@@ -158,21 +159,36 @@ class Bootstrap {
         fclose($fp);
         $sxml = new SimpleXMLElement($xmlstr);
         $this->pathsConfig($sxml);
+    }
+
+    private function loadUserConfig() {
+        $filename = 'App/Config/config.xml';
+        $fp = fopen($filename, 'r');
+        $xmlstr = fread($fp, filesize($filename));
+        fclose($fp);
+        $sxml = new SimpleXMLElement($xmlstr);
         $this->databaseConfig($sxml);
+        $this->valuesConfig($sxml);
     }
 
     private function pathsConfig($sxml) {
         foreach ($sxml->paths->path as $path) {
-            Configuration::write((string)$path['name'], $path);
+            Configuration::write((string) $path['name'], (string)$path);
         }
     }
 
     private function databaseConfig($sxml) {
-        foreach ($sxml->database as $db){
-            Configuration::write('db_host', $db->host);
-            Configuration::write('db_name', $db->databasename);
-            Configuration::write('db_username', $db->username);
-            Configuration::write('db_password', $db->password);
+        foreach ($sxml->database as $db) {
+            Configuration::write('db_host', (string)$db->host);
+            Configuration::write('db_name', (string)$db->databasename);
+            Configuration::write('db_username', (string)$db->username);
+            Configuration::write('db_password', (string)$db->password);
+        }
+    }
+
+    private function valuesConfig($sxml) {
+        foreach ($sxml->values->value as $value) {
+            Configuration::write((string)$value['name'], (string)$value);
         }
     }
 

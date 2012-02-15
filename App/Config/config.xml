@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : core_config.xml
+    Created on : February 11, 2012, 4:16 PM
+    Author     : smarkoski
+    Description:
+        Purpose of the document follows.
+-->
+
+<!DOCTYPE Base PUBLIC '-//DTD XCatalog//EN' 'null'>
+<config>
+
+    <values>
+        <value name="basepath">sr</value>
+        <value name="mod_rewrite_enabled">1</value>
+        <value name="default_controller">index</value>
+    </values>
+
+    <database>
+        <host>192.168.0.50</host> <!--Development-->
+<!--        <host>localhost</host>  Production -->
+        <databasename>silentrunning</databasename>
+        <username>sr</username>
+        <password>wra92e</password>
+    </database>
+
+</config>

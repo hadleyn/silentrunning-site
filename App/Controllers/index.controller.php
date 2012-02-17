@@ -9,7 +9,7 @@
  *
  * @author smarkoski
  */
-class index extends CoreController implements ICoreController {
+class index extends CoreController {
 
     protected function header(){
         $this->loadView('includes/header');

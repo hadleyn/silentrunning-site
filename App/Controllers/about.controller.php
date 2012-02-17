@@ -9,7 +9,7 @@
  *
  * @author smarkoski
  */
-class about extends CoreController implements ICoreController {
+class about extends CoreController {
 
     public function invoke(){
         $this->loadView('about');

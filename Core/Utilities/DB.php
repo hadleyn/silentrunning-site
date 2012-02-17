@@ -26,7 +26,7 @@ class DB {
             throw new MysqliConnectionException('Connect Error (' . mysqli_connect_errno() . ') ' . mysqli_connect_error());
         }
     }
-
+    
     /**
      *
      * @return DB

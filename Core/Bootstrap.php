@@ -23,6 +23,7 @@ class Bootstrap {
     private $controllerObject;
 
     public function __construct() {
+        xdebug_disable();
         $this->loadCoreConfig();
 
         $this->loadUserConfig();
@@ -37,6 +38,8 @@ class Bootstrap {
 
         $this->instantiateController();
     }
+
+    
 
     public function run() {
         $this->executePreLaunchTasks();

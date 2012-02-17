@@ -10,6 +10,11 @@
  * @author smarkoski
  */
 class MysqliConnectionException extends Exception {
-    //put your code here
+    /**
+     * @assert (1, 1) == 2
+     */
+    public function test($a, $b) {
+        return $a + $b;
+    }
 }
 ?>

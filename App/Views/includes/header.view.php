@@ -5,11 +5,14 @@
                 <div id="logo">
                     <h1><a href="/<?php echo Configuration::read('basepath');?>"><span>silent</span>running</a></h1>
                 </div>
+                
                 <div id="menu">
+                    
                     <ul>
-                        <li><a href="about" title="about">comm link</a></li>
+                        <li><div id="menuLeftBlock"></div><a href="about" title="about">comm link</a></li>
                         <li><a href="whiteboard" title="whiteboard">whiteboard</a></li>
                     </ul>
+                    <div id="menuRightBlock"></div>
                 </div>
             </div>
         </div>

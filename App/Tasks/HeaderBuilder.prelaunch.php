@@ -31,6 +31,7 @@ class HeaderBuilder implements Task {
         $this->headHelper->setTitle('silentrunning');
         $this->headHelper->addCSS('style');
         $this->headHelper->addScript('https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js', TRUE);
+        $this->headHelper->addScript('menu');
     }
 
 }

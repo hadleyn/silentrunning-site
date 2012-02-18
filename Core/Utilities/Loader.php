@@ -33,7 +33,7 @@ class Loader {
         }
     }
 
-    public static function loadView($v, $viewData=NULL, $absolutePath=FALSE) {
+    public static function loadView($v, $viewData = NULL, $absolutePath = FALSE) {
         $file = Configuration::read('view_path') . $v . '.view.php';
         if (file_exists($file)) {
             extract($viewData);
@@ -60,5 +60,17 @@ class Loader {
         }
     }
 
+    public static function loadModule($m) {
+        $file = 'Core/ConfigModules/' . $m . '.module.php';
+        if (file_exists($file)){
+            require_once $file;
+        }
+        $file = 'App/ConfigModules/' . $m . '.module.php';
+        if (file_exists($file)){
+            require_once $file;
+        }
+    }
+
 }
+
 ?>

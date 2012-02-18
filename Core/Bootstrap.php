@@ -5,6 +5,7 @@
  * and open the template in the editor.
  */
 require_once 'Core/Controllers/CoreController.php';
+require_once 'Core/Utilities/ConfigModule.php';
 require_once 'Core/Utilities/Configuration.php';
 require_once 'Core/Utilities/Loader.php';
 
@@ -23,13 +24,11 @@ class Bootstrap {
     private $controllerObject;
 
     public function __construct() {
-        xdebug_disable();
-        $this->loadCoreConfig();
-
-        $this->loadUserConfig();
-
+        
         $this->createSPLAutoloaders();
-
+        
+        $this->loadConfigs();
+        
         $this->uri = URIHelper::getURIArray();
 
         $this->prepareURI();
@@ -60,6 +59,8 @@ class Bootstrap {
         spl_autoload_register(array('Loader', 'loadUtility'));
         spl_autoload_register(array('Loader', 'loadController'));
         spl_autoload_register(array('Loader', 'loadTask'));
+        spl_autoload_register(array('Loader', 'loadModule'));
+        
     }
 
     private function prepareURI() {
@@ -155,45 +156,22 @@ class Bootstrap {
         }
     }
 
-    private function loadCoreConfig() {
-        $filename = 'Core/Config/core_config.xml';
-        $fp = fopen($filename, 'r');
-        $xmlstr = fread($fp, filesize($filename));
-        fclose($fp);
-        $sxml = new SimpleXMLElement($xmlstr);
-        $this->pathsConfig($sxml);
-    }
-
-    private function loadUserConfig() {
-        $filename = 'App/Config/config.xml';
-        $fp = fopen($filename, 'r');
-        $xmlstr = fread($fp, filesize($filename));
-        fclose($fp);
-        $sxml = new SimpleXMLElement($xmlstr);
-        $this->databaseConfig($sxml);
-        $this->valuesConfig($sxml);
-    }
-
-    private function pathsConfig($sxml) {
-        foreach ($sxml->paths->path as $path) {
-            Configuration::write((string) $path['name'], (string)$path);
+    private function loadConfigs() {
+        $coreConfigModules = scandir('Core/ConfigModules');
+        $appConfigModules = scandir('App/ConfigModules');
+        $allModules = array_merge($coreConfigModules, $appConfigModules);
+        foreach ($allModules as $module) {
+            if (preg_match('/module\.php$/', $module) > 0) {
+                $module = preg_replace('/\..*$/', '', $module);
+                $configModule = new $module();
+                $configModule->readConfig();
+            }
         }
     }
 
-    private function databaseConfig($sxml) {
-        foreach ($sxml->database as $db) {
-            Configuration::write('db_host', (string)$db->host);
-            Configuration::write('db_name', (string)$db->databasename);
-            Configuration::write('db_username', (string)$db->username);
-            Configuration::write('db_password', (string)$db->password);
-        }
-    }
+    
 
-    private function valuesConfig($sxml) {
-        foreach ($sxml->values->value as $value) {
-            Configuration::write((string)$value['name'], (string)$value);
-        }
-    }
+    
 
 }
 ?>

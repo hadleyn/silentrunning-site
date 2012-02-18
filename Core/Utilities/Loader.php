@@ -14,23 +14,17 @@ class Loader {
 
     public static function loadException($e) {
         $file = Configuration::read('exception_path') . $e . '.php';
-        if (file_exists($file)) {
-            require_once $file;
-        }
+        @include_once $file;
     }
 
     public static function loadUtility($e) {
         $file = Configuration::read('utility_path') . $e . '.php';
-        if (file_exists($file)) {
-            require_once $file;
-        }
+        @include_once $file;
     }
 
     public static function loadController($e) {
         $file = Configuration::read('controller_path') . $e . '.controller.php';
-        if (file_exists($file)) {
-            require_once $file;
-        }
+        @include_once $file;
     }
 
     public static function loadView($v, $viewData = NULL, $absolutePath = FALSE) {
@@ -42,32 +36,24 @@ class Loader {
     }
 
     public static function loadTask($t) {
-        $file = Configuration::read('task_path') . $t . '.precontroller.php';
-        if (file_exists($file)) {
-            require_once $file;
-        }
-        $file = Configuration::read('task_path') . $t . '.postcontroller.php';
-        if (file_exists($file)) {
-            require_once $file;
-        }
-        $file = Configuration::read('task_path') . $t . '.prelaunch.php';
-        if (file_exists($file)) {
-            require_once $file;
-        }
-        $file = Configuration::read('task_path') . $t . '.postlaunch.php';
-        if (file_exists($file)) {
-            require_once $file;
-        }
+        $file = array();
+        $file[] = Configuration::read('task_path') . $t . '.precontroller.php';
+        $file[] = Configuration::read('task_path') . $t . '.postcontroller.php';
+        $file[] = Configuration::read('task_path') . $t . '.prelaunch.php';
+        $file[] = Configuration::read('task_path') . $t . '.postlaunch.php';
+        $f = null;
+        do {
+            $f = array_shift($file);
+        } while (count($file) > 0 && (@include_once $f) === FALSE);
     }
 
     public static function loadModule($m) {
+
         $file = 'Core/ConfigModules/' . $m . '.module.php';
-        if (file_exists($file)){
-            require_once $file;
-        }
-        $file = 'App/ConfigModules/' . $m . '.module.php';
-        if (file_exists($file)){
-            require_once $file;
+
+        if ((@include_once $file) === FALSE) {
+            $file = 'App/ConfigModules/' . $m . '.module.php';
+            include_once $file;
         }
     }
 

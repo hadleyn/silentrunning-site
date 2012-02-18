@@ -26,6 +26,7 @@
             <value name="basepath">sr/</value>
             <value name="mod_rewrite_enabled">1</value>
             <value name="default_controller">index</value>
+            <value name="random_salt">suWpUzTtLGzB1ZBCq0kH</value>
         </values>
 
         <database>

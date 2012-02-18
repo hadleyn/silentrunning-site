@@ -26,7 +26,7 @@ class Session {
      */
     public function write($name, $value, $overwrite = FALSE) {
         if ($this->peek($name) && !$overwrite) {
-            throw new SessionDataIOException('Tried to write session data to '.$name.' that already exists');
+            throw new SessionDataIOException('Tried to write session data to ' . $name . ' that already exists');
         }
         $_SESSION[$name] = $value;
     }
@@ -40,7 +40,12 @@ class Session {
      * @throws SessionDataExpiredException if the named session data has expired.
      */
     public function read($name) {
-        
+        //Decide if the session value is even set or not
+        if ($this->peek($name)) {
+            return $this->readSessionPackage($name);
+        } else {
+            throw new SessionDataIOException('Session data ' . $name . ' does not exist!');
+        }
     }
 
     /**
@@ -50,7 +55,10 @@ class Session {
      * @return boolean True if the session data exists, False if it doesn't. 
      */
     public function peek($name) {
-        
+        if (isset($_SESSION[$name])) {
+            return TRUE;
+        }
+        return FALSE;
     }
 
     /**
@@ -59,15 +67,44 @@ class Session {
      * 
      * @param string $name The name of the session value
      * @param mixed $value The value of the session variable
-     * @param int $duration The duration (in millisecons) this session value will last.
+     * @param int $duration The duration (in seconds) this session value will last.
      * @param boolean $overwrite [Optional] Allows existing session data to be overwritten. Default is false.
      * @throws SessionDataIOException If the session data already exists and the overwrite is not set.
      */
-    public function writeTimed($name, $value, $duration, $overwrite=FALSE) {
-        $dataPackage = base64_encode(serialize($value)).'~'.$duration;
+    public function writeTimed($name, $value, $duration, $overwrite = FALSE) {
+        $dataPackage = base64_encode(serialize($value)) . '~' . $duration . '~' . time();
         $checksum = hash_hmac('md5', $dataPackage, Configuration::read('random_salt'));
-        $dataPackage .= '~'.$checksum;
+        $dataPackage .= '~' . $checksum;
         $this->write($name, $dataPackage, $overwrite);
+    }
+
+    /**
+     * This helper function will correctly decode a session package (whether it is
+     * a flat package or a timed package and return the value.
+     *  
+     * @param string $name The name of the session data.
+     */
+    private function readSessionPackage($name) {
+        if (is_array($_SESSION[$name])) {
+            return $_SESSION[$name];
+        }
+        $package = explode('~', $_SESSION[$name]);
+        if (count($package) == 4) {
+            list($data, $duration, $initialized, $checksum) = $package;
+            $actualChecksum = hash_hmac('md5', $data . '~' . $duration . '~' . $initialized, Configuration::read('random_salt'));
+            if ($actualChecksum != $checksum) {
+                //Normal session value
+                return $_SESSION[$name];
+            } else {
+                if (($initialized + $duration) < time()) {
+                    throw new SessionDataExpiredException('The session data ' . $name . ' has expired!');
+                } else {
+                    return unserialize(base64_decode($data));
+                }
+            }
+        } else {
+            return $_SESSION[$name];
+        }
     }
 
 }

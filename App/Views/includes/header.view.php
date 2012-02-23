@@ -10,7 +10,7 @@
                     
                     <ul>
                         <li><div id="menuLeftBlock"></div><a href="about" title="about">comm link</a></li>
-                        <li><a href="whiteboard" title="whiteboard">whiteboard</a></li>
+                        <li><a href="hive" title="hive">Hive</a></li>
                     </ul>
                     <div id="menuRightBlock"></div>
                 </div>

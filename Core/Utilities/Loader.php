@@ -27,12 +27,17 @@ class Loader {
         @include_once $file;
     }
 
-    public static function loadView($v, $viewData = NULL, $absolutePath = FALSE) {
+    public static function loadView($v, $viewData = NULL) {
         $file = Configuration::read('view_path') . $v . '.view.php';
         if (file_exists($file)) {
             extract($viewData);
             include $file;
         }
+    }
+
+    public static function loadModel($m) {
+        $file = Configuration::read('model_path') . $m . '.model.php';
+        @include_once $file;
     }
 
     public static function loadTask($t) {

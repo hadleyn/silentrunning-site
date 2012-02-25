@@ -14,11 +14,16 @@
         </div>
         <div>
             <form method="post" action="/hive/register">
+                <input type="text" id="registerHandle" name="registerHandle" placeholder="handle"/>
+                <input type="password" id="registerPassword" name="registerPassword" placeholder="password"/>
+                <input type="password" id="registerPasswordConf" name="registerPasswordConf" placeholder="password confirm"/>
                 <div id="captcha">
                     <?php
                     echo recaptcha_get_html(Configuration::read('captcha_key'));
                     ?>
+                   
                 </div>
+                 <input type="submit" id="registerSubmit" value="Register"/>
             </form>
 
         </div>

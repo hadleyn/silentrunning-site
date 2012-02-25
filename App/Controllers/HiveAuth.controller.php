@@ -10,11 +10,9 @@
  *
  * @author smarkoski
  */
-abstract class HiveAuthController extends CoreController {
+abstract class HiveAuth extends CoreController {
     
-    public function precontroller(){
-        
-    }
+    
     
 }
 

@@ -24,11 +24,11 @@ class Bootstrap {
     private $controllerObject;
 
     public function __construct() {
-        
+
         $this->createSPLAutoloaders();
-        
+
         $this->loadConfigs();
-        
+
         $this->uri = URIHelper::getURIArray();
 
         $this->prepareURI();
@@ -38,10 +38,15 @@ class Bootstrap {
         $this->instantiateController();
     }
 
-    
-
     public function run() {
+
+        if (Configuration::read('sessions_enabled')) {
+            session_start();
+        }
+
         $this->executePreLaunchTasks();
+
+        $this->executeAjax();
 
         $this->executePrecontroller();
 
@@ -50,6 +55,8 @@ class Bootstrap {
         $this->executePostcontroller();
 
         $this->executePostLaunchTasks();
+
+        $this->storeSRReferer();
     }
 
     private function createSPLAutoloaders() {
@@ -60,7 +67,6 @@ class Bootstrap {
         spl_autoload_register(array('Loader', 'loadController'));
         spl_autoload_register(array('Loader', 'loadTask'));
         spl_autoload_register(array('Loader', 'loadModule'));
-        
     }
 
     private function prepareURI() {
@@ -92,6 +98,17 @@ class Bootstrap {
             $this->controllerObject = new $defaultController();
         } else {
             die('Missing controller: ' . $this->controllerFile);
+        }
+    }
+
+    private function executeAjax() {
+        if (method_exists($this->controllerObject, $this->method . '_ajax')) {
+            if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
+                $this->wrap_call_user_func_array($this->controllerObject, $this->method . '_ajax', $this->arguments);
+                die();
+            } else {
+                die('Invalid request!');
+            }
         }
     }
 
@@ -137,6 +154,11 @@ class Bootstrap {
         //nothing here yet
     }
 
+    private function storeSRReferer() {
+        $session = new Session();
+        $session->write('sr_referer', 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'], TRUE);
+    }
+
     private function wrap_call_user_func_array($c, $a, $p) {
         switch (count($p)) {
             case 0: $c->{$a}();
@@ -169,9 +191,6 @@ class Bootstrap {
         }
     }
 
-    
-
-    
-
 }
+
 ?>

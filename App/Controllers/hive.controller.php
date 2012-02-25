@@ -10,10 +10,14 @@
  *
  * @author smarkoski
  */
-class hive extends HiveAuthController {
+class hive extends HiveAuth {
 
     public function invoke() {
         $this->loadView('hive');
+    }
+    
+    public function ajaxtest_ajax(){
+        echo json_encode('win');
     }
 
 }

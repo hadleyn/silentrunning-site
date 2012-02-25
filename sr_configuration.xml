@@ -32,6 +32,7 @@
 <!--            <value name="cookie_domain">.silentrunning.info</value>-->
             <value name="cookie_domain">localhost</value>
             <value name="captcha_key">6LfkJ84SAAAAABbhQxgFAM-eblDJ_Pl2smK56N3l</value>
+            <value name="sessions_enabled">1</value>
         </values>
 
         <database>

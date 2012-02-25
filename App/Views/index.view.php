@@ -12,4 +12,14 @@
                 <input type="password" id="password" name="password" placeholder="passcode"/>
             </form>
         </div>
+        <div>
+            <form method="post" action="/hive/register">
+                <div id="captcha">
+                    <?php
+                    echo recaptcha_get_html(Configuration::read('captcha_key'));
+                    ?>
+                </div>
+            </form>
+
+        </div>
     </div>

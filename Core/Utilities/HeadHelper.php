@@ -12,23 +12,31 @@
  */
 class HeadHelper {
 
+    private static $instance;
     private $css;
     private $script;
     private $meta;
     private $htmlTitle;
 
-    public function __construct() {
+    protected function __construct() {
         $this->css = array();
         $this->script = array();
         $this->meta = array();
         $this->htmlTitle = '';
     }
 
+    public static function getInstance() {
+        if (!isset(self::$instance)) {
+            self::$instance = new HeadHelper();
+        }
+        return self::$instance;
+    }
+
     public function setTitle($title) {
         $this->htmlTitle = $title;
     }
 
-    public function addCSS($css, $absolute=FALSE) {
+    public function addCSS($css, $absolute = FALSE) {
         if (!$absolute) {
             $this->css[] = 'Webroot/css/' . $css . '.css';
         } else {
@@ -36,11 +44,29 @@ class HeadHelper {
         }
     }
 
-    public function addScript($script, $absolute=FALSE) {
+    /**
+     * Add a script to the header.
+     * 
+     * @param string $script The name of the script to add or the path if using a script outside of the default script location.
+     * @param int $priority [Optional] The priority of the script. 0 is higest meaning it will be loaded first. Default is -1 
+     *                      meaning add the script onto the end of the list.
+     * @param boolean $absolute [Optional] Whether or not the script name is absolute. Default is false.
+     */
+    public function addScript($script, $priority = -1, $absolute = FALSE) {
         if (!$absolute) {
-            $this->script[] = 'Webroot/js/'.$script.'.js';
+            if ($priority >= 0) {
+                $priority = min(array($priority, count($this->script)));
+                array_splice($this->script, $priority, 0, 'Webroot/js/' . $script . '.js');
+            } else {
+                $this->script[] = 'Webroot/js/' . $script . '.js';
+            }
         } else {
-            $this->script[] = $script;
+            if ($priority >= 0) {
+                $priority = min(array($priority, count($this->script)));
+                array_splice($this->script, $priority, 0, $script);
+            } else {
+                $this->script[] = $script;
+            }
         }
     }
 
@@ -50,6 +76,7 @@ class HeadHelper {
 
     public function generateHead() {
         ob_start();
+        $temp = array();
         $temp['css'] = $this->css;
         $temp['script'] = $this->script;
         $temp['meta'] = $this->meta;
@@ -63,4 +90,5 @@ class HeadHelper {
     }
 
 }
+
 ?>

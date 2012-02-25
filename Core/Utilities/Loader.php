@@ -18,7 +18,13 @@ class Loader {
     }
 
     public static function loadUtility($e) {
-        $file = Configuration::read('utility_path') . $e . '.php';
+        $file = array();
+        $file[] = Configuration::read('utility_path') . $e . '.php';
+        $file[] = Configuration::read('app_utility_path') . $e . '.php';
+        $f = null;
+        do {
+            $f = array_shift($file);
+        } while (count($file) > 0 && (@include_once $f) === FALSE);
         @include_once $file;
     }
 

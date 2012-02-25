@@ -23,8 +23,15 @@ class index extends CoreController {
         $this->loadView('includes/sidebar');
     }
 
+    public function precontroller(){
+        $headHelper = HeadHelper::getInstance();
+        $headHelper->addScript('recaptcha');
+        $headHelper->addScript('login');
+        parent::precontroller();
+    }
 
     public function invoke(){
+        require_once('App/Utilities/recaptchalib.php');
         $this->loadView('index');
     }
 

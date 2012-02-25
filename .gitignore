@@ -2,3 +2,4 @@ nb/*
 /tests/
 nbproject/
 sr_configuration.xml
+!/sr_configuration.xml

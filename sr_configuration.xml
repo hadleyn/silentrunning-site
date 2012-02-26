@@ -20,6 +20,8 @@
             <path name="app_utility_path">App/Utilities/</path>
             <path name="task_path">App/Tasks/</path>
             <path name="exception_path">Core/Exceptions/</path>
+            <path name="core_model_path">Core/Models/</path>
+            <path name="user_validation_rules_path">App/Utilities/Validation/Rules/</path>
         </paths>
     </coreconfig>
     

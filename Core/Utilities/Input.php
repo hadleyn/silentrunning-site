@@ -18,7 +18,7 @@ class Input {
         }
         $post = $_POST[$index];
         if ($sanitize) {
-            $post = $this->sanitize($post);
+            $post = self::sanitize($post);
         }
         return $post;
     }
@@ -29,7 +29,7 @@ class Input {
         }
         $get = $_GET[$index];
         if ($sanitize) {
-            $get = $this->sanitize($post);
+            $get = self::sanitize($post);
         }
         return $get;
     }
@@ -45,7 +45,7 @@ class Input {
         return $_SESSION['sr_referer'];
     }
 
-    private function sanitize($input) {
+    private static function sanitize($input) {
         return filter_var($input, FILTER_SANITIZE_STRING);
     }
 

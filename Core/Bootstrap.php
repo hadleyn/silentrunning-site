@@ -67,6 +67,7 @@ class Bootstrap {
         spl_autoload_register(array('Loader', 'loadController'));
         spl_autoload_register(array('Loader', 'loadTask'));
         spl_autoload_register(array('Loader', 'loadModule'));
+        spl_autoload_register(array('Loader', 'loadModel'));
     }
 
     private function prepareURI() {

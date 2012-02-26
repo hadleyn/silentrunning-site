@@ -20,12 +20,12 @@ class Loader {
     public static function loadUtility($e) {
         $file = array();
         $file[] = Configuration::read('utility_path') . $e . '.php';
+        $file[] = Configuration::read('utility_path') . '/Validator/Rules/' . $e . '.php';
         $file[] = Configuration::read('app_utility_path') . $e . '.php';
         $f = null;
         do {
             $f = array_shift($file);
-        } while (count($file) > 0 && (@include_once $f) === FALSE);
-        @include_once $file;
+        } while ((@include_once $f) === FALSE && count($file) > 0);
     }
 
     public static function loadController($e) {
@@ -42,8 +42,13 @@ class Loader {
     }
 
     public static function loadModel($m) {
-        $file = Configuration::read('model_path') . $m . '.model.php';
-        @include_once $file;
+        $file = array();
+        $file[] = Configuration::read('model_path') . $m . '.model.php';
+        $file[] = Configuration::read('core_model_path') . $m . '.php';
+        $f = null;
+        do {
+            $f = array_shift($file);
+        } while ((@include_once $f) === FALSE && count($file) > 0);
     }
 
     public static function loadTask($t) {
@@ -55,7 +60,7 @@ class Loader {
         $f = null;
         do {
             $f = array_shift($file);
-        } while (count($file) > 0 && (@include_once $f) === FALSE);
+        } while ((@include_once $f) === FALSE && count($file) > 0);
     }
 
     public static function loadModule($m) {
@@ -64,7 +69,7 @@ class Loader {
 
         if ((@include_once $file) === FALSE) {
             $file = 'App/ConfigModules/' . $m . '.module.php';
-            include_once $file;
+            @include_once $file;
         }
     }
 

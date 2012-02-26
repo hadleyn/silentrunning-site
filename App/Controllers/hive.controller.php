@@ -30,7 +30,14 @@ class hive extends HiveAuth {
         $validator->addRule(new matches(Input::post('registerPassword'), Input::post('registerPasswordConf'), 'password', 'password confirm'));
         $this->errorHelper->pushError($validator->run());
         if ($this->errorHelper->hasErrors()){
-            $this->redirect('http://localhost/sr/');
+            $this->redirect(Configuration::read('basepath'));
+        } else {
+            $user = new User();
+            $user->handle = Input::post('registerHandle');
+            $user->password = Input::post('registerPassword');
+            $user->insertNewUser();
+            
+            $this->redirect(Configuration::read('basepath').'/hive');
         }
     }
 

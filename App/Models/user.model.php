@@ -33,6 +33,25 @@ class user extends CoreModel {
         $this->populate($result);
     }
     
+    /**
+     * Insert user into the database using $this. 
+     */
+    public function insertNewUser(){
+        $db = DB::instance();
+        $hashedPassword = $this->hashPassword();
+        $query = 'INSERT INTO users (handle, password) VALUES (?, ?)';
+        $db->query($query, array('s','s'), array($this->handle, $hashedPassword));
+    }
+    
+    public function authenticateUsernamePassword($username, $password){
+        
+    }
+    
+    private function hashPassword(){
+        return hash_hmac('sha256', $this->password.Configuration::read('random_salt'), Configuration::read('random_salt'));
+    }
+    
+    
 }
 
 ?>

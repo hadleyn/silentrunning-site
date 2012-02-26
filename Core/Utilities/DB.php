@@ -52,9 +52,9 @@ class DB {
             case SELECT:
                 $result = $this->bindResults();
                 break;
-            case INSERT:
         }
         $this->stmt->execute();
+        $this->insertID = $this->stmt->insert_id;
 
         return $result;
     }

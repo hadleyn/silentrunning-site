@@ -38,7 +38,7 @@ class HeadHelper {
 
     public function addCSS($css, $absolute = FALSE) {
         if (!$absolute) {
-            $this->css[] = 'Webroot/css/' . $css . '.css';
+            $this->css[] = Configuration::read('basepath').'/Webroot/css/' . $css . '.css';
         } else {
             $this->css[] = $css;
         }
@@ -56,9 +56,9 @@ class HeadHelper {
         if (!$absolute) {
             if ($priority >= 0) {
                 $priority = min(array($priority, count($this->script)));
-                array_splice($this->script, $priority, 0, 'Webroot/js/' . $script . '.js');
+                array_splice($this->script, $priority, 0, Configuration::read('basepath').'/Webroot/js/' . $script . '.js');
             } else {
-                $this->script[] = 'Webroot/js/' . $script . '.js';
+                $this->script[] = Configuration::read('basepath').'/Webroot/js/' . $script . '.js';
             }
         } else {
             if ($priority >= 0) {

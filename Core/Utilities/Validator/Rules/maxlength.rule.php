@@ -16,17 +16,21 @@ class maxlength implements Rule {
     private $value;
     private $maxlength;
     
-    public function __construct($value, $maxlength){
+    public function __construct($value, $maxlength, $fieldname){
         $this->value = $value;
         $this->maxlength = $maxlength;
+        $this->fieldname = $fieldname;
     }
     
     public function getError() {
-        return '';
+        return 'The value for '.$this->fieldname.' must be less than '.$this->maxlength .' characters in length';
     }
 
     public function run() {
-        
+        if (strlen($this->value) > $this->maxlength) {
+            return FALSE;
+        }
+        return TRUE;
     }
 
 }

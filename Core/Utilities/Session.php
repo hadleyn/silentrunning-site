@@ -60,6 +60,10 @@ class Session {
         }
         return FALSE;
     }
+    
+    public function destroy($name) {
+        unset($_SESSION[$name]);
+    }
 
     /**
      * Write a timed session value. This value will exist only for $duration 

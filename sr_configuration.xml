@@ -27,7 +27,7 @@
     
     <appconfig>
         <values>
-            <value name="basepath">sr/</value>
+            <value name="basepath">/sr</value>
             <value name="mod_rewrite_enabled">1</value>
             <value name="default_controller">index</value>
             <value name="random_salt">suWpUzTtLGzB1ZBCq0kH</value>
@@ -35,6 +35,7 @@
             <value name="cookie_domain">localhost</value>
             <value name="captcha_key">6LfkJ84SAAAAABbhQxgFAM-eblDJ_Pl2smK56N3l</value>
             <value name="sessions_enabled">1</value>
+            <value name="error_div_class">sr_errors</value>
         </values>
 
         <database>

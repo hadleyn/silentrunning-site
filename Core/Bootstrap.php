@@ -62,12 +62,8 @@ class Bootstrap {
     private function createSPLAutoloaders() {
         spl_autoload_register(null, false);
         spl_autoload_extensions('.php');
-        spl_autoload_register(array('Loader', 'loadException'));
-        spl_autoload_register(array('Loader', 'loadUtility'));
-        spl_autoload_register(array('Loader', 'loadController'));
-        spl_autoload_register(array('Loader', 'loadTask'));
+        spl_autoload_register(array('Loader', 'loadGeneric'));
         spl_autoload_register(array('Loader', 'loadModule'));
-        spl_autoload_register(array('Loader', 'loadModel'));
     }
 
     private function prepareURI() {

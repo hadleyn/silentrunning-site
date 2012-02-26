@@ -12,25 +12,24 @@
  */
 class Loader {
 
-    public static function loadException($e) {
-        $file = Configuration::read('exception_path') . $e . '.php';
-        @include_once $file;
-    }
-
-    public static function loadUtility($e) {
+    public static function loadGeneric($e) {
         $file = array();
         $file[] = Configuration::read('utility_path') . $e . '.php';
-        $file[] = Configuration::read('utility_path') . '/Validator/Rules/' . $e . '.php';
+        $file[] = Configuration::read('utility_path') . '/Validator/Rules/' . $e . '.rule.php';
+        $file[] = Configuration::read('user_validation_rules_path') . $e . '.rule.php';
         $file[] = Configuration::read('app_utility_path') . $e . '.php';
+        $file[] = Configuration::read('exception_path') . $e . '.php';
+        $file[] = Configuration::read('controller_path') . $e . '.controller.php';
+        $file[] = Configuration::read('model_path') . $e . '.model.php';
+        $file[] = Configuration::read('core_model_path') . $e . '.php';
+        $file[] = Configuration::read('task_path') . $e . '.precontroller.php';
+        $file[] = Configuration::read('task_path') . $e . '.postcontroller.php';
+        $file[] = Configuration::read('task_path') . $e . '.prelaunch.php';
+        $file[] = Configuration::read('task_path') . $e . '.postlaunch.php';
         $f = null;
         do {
             $f = array_shift($file);
         } while ((@include_once $f) === FALSE && count($file) > 0);
-    }
-
-    public static function loadController($e) {
-        $file = Configuration::read('controller_path') . $e . '.controller.php';
-        @include_once $file;
     }
 
     public static function loadView($v, $viewData = NULL) {
@@ -39,28 +38,6 @@ class Loader {
             extract($viewData);
             include $file;
         }
-    }
-
-    public static function loadModel($m) {
-        $file = array();
-        $file[] = Configuration::read('model_path') . $m . '.model.php';
-        $file[] = Configuration::read('core_model_path') . $m . '.php';
-        $f = null;
-        do {
-            $f = array_shift($file);
-        } while ((@include_once $f) === FALSE && count($file) > 0);
-    }
-
-    public static function loadTask($t) {
-        $file = array();
-        $file[] = Configuration::read('task_path') . $t . '.precontroller.php';
-        $file[] = Configuration::read('task_path') . $t . '.postcontroller.php';
-        $file[] = Configuration::read('task_path') . $t . '.prelaunch.php';
-        $file[] = Configuration::read('task_path') . $t . '.postlaunch.php';
-        $f = null;
-        do {
-            $f = array_shift($file);
-        } while ((@include_once $f) === FALSE && count($file) > 0);
     }
 
     public static function loadModule($m) {

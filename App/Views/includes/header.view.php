@@ -3,7 +3,7 @@
         <div id="header-wrapper">
             <div id="header">
                 <div id="logo">
-                    <h1><a href="/<?php echo Configuration::read('basepath');?>"><span>silent</span>running</a></h1>
+                    <h1><a href="<?php echo Configuration::read('basepath');?>"><span>silent</span>running</a></h1>
                 </div>
                 
                 <div id="menu">

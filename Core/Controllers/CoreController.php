@@ -14,6 +14,10 @@ require_once 'Core/Controllers/ICoreController.php';
 abstract class CoreController implements ICoreController {
 
     protected $viewData;
+    /**
+     * A handy error helper class.
+     * @var Error 
+     */
     protected $errorHelper;
     protected $infoHelper;
     protected $viewPrefix;
@@ -21,6 +25,7 @@ abstract class CoreController implements ICoreController {
     public function __construct() {
         $this->viewData = array();
         $this->viewPrefix = '';
+        $this->errorHelper = new Error();
     }
 
     public function precontroller() {
@@ -62,7 +67,13 @@ abstract class CoreController implements ICoreController {
 
     protected function loadView($view) {
         $file = $this->viewPrefix . $view;
+        $this->viewData['errorHelper'] = $this->errorHelper;
         Loader::loadView($file, $this->viewData);
+    }
+    
+    protected function redirect($location){
+        header('Location: '.$location);
+        exit;
     }
 
 }

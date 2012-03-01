@@ -44,7 +44,7 @@ class Cookie {
         if ($this->peek($name) && !$overwrite){
             throw new CookieDataIOException('Cookie '.$name.' already exists!');
         }
-        setcookie($name, $value, $expires, $path, $this->domain);
+        setcookie($name, $value, time()+$expires, $path, $this->domain);
         $_COOKIE[$name] = $value;
     }
 

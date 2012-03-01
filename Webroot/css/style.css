@@ -31,6 +31,7 @@ h2 {
 
 h3 {
     font-size: 1.6em;
+    padding-bottom: 10px;
 }
 
 p, ul, ol {
@@ -351,4 +352,32 @@ a:hover {
 
 #footer a {
     color: #6B4A45;
+}
+
+
+#loginform {
+    float: left;
+}
+
+#registerform {
+    clear: left;
+    float: left;
+}
+
+#registerform input {
+    float: left;
+    clear: left;
+}
+
+#welcomebox {
+    overflow: auto;
+    width: 600px;
+    margin: 15px auto;
+    border: solid 1px #ccc;
+    padding: 5px;
+}
+
+#captcha {
+    float: left;
+    clear: left;
 }

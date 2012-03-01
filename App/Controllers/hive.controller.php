@@ -28,6 +28,7 @@ class hive extends HiveAuth {
         $validator->addRule(new required(Input::post('registerHandle'), 'handle'));
         $validator->addRule(new required(Input::post('registerPassword'), 'password'));
         $validator->addRule(new matches(Input::post('registerPassword'), Input::post('registerPasswordConf'), 'password', 'password confirm'));
+        $validator->addRule(new recaptcha(Input::post('recaptcha_challenge_field'), Input::post('recaptcha_response_field')));
         $this->errorHelper->pushError($validator->run());
         if ($this->errorHelper->hasErrors()){
             $this->redirect(Configuration::read('basepath'));
@@ -36,9 +37,9 @@ class hive extends HiveAuth {
             $user->handle = Input::post('registerHandle');
             $user->password = Input::post('registerPassword');
             $user->insertNewUser();
-            
-            $this->redirect(Configuration::read('basepath').'/hive');
+            $user->authenticateHandlePassword(Input::post('registerHandle'), Input::post('registerPassword'));
         }
+        $this->precontroller();
     }
 
     public function checkhandle_ajax() {

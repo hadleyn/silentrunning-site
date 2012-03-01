@@ -33,7 +33,8 @@
             <value name="random_salt">suWpUzTtLGzB1ZBCq0kH</value>
 <!--            <value name="cookie_domain">.silentrunning.info</value>-->
             <value name="cookie_domain">localhost</value>
-            <value name="captcha_key">6LfkJ84SAAAAABbhQxgFAM-eblDJ_Pl2smK56N3l</value>
+            <value name="captcha_key">6LcXWM4SAAAAAMRUfDZmOp-dj7Rc9lu6AQJFL_CL</value>
+            <value name="captcha_priv_key">6LcXWM4SAAAAAPBQtfZ6ALARPdY5K-Yw3hlT75uJ</value>
             <value name="sessions_enabled">1</value>
             <value name="error_div_class">sr_errors</value>
         </values>

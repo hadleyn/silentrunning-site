@@ -19,6 +19,7 @@ class DB {
     private $mysqli;
     private $stmt;
     private $insertID;
+    private $result;
 
     protected function __construct() {
         $this->mysqli = mysqli_init();
@@ -39,6 +40,9 @@ class DB {
     }
 
     public function query($query, $parameterTypes, $parameters, $queryType='') {
+        if (isset($this->stmt)){
+            $this->stmt->close();
+        }
         if ($queryType == ''){
             $queryType = $this->autoTypeQuery($query);
         }
@@ -47,16 +51,19 @@ class DB {
             throw new MysqliMalformedQueryException($this->mysqli->error);
         }
         $this->bindParameters($parameterTypes, $parameters);
-        $result = TRUE;
+        $this->result = TRUE;
         switch ($queryType){
             case SELECT:
-                $result = $this->bindResults();
+                $this->result = $this->bindResults();
                 break;
         }
         $this->stmt->execute();
         $this->insertID = $this->stmt->insert_id;
-
-        return $result;
+    }
+    
+    public function fetchResult(){
+        $this->stmt->fetch();
+        return $this->result;
     }
 
     private function bindParameters($parameterTypes, $parameters) {

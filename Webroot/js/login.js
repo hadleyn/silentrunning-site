@@ -1,7 +1,12 @@
 $(document).ready(function(){
-   $('#captcha').hide(); 
+   $('#captcha').hide();
+   $('#captcha').slideUp();
    $('#registerHandle').keyup(function(){
       checkHandleAvailable();
+   });
+   $('#registerPasswordConf').keyup(function(){
+//      $('#captcha').show();
+      $('#captcha').slideDown(); 
    });
 });
 

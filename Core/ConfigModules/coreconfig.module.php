@@ -17,8 +17,8 @@ class coreconfig implements ConfigModule {
     }
     
     public function readConfig() {
-        $filename = '../../../sr_configuration.xml';
-//        $filename = 'sr_configuration.xml';
+//        $filename = '../../../sr_configuration.xml';
+        $filename = 'sr_configuration.xml';
         $fp = fopen($filename, 'r');
         $xmlstr = fread($fp, filesize($filename));
         fclose($fp);

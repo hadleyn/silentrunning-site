@@ -31,6 +31,7 @@ class user extends CoreModel {
         $query = 'SELECT * FROM users WHERE handle=?';
         $db->query($query, array('s'), array($handle));
         $result = $db->fetchResult();
+        $db->cleanupConnection();
         $this->populate($result);
     }
 
@@ -52,6 +53,7 @@ class user extends CoreModel {
         $query = 'SELECT COUNT(*) AS c FROM users WHERE handle=? AND password=?';
         $db->query($query, array('s', 's'), array($handle, $hashedPassword));
         $result = $db->fetchResult();
+        $db->cleanupConnection();
         if ($result['c'] > 0) {
             $this->writeCookie($handle);
             return TRUE;
@@ -81,7 +83,12 @@ class user extends CoreModel {
     }
 
     private function hashPassword() {
-        return hash_hmac('sha256', $this->password . Configuration::read('random_salt'), Configuration::read('random_salt'));
+        $db = DB::instance();
+        $db->query('SELECT value FROM secret WHERE name="secretkey1"');
+        $result = $db->fetchResult();
+        $db->cleanupConnection();
+        $dbSecureKey = $result['value'];
+        return hash_hmac('sha512', $this->password . Configuration::read('random_salt').$dbSecureKey, Configuration::read('random_salt').$dbSecureKey);
     }
 
     private function createMysqlUser() {

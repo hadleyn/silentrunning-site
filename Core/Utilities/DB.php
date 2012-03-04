@@ -17,7 +17,8 @@ define('CREATE', 'CREATE');
  */
 class DB {
 
-    private static $instance;
+    private $instance;
+    private static $connections;
     private $mysqli;
     private $stmt;
     private $insertID;
@@ -30,15 +31,31 @@ class DB {
         }
     }
 
+    private static function addConnection($db) {
+        self::$connections[] = $db;
+    }
+
+    public function cleanupConnection() {
+        self::addConnection($this);
+    }
+
     /**
      *
      * @return DB
      */
     public static function instance() {
-        if (!isset(self::$instance)) {
-            self::$instance = new DB();
+        if (count(self::$connections) <= 0) {
+            $db = new DB();
+            return $db;
+        } else {
+            return array_shift(self::$connections);
         }
-        return self::$instance;
+
+//        if (self::containsConnection(self::$instance) || !isset(self::$instance)) {
+//            self::$instance = new DB();
+//            self::addConnection(self::$instance);
+//        }
+//        return self::$instance;
     }
 
     public function getMysqli() {
@@ -78,22 +95,32 @@ class DB {
             throw new MysqliQueryExecutionException('Execution of statement failed: ' . $this->stmt->error);
         }
         $this->insertID = $this->stmt->insert_id;
+        if ($queryType != SELECT) {
+            //return the connection to the pool
+            $this->cleanupConnection();
+        }
     }
 
     public function fetchResult() {
-        $this->stmt->fetch();
-        return $this->result;
+        if ($this->stmt->fetch()) {
+            return $this->result;
+        } else {
+            //return the connection to the pool
+            $this->cleanupConnection();
+        }
     }
 
     private function bindParameters($parameterTypes, $parameters) {
-        $bind_names = array();
-        $bind_names[] = implode($parameterTypes);
-        for ($i = 0; $i < count($parameters); $i++) {
-            $bind_name = 'bind' . $i;
-            $$bind_name = $parameters[$i];
-            $bind_names[] = &$$bind_name;
+        if (count($parameterTypes) > 0) {
+            $bind_names = array();
+            $bind_names[] = implode($parameterTypes);
+            for ($i = 0; $i < count($parameters); $i++) {
+                $bind_name = 'bind' . $i;
+                $$bind_name = $parameters[$i];
+                $bind_names[] = &$$bind_name;
+            }
+            call_user_func_array(array($this->stmt, 'bind_param'), $bind_names);
         }
-        call_user_func_array(array($this->stmt, 'bind_param'), $bind_names);
     }
 
     private function bindResults() {

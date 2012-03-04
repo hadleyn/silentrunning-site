@@ -12,6 +12,18 @@
 class index extends CoreController {
 
     protected function header(){
+        $cookie = new Cookie();
+        $cryptor = new Cryptor();
+        try {
+            $usercookie = $cookie->read('sr_user');
+            if (!$cryptor->verifySecureString($usercookie)){
+                $this->viewData['userLoggedIn'] = TRUE;
+            } else {
+                $this->viewData['userLoggedIn'] = FALSE;
+            }
+        } catch (CookieDataIOException $e) {
+            $this->viewData['userLoggedIn'] = FALSE;
+        }
         $this->loadView('includes/header');
     }
 

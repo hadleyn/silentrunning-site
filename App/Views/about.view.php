@@ -24,6 +24,6 @@
             These tools and languages were written because they are good at what they
             do. Let's let HTML, MySQL, and Javascript do their jobs and PHP will do its
             job.
-            <img src="/<?php echo Configuration::read('basepath');?>Webroot/images/code.png"/>
+            <img src="<?php echo Configuration::read('basepath');?>/Webroot/images/code.png"/>
         </p>
     </div>

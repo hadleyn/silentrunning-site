@@ -23,15 +23,38 @@ class hive extends HiveAuth {
         $this->loadView('hive');
     }
 
+    public function logout_precontroller() {
+        $cookie = new Cookie();
+        try {
+            $cookie->clear('sr_user');
+        } catch (CookieDataIOException $e) {
+            //nothing to do here
+        }
+        $this->redirect(Configuration::read('basepath'));
+    }
+    
+    public function login_precontroller() {
+        $validator = new Validator();
+        $validator->addRule(new required(Input::post('handle'), 'handle'));
+        $validator->addRule(new authenticateuser(Input::post('handle'), Input::post('password')));
+        $this->errorHelper->pushError($validator->run());
+        if ($this->errorHelper->hasErrors()){
+            $this->redirect(Configuration::read('basepath'));
+        } else {
+            $this->precontroller();
+        }
+    }
+
     public function register_precontroller() {
         $validator = new Validator();
         $validator->addRule(new required(Input::post('registerHandle'), 'handle'));
         $validator->addRule(new alphanumeric(Input::post('registerHandle'), 'handle'));
+        $validator->addRule(new uniqueusername(Input::post('registerHandle'), 'handle'));
         $validator->addRule(new required(Input::post('registerPassword'), 'password'));
         $validator->addRule(new matches(Input::post('registerPassword'), Input::post('registerPasswordConf'), 'password', 'password confirm'));
         $validator->addRule(new recaptcha(Input::post('recaptcha_challenge_field'), Input::post('recaptcha_response_field')));
         $this->errorHelper->pushError($validator->run());
-        if ($this->errorHelper->hasErrors()){
+        if ($this->errorHelper->hasErrors()) {
             $this->redirect(Configuration::read('basepath'));
         } else {
             $user = new User();

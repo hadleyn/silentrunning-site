@@ -4,7 +4,7 @@
             <h3>Log into the hive</h3>
             <?php $errorHelper->showErrors(); ?>
             <div id="loginform">
-                <form action="/hive/login" method="post">
+                <form action="hive/login" method="post">
                     <input type="text" id="handle" name="handle" placeholder="handle"/>
                     <input type="password" id="password" name="password" placeholder="password"/>
                     <input type="submit" value="authenticate"/>

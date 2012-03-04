@@ -6,18 +6,20 @@
  */
 
 /**
- * Description of alphanumeric
+ * Description of uniqueusername
  *
  * @author smarkoski
  */
-class alphanumeric extends Rule {
+class uniqueusername extends Rule {
 
     public function getError() {
-        return 'The '.$this->fieldname .' field must contain only alpha numeric characters';
+        return 'The handle '.$this->value.' is already in use';
     }
 
     public function run() {
-        if (preg_match('/[^\w]/i', $this->value)) {
+        $user = new User();
+        $user->getUserByHandle($this->value);
+        if ($user->userid > 0) {
             return FALSE;
         }
         return TRUE;

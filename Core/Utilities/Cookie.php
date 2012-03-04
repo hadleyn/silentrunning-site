@@ -75,7 +75,7 @@ class Cookie {
     }
 
     public function clear($name) {
-        setcookie($name, '', time()-200);
+        setcookie($name, '', time()-200, '/', $this->domain);
         unset($_COOKIE[$name]);
     }
 

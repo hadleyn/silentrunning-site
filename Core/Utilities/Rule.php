@@ -9,10 +9,18 @@
  *
  * @author smarkoski
  */
-interface Rule {
+abstract class Rule {
     
-    public function run();
-    public function getError();
+    protected $fieldname;
+    protected $value;
+    
+    public function __construct($value, $fieldName) {
+        $this->value = $value;
+        $this->fieldname = $fieldName;
+    }
+    
+    abstract public function run();
+    abstract public function getError();
 }
 
 ?>

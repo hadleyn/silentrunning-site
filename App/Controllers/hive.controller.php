@@ -26,6 +26,7 @@ class hive extends HiveAuth {
     public function register_precontroller() {
         $validator = new Validator();
         $validator->addRule(new required(Input::post('registerHandle'), 'handle'));
+        $validator->addRule(new alphanumeric(Input::post('registerHandle'), 'handle'));
         $validator->addRule(new required(Input::post('registerPassword'), 'password'));
         $validator->addRule(new matches(Input::post('registerPassword'), Input::post('registerPasswordConf'), 'password', 'password confirm'));
         $validator->addRule(new recaptcha(Input::post('recaptcha_challenge_field'), Input::post('recaptcha_response_field')));

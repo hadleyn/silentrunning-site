@@ -10,7 +10,7 @@
  *
  * @author smarkoski
  */
-class recaptcha implements Rule {
+class recaptcha extends Rule {
     
     private $challengeField;
     private $responseField;

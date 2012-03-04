@@ -10,7 +10,7 @@
  *
  * @author smarkoski
  */
-class matches implements Rule {
+class matches extends Rule {
 
     private $fieldA;
     private $fieldB;

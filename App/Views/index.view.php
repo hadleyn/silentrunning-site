@@ -6,7 +6,8 @@
             <div id="loginform">
                 <form action="/hive/login" method="post">
                     <input type="text" id="handle" name="handle" placeholder="handle"/>
-                    <input type="password" id="password" name="password" placeholder="passcode"/>
+                    <input type="password" id="password" name="password" placeholder="password"/>
+                    <input type="submit" value="authenticate"/>
                 </form>
             </div>
             <div id="registerform">

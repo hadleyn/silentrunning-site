@@ -1,8 +1,10 @@
 <?php
+
 define('SELECT', 'SELECT');
 define('INSERT', 'INSERT');
 define('UPDATE', 'UPDATE');
 define('DELETE', 'DELETE');
+define('CREATE', 'CREATE');
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -27,7 +29,7 @@ class DB {
             throw new MysqliConnectionException('Connect Error (' . mysqli_connect_errno() . ') ' . mysqli_connect_error());
         }
     }
-    
+
     /**
      *
      * @return DB
@@ -39,11 +41,25 @@ class DB {
         return self::$instance;
     }
 
-    public function query($query, $parameterTypes, $parameters, $queryType='') {
-        if (isset($this->stmt)){
+    public function getMysqli() {
+        return $this->mysqli;
+    }
+
+    /**
+     *
+     * @param string $query The query string to run.
+     * @param array $parameterTypes [Optional] An array of parameter types for mysqli
+     * @param array $parameters [Optional] The array of parameters.
+     * @param string $queryType [Optional] A query type constant may be specified. If it is 
+     *                          omitted, the query type will be determined by the first word in
+     *                          the query.
+     * @throws MysqliMalformedQueryException 
+     */
+    public function query($query, $parameterTypes = array(), $parameters = array(), $queryType = '') {
+        if (isset($this->stmt)) {
             $this->stmt->close();
         }
-        if ($queryType == ''){
+        if ($queryType == '') {
             $queryType = $this->autoTypeQuery($query);
         }
         $this->stmt = $this->mysqli->prepare($query);
@@ -52,21 +68,25 @@ class DB {
         }
         $this->bindParameters($parameterTypes, $parameters);
         $this->result = TRUE;
-        switch ($queryType){
+        switch ($queryType) {
             case SELECT:
                 $this->result = $this->bindResults();
                 break;
         }
         $this->stmt->execute();
+        if ($this->stmt->error) {
+            throw new MysqliQueryExecutionException('Execution of statement failed: ' . $this->stmt->error);
+        }
         $this->insertID = $this->stmt->insert_id;
     }
-    
-    public function fetchResult(){
+
+    public function fetchResult() {
         $this->stmt->fetch();
         return $this->result;
     }
 
     private function bindParameters($parameterTypes, $parameters) {
+        $bind_names = array();
         $bind_names[] = implode($parameterTypes);
         for ($i = 0; $i < count($parameters); $i++) {
             $bind_name = 'bind' . $i;
@@ -76,7 +96,7 @@ class DB {
         call_user_func_array(array($this->stmt, 'bind_param'), $bind_names);
     }
 
-    private function bindResults(){
+    private function bindResults() {
         //Get information on the query result
         $resultMetadata = $this->stmt->result_metadata();
 
@@ -84,8 +104,7 @@ class DB {
         $resultArray = array();
 
         //Now loop through the field names and build out an array with those names
-        while ($field = $resultMetadata->fetch_field())
-        {
+        while ($field = $resultMetadata->fetch_field()) {
             $resultArray[$field->name] = NULL;
             $bindParameters[] = &$resultArray[$field->name];
         }
@@ -97,10 +116,11 @@ class DB {
         return $resultArray;
     }
 
-    private function autoTypeQuery($query){
+    private function autoTypeQuery($query) {
         $queryTerms = preg_split('/\s+/', $query);
         return strtoupper(array_shift($queryTerms));
     }
 
 }
+
 ?>

@@ -10,15 +10,7 @@
  *
  * @author smarkoski
  */
-class email implements Rule {
-
-    private $fieldName;
-    private $value;
-
-    public function __construct($value, $fieldName) {
-        $this->value = $value;
-        $this->fieldName = $fieldName;
-    }
+class email extends Rule {
 
     public function getError() {
         return 'The value in '.$this->fieldName .' is not a valid email address';

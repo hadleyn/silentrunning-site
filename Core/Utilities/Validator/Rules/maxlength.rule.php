@@ -10,16 +10,13 @@
  *
  * @author smarkoski
  */
-class maxlength implements Rule {
-
-    private $fieldname;
-    private $value;
+class maxlength extends Rule {
+    
     private $maxlength;
     
     public function __construct($value, $maxlength, $fieldname){
-        $this->value = $value;
         $this->maxlength = $maxlength;
-        $this->fieldname = $fieldname;
+        parent::__construct($value, $fieldname);
     }
     
     public function getError() {

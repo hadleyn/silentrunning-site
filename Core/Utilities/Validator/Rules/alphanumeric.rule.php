@@ -6,18 +6,18 @@
  */
 
 /**
- * Description of required
+ * Description of alphanumeric
  *
  * @author smarkoski
  */
-class required extends Rule {
-    
+class alphanumeric implements Rule {
+
     public function getError() {
-        return 'The '.$this->fieldname.' is required';
+        return 'The '.$this->fieldname .' field must contain only alpha numeric characters';
     }
 
     public function run() {
-        if (empty($this->value)){
+        if (preg_match('/[^\w]/i', $this->value)) {
             return FALSE;
         }
         return TRUE;

@@ -40,7 +40,6 @@
 
         <database>
             <host>192.168.0.50</host> <!--Development-->
-<!--        <host>localhost</host>  Production -->
             <databasename>silentrunning</databasename>
             <username>sr</username>
             <password>wra92e</password>

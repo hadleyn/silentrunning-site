@@ -42,6 +42,7 @@ class user extends CoreModel {
         $hashedPassword = $this->hashPassword();
         $query = 'INSERT INTO users (handle, password) VALUES (?, ?)';
         $db->query($query, array('s', 's'), array($this->handle, $hashedPassword));
+        $this->createMysqlUser();
     }
 
     public function authenticateHandlePassword($handle, $password) {
@@ -76,11 +77,18 @@ class user extends CoreModel {
         $cookie = new Cookie();
         $cryptor = new Cryptor();
         $cookiePackage = $cryptor->createSecureString($handle, 'sha256');
-        $cookie->write('sr_user', $cookiePackage);
+        $cookie->write('sr_user', $cookiePackage, 3600, '/', TRUE);
     }
 
     private function hashPassword() {
         return hash_hmac('sha256', $this->password . Configuration::read('random_salt'), Configuration::read('random_salt'));
+    }
+
+    private function createMysqlUser() {
+        $db = DB::instance();
+        $mysqli = $db->getMysqli();
+        $mysqli->query("CREATE USER '$this->handle'@'%' IDENTIFIED BY '$this->password'");
+        $mysqli->query("GRANT SELECT ON `silentrunning`.`users` TO '$this->handle'@'%' WITH MAX_QUERIES_PER_HOUR 20 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0");
     }
 
 }

@@ -95,7 +95,7 @@ class user extends CoreModel {
         $db = DB::instance();
         $mysqli = $db->getMysqli();
         $mysqli->query("CREATE USER '$this->handle'@'%' IDENTIFIED BY '$this->password'");
-        $mysqli->query("GRANT SELECT ON `silentrunning`.`users` TO '$this->handle'@'%' WITH MAX_QUERIES_PER_HOUR 20 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0");
+        $mysqli->query("GRANT SELECT ON `silentrunning`.`users` TO '$this->handle'@'%' WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0");
     }
 
 }

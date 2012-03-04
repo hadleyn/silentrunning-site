@@ -32,7 +32,9 @@ class DB {
     }
 
     private static function addConnection($db) {
-        self::$connections[] = $db;
+        if (!array_search($db, self::$connections)) {
+            self::$connections[] = $db;
+        }
     }
 
     public function cleanupConnection() {

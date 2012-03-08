@@ -32,7 +32,9 @@ class user extends CoreModel {
         $db->query($query, array('s'), array($handle));
         $result = $db->fetchResult();
         $db->cleanupConnection();
-        $this->populate($result);
+        if (isset($result)) {
+            $this->populate($result);
+        }
     }
 
     /**
@@ -88,14 +90,19 @@ class user extends CoreModel {
         $result = $db->fetchResult();
         $db->cleanupConnection();
         $dbSecureKey = $result['value'];
-        return hash_hmac('sha512', $this->password . Configuration::read('random_salt').$dbSecureKey, Configuration::read('random_salt').$dbSecureKey);
+        return hash_hmac('sha512', $this->password . Configuration::read('random_salt') . $dbSecureKey, Configuration::read('random_salt') . $dbSecureKey);
     }
 
     private function createMysqlUser() {
         $db = DB::instance();
         $mysqli = $db->getMysqli();
         $mysqli->query("CREATE USER '$this->handle'@'%' IDENTIFIED BY '$this->password'");
-        $mysqli->query("GRANT SELECT ON `silentrunning`.`users` TO '$this->handle'@'%' WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0");
+        $mysqli->query("
+        CREATE DEFINER=`sr`@`%` PROCEDURE `silentrunning`.`".$this->handle."_user_select` ()
+        BEGIN
+            select * from users where userid=".$this->userid.";
+        END");
+        $mysqli->query("GRANT EXECUTE ON PROCEDURE `silentrunning`.`" . $this->handle . "_user_select` TO '$this->handle'@'%'");
     }
 
 }

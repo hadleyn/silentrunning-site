@@ -32,13 +32,13 @@ class hive extends HiveAuth {
         }
         $this->redirect(Configuration::read('basepath'));
     }
-    
+
     public function login_precontroller() {
         $validator = new Validator();
         $validator->addRule(new required(Input::post('handle'), 'handle'));
         $validator->addRule(new authenticateuser(Input::post('handle'), Input::post('password')));
         $this->errorHelper->pushError($validator->run());
-        if ($this->errorHelper->hasErrors()){
+        if ($this->errorHelper->hasErrors()) {
             $this->redirect(Configuration::read('basepath'));
         } else {
             $this->precontroller();

@@ -32,7 +32,7 @@ class DB {
     }
 
     private static function addConnection($db) {
-        if (!array_search($db, self::$connections)) {
+        if (isset(self::$connections) && !array_search($db, self::$connections)) {
             self::$connections[] = $db;
         }
     }
@@ -62,6 +62,12 @@ class DB {
 
     public function getMysqli() {
         return $this->mysqli;
+    }
+    
+    public function __get($name){
+        if ($name == 'insert_id'){
+            return $this->insertID;
+        }
     }
 
     /**

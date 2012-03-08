@@ -1,4 +1,5 @@
 <?php
+define('BASEPATH', Configuration::read('basepath'));
 /* 
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -15,7 +16,7 @@ class HeaderBuilder implements Task {
 
     public function __construct(){
         $this->headHelper = HeadHelper::getInstance();
-
+        
         $this->setupHeadHelper();
     }
 

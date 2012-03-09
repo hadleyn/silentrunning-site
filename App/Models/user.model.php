@@ -45,6 +45,7 @@ class user extends CoreModel {
         $hashedPassword = $this->hashPassword();
         $query = 'INSERT INTO users (handle, password) VALUES (?, ?)';
         $db->query($query, array('s', 's'), array($this->handle, $hashedPassword));
+        $this->userid = $db->insert_id;
         $this->createMysqlUser();
     }
 

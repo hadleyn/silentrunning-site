@@ -16,7 +16,7 @@ function checkHandleAvailable(){
        type: 'post',
        dataType: 'json',
        data: 'handle='+$('#registerHandle').val(),
-       url: 'hive/checkhandle',
+       url: 'checkhandle',
        success: function(data){
            console.log(data);
            if (data.handleOk){

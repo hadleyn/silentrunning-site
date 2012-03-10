@@ -18,7 +18,7 @@ abstract class HiveAuth extends CoreController {
     }
 
     public function preajax() {
-        
+
         try {
             $this->getUserFromCookie();
         } catch (CookieDataIOException $e) {

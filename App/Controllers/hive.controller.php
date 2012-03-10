@@ -68,16 +68,6 @@ class hive extends HiveAuth {
         $this->precontroller();
     }
 
-    public function checkhandle_ajax() {
-        $this->user->getUserByHandle(Input::post('handle'));
-        $result = array();
-        $result['handleOk'] = TRUE;
-        if ($this->user->userid > 0) {
-            $result['handleOk'] = FALSE;
-        }
-        echo json_encode($result);
-    }
-
     /*
      * 
      * Begin Ajax callbacks

@@ -62,6 +62,7 @@ class Session {
     }
     
     public function destroy($name) {
+        $_SESSION[$name] = NULL;
         unset($_SESSION[$name]);
     }
 

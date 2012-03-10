@@ -18,10 +18,15 @@ class hive extends HiveAuth {
         parent::__construct();
         $headHelper = HeadHelper::getInstance();
         $headHelper->addScript('content');
+        $headHelper->addScript('jquery-ui-1.8.18.custom.min');
+        $headHelper->addScript('hive');
+        $headHelper->addCSS('hivestyle');
     }
 
     public function invoke() {
         $this->viewData['contentCreationForm'] = $this->bufferedControllerCall('createContentCreationForm');
+        $textContent = new textcontent();
+        $this->viewData['contentBlocks'] = $textContent->getAll();
         $this->loadView('hive');
     }
 

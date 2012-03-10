@@ -1,0 +1,23 @@
+/* 
+    Document   : hivestyle
+    Created on : Mar 10, 2012, 3:24:57 PM
+    Author     : smarkoski
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+
+#hiveDisplay {
+    position: relative;
+    width: 900px;
+    min-height: 400px;
+    border: 1px solid #CCC;
+    margin: 5px auto;
+}
+
+.hiveContentBox {
+    position: absolute;
+    border: 1px solid #DDD;
+    padding: 5px;
+    cursor: default;
+}

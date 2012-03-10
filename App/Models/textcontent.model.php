@@ -38,13 +38,7 @@ class textcontent extends CoreModel implements content {
     public function displayContent() {
         
     }
-
-    public function insertContent() {
-        $db = DB::instance();
-        $query = 'INSERT INTO content (ownerid, content_type, content_data, created, modified) VALUES (?, "'.TEXT.'", ?, NOW(), NOW())';
-        $db->query($query, array('i', 's'), array($this->ownerid, $this->content_data));
-    }
-    
+ 
     public function getOwner() {
         return $this->ownerid;
     }
@@ -53,6 +47,26 @@ class textcontent extends CoreModel implements content {
         
     }
 
+    public function insertContent() {
+        $db = DB::instance();
+        $query = 'INSERT INTO content (ownerid, content_type, content_data, created, modified) VALUES (?, "'.TEXT.'", ?, NOW(), NOW())';
+        $db->query($query, array('i', 's'), array($this->ownerid, $this->content_data));
+    }
+    
+    public function getAll() {
+        $db = DB::instance();
+        $query = 'SELECT * FROM content WHERE content_type = "'.TEXT.'"';
+        $db->query($query);
+        $results = array();
+        while ($resultRow = $db->fetchResult()) {
+            $tc = new textcontent();
+            $tc->populate($resultRow);
+            $results[] = $tc;
+        }
+        
+        return $results;
+    }
+    
 }
 
 ?>

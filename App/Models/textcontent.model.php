@@ -12,6 +12,14 @@
  */
 class textcontent extends CoreModel implements content {
 
+    protected $contentid;
+    protected $ownerid;
+    protected $content_type;
+    protected $content_data;
+    protected $created;
+    protected $modified;
+    
+    
     public function getContent($id) {
         $db = DB::instance();
         $query = 'SELECT * FROM content WHERE contentid=?';
@@ -31,14 +39,14 @@ class textcontent extends CoreModel implements content {
         
     }
 
-    public function insertContent($ownerid, $content) {
+    public function insertContent() {
         $db = DB::instance();
-        $query = 'INSERT INTO content (ownerid, content_type, content_data, created, modified) VALUES (?, '.TEXT.', ?, NOW(), NOW())';
-        $db->query($query, array('i', 's'), array($ownerid, $content));
+        $query = 'INSERT INTO content (ownerid, content_type, content_data, created, modified) VALUES (?, "'.TEXT.'", ?, NOW(), NOW())';
+        $db->query($query, array('i', 's'), array($this->ownerid, $this->content_data));
     }
     
     public function getOwner() {
-        
+        return $this->ownerid;
     }
 
     public function updateContent($id) {

@@ -63,6 +63,19 @@ class Cryptor {
         return (hash_hmac($method, $data, $this->secretKey) == $hash);
     }
     
+    /**
+     * A utility for getting the secure data out of the secure string.
+     * 
+     * @param string $secureString
+     * @return array The array of strings in the secure hash 
+     */
+    public function getSecureData($secureString) {
+        $temp = base64_decode(urldecode($secureString));
+        $pieces = explode('~~', $temp);
+        array_pop($pieces); //remove the hash
+        return $pieces;
+    }
+    
     
 }
 

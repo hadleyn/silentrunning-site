@@ -16,10 +16,12 @@ class hive extends HiveAuth {
 
     public function __construct() {
         parent::__construct();
-        $this->user = new user();
+        $headHelper = HeadHelper::getInstance();
+        $headHelper->addScript('content');
     }
 
     public function invoke() {
+        $this->viewData['contentCreationForm'] = $this->bufferedControllerCall('createContentCreationForm');
         $this->loadView('hive');
     }
 
@@ -74,6 +76,42 @@ class hive extends HiveAuth {
             $result['handleOk'] = FALSE;
         }
         echo json_encode($result);
+    }
+
+    /*
+     * 
+     * Begin Ajax callbacks
+     * 
+     */
+
+    public function createContent_ajax() {
+        $validator = new Validator();
+        $validator->addRule(new required(Input::post('content'), 'content'));
+        $this->errorHelper->pushError($validator->run());
+        $result['errors'] = '';
+        if ($this->errorHelper->hasErrors()) {
+            $result['errors'] = $this->errorHelper->showErrors(FALSE);
+        } else {
+            $content = new textcontent();
+            $content->ownerid = $this->user->userid;
+            $content->content_data = Input::post('content');
+            try {
+                $content->insertContent();
+            } catch (Exception $e) {
+                $result['errors'] = $e->getMessage();
+            }
+        }
+        echo json_encode($result);
+    }
+
+    /*
+     * 
+     * Begin protected subview creation methods
+     * 
+     */
+
+    protected function createContentCreationForm() {
+        $this->loadView('contentcreationform');
     }
 
 }

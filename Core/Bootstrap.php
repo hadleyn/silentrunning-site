@@ -97,18 +97,7 @@ class Bootstrap {
             die('Missing controller: ' . $this->controllerFile);
         }
     }
-
-    private function executeAjax() {
-        if (method_exists($this->controllerObject, $this->method . '_ajax')) {
-            if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
-                $this->wrap_call_user_func_array($this->controllerObject, $this->method . '_ajax', $this->arguments);
-                die();
-            } else {
-                die('Invalid request!');
-            }
-        }
-    }
-
+    
     private function executePreLaunchTasks() {
         /*
          * Look for any pre-launch tasks
@@ -119,6 +108,21 @@ class Bootstrap {
                 $pre = preg_replace('/\..*$/', '', $pre);
                 $task = new $pre();
                 $task->execute();
+            }
+        }
+    }
+    
+    private function executeAjax() {
+        if (method_exists($this->controllerObject, $this->method . '_ajax')) {
+            if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
+                //Call the preajax method first if we've got one
+                if (method_exists($this->controllerObject, 'preajax')) {
+                    $this->wrap_call_user_func_array($this->controllerObject, 'preajax', $this->arguments);
+                }
+                $this->wrap_call_user_func_array($this->controllerObject, $this->method . '_ajax', $this->arguments);
+                die();
+            } else {
+                die('Invalid request!');
             }
         }
     }

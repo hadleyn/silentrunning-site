@@ -13,7 +13,7 @@
 class required extends Rule {
     
     public function getError() {
-        return 'The '.$this->fieldname.' is required';
+        return 'The '.$this->fieldname.' field is required';
     }
 
     public function run() {

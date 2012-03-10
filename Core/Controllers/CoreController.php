@@ -27,7 +27,7 @@ abstract class CoreController implements ICoreController {
         $this->viewPrefix = '';
         $this->errorHelper = new Error();
     }
-
+    
     public function precontroller() {
         $preController = scandir(Configuration::read('task_path'));
         foreach ($preController as $pre) {

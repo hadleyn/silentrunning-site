@@ -53,12 +53,12 @@ class user extends CoreModel {
         $db = DB::instance();
         $this->password = $password;
         $hashedPassword = $this->hashPassword();
-        $query = 'SELECT COUNT(*) AS c FROM users WHERE handle=? AND password=?';
+        $query = 'SELECT *, COUNT(*) AS c FROM users WHERE handle=? AND password=?';
         $db->query($query, array('s', 's'), array($handle, $hashedPassword));
         $result = $db->fetchResult();
         $db->cleanupConnection();
         if ($result['c'] > 0) {
-            $this->writeCookie($handle);
+            $this->writeCookie($result['userid'], $handle);
             return TRUE;
         }
         return FALSE;
@@ -78,10 +78,10 @@ class user extends CoreModel {
         }
     }
 
-    private function writeCookie($handle) {
+    private function writeCookie($userid, $handle) {
         $cookie = new Cookie();
         $cryptor = new Cryptor();
-        $cookiePackage = $cryptor->createSecureString($handle, 'sha256');
+        $cookiePackage = $cryptor->createSecureString(array($userid, $handle), 'sha256');
         $cookie->write('sr_user', $cookiePackage, 3600, '/', TRUE);
     }
 

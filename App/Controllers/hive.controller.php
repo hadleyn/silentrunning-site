@@ -25,8 +25,7 @@ class hive extends HiveAuth {
 
     public function invoke() {
         $this->viewData['contentCreationForm'] = $this->bufferedControllerCall('createContentCreationForm');
-        $textContent = new textcontent();
-        $this->viewData['contentBlocks'] = $textContent->getAll();
+        $this->viewData['hiveContent'] = $this->bufferedControllerCall('createHiveContents');
         $this->loadView('hive');
     }
 
@@ -109,6 +108,11 @@ class hive extends HiveAuth {
         $this->loadView('contentcreationform');
     }
 
+    protected function createHiveContents() {
+        $textContent = new textcontent();
+        $this->viewData['contentBlocks'] = $textContent->getAll();
+        $this->loadView('hivecontents');
+    }
 }
 
 ?>

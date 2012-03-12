@@ -14,11 +14,13 @@ define('VIDEO', 'VIDEO');
  */
 interface content {
     
-    public function displayContent();
+    public function display();
     public function deleteContent($id);
     public function updateContent($id);
     public function getContent($id);
     public function getOwner();
+    public function setZ();
+    public function getZ();
     
 }
 

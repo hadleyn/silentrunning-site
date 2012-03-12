@@ -28,6 +28,10 @@ abstract class CoreController implements ICoreController {
         $this->errorHelper = new Error();
     }
     
+    public function preajax() {
+        // this doesn't do anything by default
+    }
+    
     public function precontroller() {
         $preController = scandir(Configuration::read('task_path'));
         foreach ($preController as $pre) {

@@ -20,4 +20,9 @@
     border: 1px solid #DDD;
     padding: 5px;
     cursor: default;
+    background-color: #EEE;
+    font-size: 12px;
+    height: 125px;
+    width: 270px;
+    overflow: hidden;
 }

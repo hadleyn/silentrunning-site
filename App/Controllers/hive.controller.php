@@ -97,6 +97,11 @@ class hive extends HiveAuth {
         }
         echo json_encode($result);
     }
+    
+    public function refreshContent_ajax() {
+        $result['hiveContent'] = $this->bufferedControllerCall('createHiveContents');
+        echo json_encode($result);
+    }
 
     /*
      * 
@@ -110,7 +115,9 @@ class hive extends HiveAuth {
 
     protected function createHiveContents() {
         $textContent = new textcontent();
-        $this->viewData['contentBlocks'] = $textContent->getAll();
+        $hivemodel = new hivemodel();
+        $hivemodel->addContent($textContent->getAll());
+        $this->viewData['hivemodel'] = $hivemodel;
         $this->loadView('hivecontents');
     }
 }

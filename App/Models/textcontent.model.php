@@ -35,12 +35,20 @@ class textcontent extends CoreModel implements content {
         $db->query($query, array('i'), array($id));
     }
 
-    public function displayContent() {
-        
+    public function display() {
+        echo $this->content_data;
     }
  
     public function getOwner() {
         return $this->ownerid;
+    }
+    
+    public function getZ() {
+        
+    }
+
+    public function setZ() {
+        
     }
 
     public function updateContent($id) {
@@ -55,7 +63,7 @@ class textcontent extends CoreModel implements content {
     
     public function getAll() {
         $db = DB::instance();
-        $query = 'SELECT * FROM content WHERE content_type = "'.TEXT.'"';
+        $query = 'SELECT * FROM content WHERE content_type = "'.TEXT.'" ORDER BY created';
         $db->query($query);
         $results = array();
         while ($resultRow = $db->fetchResult()) {
@@ -66,6 +74,8 @@ class textcontent extends CoreModel implements content {
         
         return $results;
     }
+
+    
     
 }
 

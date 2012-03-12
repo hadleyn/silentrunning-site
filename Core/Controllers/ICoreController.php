@@ -9,6 +9,7 @@
  * @author smarkoski
  */
 interface ICoreController {
+    public function preajax();
     public function precontroller();
     public function invoke();
     public function postcontroller();

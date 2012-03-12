@@ -1,3 +1,3 @@
-<?php foreach ($contentBlocks as $content): ?>
-    <div class="hiveContentBox" id="<?php echo $content->contentid; ?>"><?php echo $content->content_data; ?></div>
+<?php foreach ($hivemodel->hiveContent as $content): ?>
+    <div style="top: <?php echo rand(0, 275);?>px; left: <?php echo rand(0, 600);?>px" class="hiveContentBox" id="<?php echo $content->contentid; ?>"><?php $content->display(); ?></div>
 <?php endforeach; ?>

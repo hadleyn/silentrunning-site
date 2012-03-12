@@ -17,7 +17,20 @@ function addContent(){
       success: function(data){
           if (data.errors.length > 0){
               $('#contentErrors').html(data.errors);
+          } else {
+              refreshHiveContent();
           }
       }
    });
+}
+
+function refreshHiveContent() {
+  $.ajax({
+     type: 'post',
+     dataType: 'json',
+     url: '/sr/hive/refreshContent',
+     success: function(data){
+         $('#hiveDisplay').html(data.hiveContent);
+     }
+  });
 }

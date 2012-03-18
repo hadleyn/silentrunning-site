@@ -24,12 +24,12 @@ class user extends CoreModel {
     /**
      * Populate $this with the user with the handle provided.
      * 
-     * @param string $handle The handle of the user to search for.
+     * @param mixed $handle The handle of the user to search for. Can also be a user ID.
      */
     public function getUserByHandle($handle) {
         $db = DB::instance();
-        $query = 'SELECT * FROM users WHERE handle=?';
-        $db->query($query, array('s'), array($handle));
+        $query = 'SELECT * FROM users WHERE handle=? OR userid=? LIMIT 1';
+        $db->query($query, array('si'), array($handle, $handle));
         $result = $db->fetchResult();
         $db->cleanupConnection();
         if (isset($result)) {

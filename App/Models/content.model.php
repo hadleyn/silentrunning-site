@@ -18,9 +18,13 @@ interface content {
     public function deleteContent($id);
     public function updateContent($id);
     public function getContent($id);
+    public function getAllContent($depth);
     public function getOwner();
-    public function setZ();
+    public function setZ($value);
     public function getZ();
+    public function setOpacity($value);
+    public function getOpacity();
+    
     
 }
 

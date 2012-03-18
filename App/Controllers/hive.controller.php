@@ -116,7 +116,9 @@ class hive extends HiveAuth {
     protected function createHiveContents() {
         $textContent = new textcontent();
         $hivemodel = new hivemodel();
-        $hivemodel->addContent($textContent->getAll());
+//        $hivemodel->addContent($textContent->getAll());
+        //$hivemodel->addContent($videoContent->getAll();
+        //$hivemodel->addContent($imageContent->getAll();
         $this->viewData['hivemodel'] = $hivemodel;
         $this->loadView('hivecontents');
     }

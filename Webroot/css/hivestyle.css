@@ -26,3 +26,8 @@
     width: 270px;
     overflow: hidden;
 }
+
+.hiveContentBox .contentOwner {
+    font-weight: bold;
+    font-size: 14px;
+}

@@ -36,6 +36,8 @@
             <value name="captcha_priv_key">6LcXWM4SAAAAAPBQtfZ6ALARPdY5K-Yw3hlT75uJ</value>
             <value name="sessions_enabled">1</value>
             <value name="error_div_class">sr_errors</value>
+            <value name="default_hive_depth">8</value> <!-- the depth of the hive, in days -->
+            <value name="hive_layer_size">2</value> <!-- how many content bits do we show in a single hive layer -->
         </values>
 
         <database>

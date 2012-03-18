@@ -19,6 +19,7 @@ function addContent(){
               $('#contentErrors').html(data.errors);
           } else {
               refreshHiveContent();
+              rebind();
           }
       }
    });

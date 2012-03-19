@@ -28,6 +28,10 @@ class hivemodel extends CoreModel {
         $this->partitionContent();
     }
 
+    public function reduceToDepth($depth) {
+//        $i = ;
+    }
+    
     /**
      * Add a single piece of content to the hive
      * 

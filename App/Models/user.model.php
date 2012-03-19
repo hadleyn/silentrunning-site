@@ -21,6 +21,17 @@ class user extends CoreModel {
         $this->userid = -1;
     }
 
+    public static function getCurrentUserID() {
+        $cookie = new Cookie();
+        $cryptor = new Cryptor();
+        $temp = $cookie->read(Configuration::read('auth_cookie_name'));
+        $userid = -1;
+        if ($cryptor->verifySecureString($temp, 'sha256')) { //I don't think this is necessary, but why chance it
+            list($userid, $handle) = $cryptor->getSecureData($temp);
+        }
+        return $userid;
+    }
+    
     /**
      * Populate $this with the user with the handle provided.
      * 
@@ -68,7 +79,7 @@ class user extends CoreModel {
         $cookie = new Cookie();
         $cryptor = new Cryptor();
         try {
-            if ($cryptor->verifySecureString($cookie->read('sr_user'), 'sha256')) {
+            if ($cryptor->verifySecureString($cookie->read(Configuration::read('auth_cookie_name')), 'sha256')) {
                 return TRUE;
             } else {
                 return FALSE;
@@ -82,7 +93,7 @@ class user extends CoreModel {
         $cookie = new Cookie();
         $cryptor = new Cryptor();
         $cookiePackage = $cryptor->createSecureString(array($userid, $handle), 'sha256');
-        $cookie->write('sr_user', $cookiePackage, 3600, '/', TRUE);
+        $cookie->write(Configuration::read('auth_cookie_name'), $cookiePackage, 3600, '/', TRUE);
     }
 
     private function hashPassword() {

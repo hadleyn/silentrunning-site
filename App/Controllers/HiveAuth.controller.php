@@ -38,7 +38,7 @@ abstract class HiveAuth extends CoreController {
 
     private function getUserFromCookie() {
         $cookie = new Cookie();
-        $temp = $cookie->read('sr_user');
+        $temp = $cookie->read(Configuration::read('auth_cookie_name'));
         $cryptor = new Cryptor();
         if (!$cryptor->verifySecureString($temp, 'sha256')) {
             throw new CookieDataIOException();

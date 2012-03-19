@@ -5,4 +5,5 @@
         <div id="hiveDisplay">
             <?php echo $hiveContent; ?>
         </div>
+        <div id="depthSlider"></div>
     </div>

@@ -102,7 +102,7 @@ class DB {
         if ($this->stmt->error) {
             throw new MysqliQueryExecutionException('Execution of statement failed: ' . $this->stmt->error);
         }
-        $this->insertID = $this->stmt->insert_id;
+        $this->insertID = $this->stmt->insert_id == 0 ? $this->mysqli->insert_id : $this->stmt->insert_id;
         if ($queryType != SELECT) {
             //return the connection to the pool
             $this->cleanupConnection();

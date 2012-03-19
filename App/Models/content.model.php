@@ -22,8 +22,13 @@ interface content {
     public function getOwner();
     public function setZ($value);
     public function getZ();
+    public function getX();
+    public function setX($value);
+    public function getY();
+    public function setY($value);
     public function setOpacity($value);
     public function getOpacity();
+    public function storeCoordinates();
     
     
 }

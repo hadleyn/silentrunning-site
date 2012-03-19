@@ -21,6 +21,7 @@ class hive extends HiveAuth {
         $headHelper->addScript('jquery-ui-1.8.18.custom.min');
         $headHelper->addScript('hive');
         $headHelper->addCSS('hivestyle');
+        $headHelper->addCSS('custom-theme/jquery-ui');
     }
 
     public function invoke() {
@@ -102,6 +103,20 @@ class hive extends HiveAuth {
         $result['hiveContent'] = $this->bufferedControllerCall('createHiveContents');
         echo json_encode($result);
     }
+    
+    public function updateHiveDepth_ajax() {
+        $depth = Input::post('depth');
+        $hivemodel = new hivemodel(); //this automatically builds a partitioned list
+        
+    }
+    
+    public function updateContentCoords_ajax() {
+        $textContent = new textcontent();
+        $textContent->getContent(Input::post('id'));
+        $textContent->setX(Input::post('x'));
+        $textContent->setY(Input::post('y'));
+        $textContent->storeCoordinates();
+    }
 
     /*
      * 
@@ -114,7 +129,7 @@ class hive extends HiveAuth {
     }
 
     protected function createHiveContents() {
-        $textContent = new textcontent();
+//        $textContent = new textcontent();
         $hivemodel = new hivemodel();
 //        $hivemodel->addContent($textContent->getAll());
         //$hivemodel->addContent($videoContent->getAll();

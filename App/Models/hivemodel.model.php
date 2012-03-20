@@ -25,7 +25,6 @@ class hivemodel extends CoreModel {
         $this->layers = array();
 //        $this->hiveContent = array();
         $this->content = new content();
-        $this->partitionContent();
     }
 
     public function reduceToDepth($depth) {
@@ -49,7 +48,7 @@ class hivemodel extends CoreModel {
     /**
      * This function partitions all the content into the layers. 
      */
-    private function partitionContent() {
+    public function partitionContent() {
         $layers = $this->calculateLayers();
         //Now assign z indexes to the layers
         $maxZ = 30;

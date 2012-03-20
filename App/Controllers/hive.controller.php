@@ -87,7 +87,7 @@ class hive extends HiveAuth {
         if ($this->errorHelper->hasErrors()) {
             $result['errors'] = $this->errorHelper->showErrors(FALSE);
         } else {
-            $content = new textcontent();
+            $content = new content();
             $content->ownerid = $this->user->userid;
             $content->content_data = Input::post('content');
             try {
@@ -111,11 +111,11 @@ class hive extends HiveAuth {
     }
     
     public function updateContentCoords_ajax() {
-        $textContent = new textcontent();
-        $textContent->getContent(Input::post('id'));
-        $textContent->setX(Input::post('x'));
-        $textContent->setY(Input::post('y'));
-        $textContent->storeCoordinates();
+        $content = new content();
+        $content->getContent(Input::post('id'));
+        $content->x = Input::post('x');
+        $content->y = Input::post('y');
+        $content->storeCoordinates();
     }
 
     /*

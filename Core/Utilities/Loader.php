@@ -15,12 +15,12 @@ class Loader {
     public static function loadGeneric($e) {
         $file = array();
         $file[] = Configuration::read('utility_path') . $e . '.php';
-        $file[] = Configuration::read('utility_path') . '/Validator/Rules/' . $e . '.rule.php';
+        $file[] = Configuration::read('utility_path') . 'Validator/Rules/' . $e . '.rule.php';
         $file[] = Configuration::read('user_validation_rules_path') . $e . '.rule.php';
         $file[] = Configuration::read('app_utility_path') . $e . '.php';
         $file[] = Configuration::read('exception_path') . $e . '.php';
-        $file[] = Configuration::read('controller_path') . $e . '.controller.php';
         $file[] = Configuration::read('model_path') . $e . '.model.php';
+        $file[] = Configuration::read('controller_path') . $e . '.controller.php';
         $file[] = Configuration::read('core_model_path') . $e . '.php';
         $file[] = Configuration::read('task_path') . $e . '.precontroller.php';
         $file[] = Configuration::read('task_path') . $e . '.postcontroller.php';

@@ -17,14 +17,14 @@ class hivemodel extends CoreModel {
 
     protected $layers;
 //    protected $hiveContent;
-    protected $textContent;
+    protected $content;
     protected $videoContent;
     protected $photoContent;
 
     public function __construct() {
         $this->layers = array();
 //        $this->hiveContent = array();
-        $this->textContent = new textcontent();
+        $this->content = new content();
         $this->partitionContent();
     }
 
@@ -54,14 +54,17 @@ class hivemodel extends CoreModel {
         //Now assign z indexes to the layers
         $maxZ = 30;
         $opacity = 1;
+        $scale = 1;
         foreach ($layers as $l) {
             foreach ($l as $lc) {
-                $lc->setZ($maxZ);
-                $lc->setOpacity($opacity);
+                $lc->z = $maxZ;
+                $lc->opacity = $opacity;
+                $lc->scale = $scale;
                 $this->layers[] = $lc;
             }
             $maxZ--;
             $opacity = $opacity / 2; //the further back in time we go, the more faded the content is.
+            $scale = $scale * 0.85; //the further back in time we go, the smaller the content gets
         }
         
     }
@@ -75,11 +78,11 @@ class hivemodel extends CoreModel {
     private function calculateLayers() {
         //find the range of dates we are trying to show
         
-        $allTextContent = $this->textContent->getAllContent(Configuration::read('default_hive_depth'));
+        $allContent = $this->content->getAllContent(Configuration::read('default_hive_depth'));
         //$allVideoContent = ...
         //$allImageContent = ...
         
-        $layers = array_chunk($allTextContent, Configuration::read('hive_layer_size'));
+        $layers = array_chunk($allContent, Configuration::read('hive_layer_size'));
         
         return $layers;
         

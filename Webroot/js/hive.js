@@ -33,11 +33,23 @@ function rebind() {
     });
     $( ".hiveContentBox" ).bind( "dragstop", function(event, ui) {
         $.ajax({
-           type: 'post',
-           dataType: 'json',
-           data: 'x='+ui.position.left+'&y='+ui.position.top+'&id='+ui.helper[0].id,
-           url: '/sr/hive/updateContentCoords'
+            type: 'post',
+            dataType: 'json',
+            data: 'x='+ui.position.left+'&y='+ui.position.top+'&id='+ui.helper[0].id,
+            url: '/sr/hive/updateContentCoords'
         });
     });
-    
+    $('.hiveContentBox').hover(function() {
+        //mouse in
+        if ($(this).css('opacity') == 1) {
+            var expand = $(this).children('.expandContent').get(0);
+            $(expand).fadeIn('fast');
+        }
+    }, function() {
+        //mouse out
+        if ($(this).css('opacity') == 1) {
+            var expand = $(this).children('.expandContent').get(0);
+            $(expand).fadeOut('fast');
+        }
+    });
 }

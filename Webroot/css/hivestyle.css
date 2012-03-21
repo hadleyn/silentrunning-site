@@ -28,6 +28,19 @@
     overflow: hidden;
 }
 
+.expandContent {
+    height: 10px;
+    width: 20px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    border: 3px solid black;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    display: none;
+}
+
 .hiveContentBox .contentOwner {
     font-weight: bold;
     font-size: 14px;

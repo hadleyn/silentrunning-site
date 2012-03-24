@@ -25,6 +25,10 @@ class HeadHelper {
         $this->htmlTitle = '';
     }
 
+    /**
+     *
+     * @return HeadHelper 
+     */
     public static function getInstance() {
         if (!isset(self::$instance)) {
             self::$instance = new HeadHelper();

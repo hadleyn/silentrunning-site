@@ -81,6 +81,10 @@ class DB {
      * @throws MysqliMalformedQueryException 
      */
     public function query($query, $parameterTypes = array(), $parameters = array(), $queryType = '') {
+        if ((array) $parameterTypes !== $parameterTypes) {
+            $parameterTypes = explode(',', $parameterTypes);
+        }
+        
         if (isset($this->stmt)) {
             $this->stmt->close();
         }

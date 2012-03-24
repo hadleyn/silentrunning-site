@@ -9,6 +9,8 @@ require_once 'Core/Utilities/ConfigModule.php';
 require_once 'Core/Utilities/Configuration.php';
 require_once 'Core/Utilities/Loader.php';
 
+define('BASEPATH', Configuration::read('basepath'));
+define('HOST', $_SERVER['SERVER_NAME']);
 /**
  * Description of Bootstrap
  *

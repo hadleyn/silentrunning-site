@@ -10,22 +10,18 @@
  *
  * @author smarkoski
  */
+class colony extends HiveAuth {
 
-namespace App\Controllers {
+    public function __construct() {
+        parent::__construct();
+    }
 
-    class colony extends HiveAuth {
-
-        public function __construct() {
-            parent::__construct();
-        }
-
-        public function addlink_precontroller($test) {
-            parent::precontroller();
-            $colony = new App\Model\colony();
-            $me = $test;
-        }
-
+    public function addlink_precontroller($test) {
+        parent::precontroller();
+        $colony = new App\Model\colony();
+        $me = $test;
     }
 
 }
+
 ?>

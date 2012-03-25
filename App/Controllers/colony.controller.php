@@ -16,10 +16,17 @@ class colony extends HiveAuth {
         parent::__construct();
     }
 
-    public function addlink_precontroller($test) {
+    public function addlink_precontroller($hash) {
         parent::precontroller();
-        $colony = new App\Model\colony();
-        $me = $test;
+        $cryptor = new Cryptor();
+        $colonyLink = new colonylink();
+        if ($cryptor->verifySecureString($hash, 'sha512')) {
+            list($relateTo) = $cryptor->getSecureData($hash);
+            $colonyLink->insertUserRelation($relateTo);
+            $this->messageHelper->pushMessage('Colony link successfully established!');
+            $this->redirect(BASEPATH.'/hive');
+        }
+        
     }
 
 }

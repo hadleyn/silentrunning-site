@@ -24,14 +24,16 @@ class tools extends HiveAuth {
 
     public function createColonyLink_ajax() {
         $cryptor = new Cryptor();
+        $colonyLink = new colonylink();
         $expires = strtotime(Input::post('expires'));
+        if ($expires <= time()) {
+            $expires = null;
+        }
         if (empty($expires)) {
             $expires = strtotime('+2 days');
         }
         $linkKey = $cryptor->createSecureString(array(user::getCurrentUserID()), 'sha512');
-        $db = DB::instance();
-        $query = 'INSERT INTO colony_links (ownerid, link_key, expires) VALUES (?, ?, FROM_UNIXTIME(?))';
-        $db->query($query, 'i,s,s', array(user::getCurrentUserID(), $linkKey, $expires));
+        $colonyLink->createColonyLink($linkKey, $expires);
         $result['link'] = 'http://'.HOST . BASEPATH . '/colony/addlink/' . $linkKey;
         echo json_encode($result);
     }

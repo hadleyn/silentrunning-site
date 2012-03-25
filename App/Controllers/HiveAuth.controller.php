@@ -22,16 +22,25 @@ abstract class HiveAuth extends CoreController {
         try {
             $this->getUserFromCookie();
         } catch (CookieDataIOException $e) {
-            $this->errorHelper->pushError('You must be logged in to view the hive.');
+            $this->messageHelper->pushError('You must be logged in to view the hive.');
         }
     }
 
     public function precontroller() {
+        $session = new Session();
         try {
             $this->getUserFromCookie();
-            parent::precontroller();
+            try {
+                $redirect = $session->read('loginRedirect');
+                $session->destroy('loginRedirect');
+                $this->redirect($redirect);
+            } catch (SessionDataIOException $e) {
+                parent::precontroller();
+            }
         } catch (CookieDataIOException $e) {
-            $this->errorHelper->pushError('You must be logged in to view the hive.');
+            
+            $this->messageHelper->pushError('You must be logged in to view the hive.');
+            $session->write('loginRedirect', URIHelper::getRequestURI(), TRUE);
             $this->redirect(Configuration::read('basepath'));
         }
     }

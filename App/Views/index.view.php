@@ -2,7 +2,7 @@
     <div id="content">
         <div id="welcomebox">
             <h3>Log into the hive</h3>
-            <?php $errorHelper->showErrors(); ?>
+            <?php $messageHelper->showMessages(); ?>
             <div id="loginform">
                 <form action="hive/login" method="post">
                     <input type="text" id="handle" name="handle" placeholder="handle"/>

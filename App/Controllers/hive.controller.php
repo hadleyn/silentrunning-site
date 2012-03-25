@@ -33,9 +33,11 @@ class hive extends HiveAuth {
         $cookie = new Cookie();
         try {
             $cookie->clear('sr_user');
+            $this->messageHelper->pushMessage('Successfully logged out of the hive!');
         } catch (CookieDataIOException $e) {
-            //nothing to do here
+            $this->messageHelper->pushError('Uh oh, something went wrong. Please verify that you have been logged out or try again');
         }
+        
         $this->redirect(Configuration::read('basepath'));
     }
 
@@ -43,8 +45,8 @@ class hive extends HiveAuth {
         $validator = new Validator();
         $validator->addRule(new required(Input::post('handle'), 'handle'));
         $validator->addRule(new authenticateuser(Input::post('handle'), Input::post('password')));
-        $this->errorHelper->pushError($validator->run());
-        if ($this->errorHelper->hasErrors()) {
+        $this->messageHelper->pushError($validator->run());
+        if ($this->messageHelper->hasErrors()) {
             $this->redirect(Configuration::read('basepath'));
         } else {
             $this->precontroller();
@@ -59,8 +61,8 @@ class hive extends HiveAuth {
         $validator->addRule(new required(Input::post('registerPassword'), 'password'));
         $validator->addRule(new matches(Input::post('registerPassword'), Input::post('registerPasswordConf'), 'password', 'password confirm'));
         $validator->addRule(new recaptcha(Input::post('recaptcha_challenge_field'), Input::post('recaptcha_response_field')));
-        $this->errorHelper->pushError($validator->run());
-        if ($this->errorHelper->hasErrors()) {
+        $this->messageHelper->pushError($validator->run());
+        if ($this->messageHelper->hasErrors()) {
             $this->redirect(Configuration::read('basepath'));
         } else {
             $user = new User();
@@ -81,10 +83,10 @@ class hive extends HiveAuth {
     public function createContent_ajax() {
         $validator = new Validator();
         $validator->addRule(new required(Input::post('content'), 'content'));
-        $this->errorHelper->pushError($validator->run());
+        $this->messageHelper->pushError($validator->run());
         $result['errors'] = '';
-        if ($this->errorHelper->hasErrors()) {
-            $result['errors'] = $this->errorHelper->showErrors(FALSE);
+        if ($this->messageHelper->hasErrors()) {
+            $result['errors'] = $this->messageHelper->showMessages(FALSE);
         } else {
             $content = new content();
             $content->ownerid = $this->user->userid;

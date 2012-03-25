@@ -15,17 +15,16 @@ abstract class CoreController implements ICoreController {
 
     protected $viewData;
     /**
-     * A handy error helper class.
-     * @var Error 
+     * A handy message helper class.
+     * @var Message 
      */
-    protected $errorHelper;
-    protected $infoHelper;
+    protected $messageHelper;
     protected $viewPrefix;
 
     public function __construct() {
         $this->viewData = array();
         $this->viewPrefix = '';
-        $this->errorHelper = new Error();
+        $this->messageHelper = new Message();
     }
     
     public function preajax() {
@@ -71,7 +70,7 @@ abstract class CoreController implements ICoreController {
 
     protected function loadView($view) {
         $file = $this->viewPrefix . $view;
-        $this->viewData['errorHelper'] = $this->errorHelper;
+        $this->viewData['messageHelper'] = $this->messageHelper;
         Loader::loadView($file, $this->viewData);
     }
     

@@ -19,14 +19,20 @@ class colony extends HiveAuth {
     public function addlink_precontroller($hash) {
         parent::precontroller();
         $cryptor = new Cryptor();
-        $colonyLink = new colonylink();
+        $usersrelated = new usersrelated();
         if ($cryptor->verifySecureString($hash, 'sha512')) {
-            list($relateTo) = $cryptor->getSecureData($hash);
-            $colonyLink->insertUserRelation($relateTo);
-            $this->messageHelper->pushMessage('Colony link successfully established!');
-            $this->redirect(BASEPATH.'/hive');
+            list($expires, $relateTo) = $cryptor->getSecureData($hash);
+            if ($expires < time()) {
+                $this->messageHelper->pushError('Colony link has expired!');
+            } else {
+                if ($usersrelated->insertUserRelation($relateTo)) {
+                    $this->messageHelper->pushMessage('Colony link successfully established!');
+                } else {
+                    $this->messageHelper->pushError('Colony link failed. Perhaps that link already exists.');
+                }
+            }
+            $this->redirect(BASEPATH . '/hive');
         }
-        
     }
 
 }

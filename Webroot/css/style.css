@@ -375,3 +375,13 @@ a:hover {
     -moz-border-radius: 5px;
     border-radius: 5px
 }
+
+.delete {
+    font-size: 30px;
+    text-decoration: none;
+}
+
+.delete:active {
+    position: relative;
+    top: 1px;
+}

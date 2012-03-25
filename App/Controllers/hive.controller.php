@@ -107,7 +107,8 @@ class hive extends HiveAuth {
 
     public function updateHiveDepth_ajax() {
         $depth = Input::post('depth');
-        $hivemodel = new hivemodel(); //this automatically builds a partitioned list
+        $result['newhive'] = $this->bufferedControllerCall('createHiveContents', array($depth));
+        echo json_encode($result);
     }
 
     public function updateContentCoords_ajax() {
@@ -128,10 +129,10 @@ class hive extends HiveAuth {
         $this->loadView('contentcreationform');
     }
 
-    protected function createHiveContents() {
+    protected function createHiveContents($depth=null) {
 //        $textContent = new textcontent();
         $hivemodel = new hivemodel();
-        $hivemodel->partitionContent();
+        $hivemodel->partitionContent($depth);
         $this->viewData['hivemodel'] = $hivemodel;
         $this->loadView('hivecontents');
     }

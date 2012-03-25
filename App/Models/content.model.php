@@ -63,7 +63,8 @@ class content extends CoreModel {
                     FROM content 
                     LEFT JOIN content_coords 
                     ON content_coords.contentid = content.contentid AND content_coords.userid = ' . user::getCurrentUserID() . '
-                    WHERE DATE(modified) > DATE_SUB(CURRENT_DATE(), INTERVAL ' . $depth . ' DAY) ORDER BY modified DESC';
+                    WHERE DATE(modified) > DATE_SUB(CURRENT_DATE(), INTERVAL ' . $depth . ' DAY) AND ownerid=' . user::getCurrentUserID() . ' OR
+                    ownerid = (SELECT relatedtouserid FROM users_related WHERE userid=' . user::getCurrentUserID() . ') ORDER BY modified DESC';
         $db->query($query);
         $allContent = array();
         while ($resultRow = $db->fetchResult()) {
@@ -81,7 +82,9 @@ class content extends CoreModel {
     }
 
     public function insertContent() {
-        
+        $db = DB::instance();
+        $query = 'INSERT INTO content (ownerid, content_type, content_data, created, modified) VALUES (?, "'.TEXT.'", ?, NOW(), NOW())';
+        $db->query($query, array('i', 's'), array($this->ownerid, $this->content_data));
     }
 
     public function storeCoordinates() {

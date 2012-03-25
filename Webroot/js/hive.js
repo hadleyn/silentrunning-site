@@ -9,7 +9,7 @@ function updateHiveDisplay(value) {
         data: 'depth='+value,
         url: '/sr/hive/updateHiveDepth',
         success: function(data) {
-           
+           $('#hiveDisplay').html(data.newhive);
         }
     });
 }
@@ -21,9 +21,9 @@ function rebind() {
     $('#depthSlider').slider({
         orientation: 'vertical',
         min: 0,
-        max: 10,
+        max: 30,
         step: 1,
-        value: 10,
+        value: 15,
         slide: function( event, ui ) {
             updateHiveDisplay(ui.value);
         }

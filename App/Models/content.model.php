@@ -57,14 +57,16 @@ class content extends CoreModel {
         $this->populate($result);
     }
 
-    public function getAllContent($depth) {
+    public function getAllContent($startDepth, $unit='days') {
         $db = DB::instance();
+        $startTime = strtotime('-'.$startDepth.' '.$unit);
+        $depth = strtotime('-'.Configuration::read('default_hive_depth').' '.$unit, $startTime);
         $query = 'SELECT content.contentid, ownerid, content_type, content_data, created, modified, x, y 
                     FROM content 
                     LEFT JOIN content_coords 
                     ON content_coords.contentid = content.contentid AND content_coords.userid = ' . user::getCurrentUserID() . '
-                    WHERE DATE(modified) > DATE_SUB(CURRENT_DATE(), INTERVAL ' . $depth . ' DAY) AND ownerid=' . user::getCurrentUserID() . ' OR
-                    ownerid = (SELECT relatedtouserid FROM users_related WHERE userid=' . user::getCurrentUserID() . ') ORDER BY modified DESC';
+                    WHERE (UNIX_TIMESTAMP(modified) <= '.$startTime.' AND UNIX_TIMESTAMP(modified) > '.$depth.') AND (ownerid=' . user::getCurrentUserID() . ' OR
+                    ownerid = (SELECT relatedtouserid FROM users_related WHERE userid=' . user::getCurrentUserID() . ')) ORDER BY modified DESC';
         $db->query($query);
         $allContent = array();
         while ($resultRow = $db->fetchResult()) {

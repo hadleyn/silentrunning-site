@@ -48,8 +48,8 @@ class hivemodel extends CoreModel {
     /**
      * This function partitions all the content into the layers. 
      */
-    public function partitionContent($depth=null) {
-        $layers = $this->calculateLayers($depth);
+    public function partitionContent($startDepth=null) {
+        $layers = $this->calculateLayers($startDepth);
         //Now assign z indexes to the layers
         $maxZ = 30;
         $opacity = 1;
@@ -74,12 +74,12 @@ class hivemodel extends CoreModel {
      * 
      * @return int The number of layers 
      */
-    private function calculateLayers($depth) {
+    private function calculateLayers($startDepth) {
         //find the range of dates we are trying to show
-        if (!isset($depth)) {
-            $depth = Configuration::read('default_hive_depth');
+        if (!isset($startDepth)) {
+            $startDepth = 0;
         }
-        $allContent = $this->content->getAllContent($depth);
+        $allContent = $this->content->getAllContent($startDepth, 'hours');
         //$allVideoContent = ...
         //$allImageContent = ...
         

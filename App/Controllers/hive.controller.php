@@ -106,8 +106,8 @@ class hive extends HiveAuth {
     }
 
     public function updateHiveDepth_ajax() {
-        $depth = Input::post('depth');
-        $result['newhive'] = $this->bufferedControllerCall('createHiveContents', array($depth));
+        $startDepth = Input::post('depth');
+        $result['newhive'] = $this->bufferedControllerCall('createHiveContents', array($startDepth));
         echo json_encode($result);
     }
 
@@ -129,10 +129,10 @@ class hive extends HiveAuth {
         $this->loadView('contentcreationform');
     }
 
-    protected function createHiveContents($depth=null) {
+    protected function createHiveContents($startDepth=null) {
 //        $textContent = new textcontent();
         $hivemodel = new hivemodel();
-        $hivemodel->partitionContent($depth);
+        $hivemodel->partitionContent($startDepth);
         $this->viewData['hivemodel'] = $hivemodel;
         $this->loadView('hivecontents');
     }

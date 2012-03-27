@@ -1,5 +1,16 @@
 $(document).ready(function(){
-    rebind();    
+    rebind();
+    
+    $('#depthSlider').slider({
+        orientation: 'vertical',
+        min: 0,
+        max: 480,
+        step: 12,
+        value: 0,
+        slide: function( event, ui ) {
+            updateHiveDisplay(ui.value);
+        }
+    });
 });
 
 function updateHiveDisplay(value) {
@@ -10,6 +21,7 @@ function updateHiveDisplay(value) {
         url: '/sr/hive/updateHiveDepth',
         success: function(data) {
            $('#hiveDisplay').html(data.newhive);
+           rebind();
         }
     });
 }
@@ -18,16 +30,7 @@ function rebind() {
     $('.hiveContentBox').draggable({
         containment: 'parent'
     }); 
-    $('#depthSlider').slider({
-        orientation: 'vertical',
-        min: 0,
-        max: 30,
-        step: 1,
-        value: 15,
-        slide: function( event, ui ) {
-            updateHiveDisplay(ui.value);
-        }
-    });
+    
     $('.hiveContentBox').draggable({
         containment: 'parent'
     });

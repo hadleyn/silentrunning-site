@@ -1,6 +1,5 @@
 $(document).ready(function(){
     rebind();
-    
     $('#depthSlider').slider({
         orientation: 'vertical',
         min: 0,
@@ -20,8 +19,8 @@ function updateHiveDisplay(value) {
         data: 'depth='+value,
         url: '/sr/hive/updateHiveDepth',
         success: function(data) {
-           $('#hiveDisplay').html(data.newhive);
-           rebind();
+            $('#hiveDisplay').html(data.newhive);
+            rebind();
         }
     });
 }

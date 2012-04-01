@@ -108,6 +108,14 @@ class content extends CoreModel {
                 '-o-transform: scale('.$this->scale.'); '.
                 '-moz-transform: scale('.$this->scale.');';
     }
+    
+    public function getCenterX() {
+        return ($this->x + 270) / 2;
+    }
+    
+    public function getCenterY() {
+        return ($this->y + 125) / 2;
+    }
 
 }
 

@@ -26,13 +26,15 @@ function updateHiveDisplay(value) {
 }
 
 function rebind() {
-    $('.hiveContentBox').draggable({
-        containment: 'parent'
-    }); 
+    $('.expandContent').live('click', function(){
+        var parentID = $(this).parent('.hiveContentBox').get(0).id;
+        $('#parentID').val(parentID);
+        $("#addComment").dialog( "open" );
+    });
     
     $('.hiveContentBox').draggable({
         containment: 'parent'
-    });
+    }); 
     $( ".hiveContentBox" ).bind( "dragstop", function(event, ui) {
         $.ajax({
             type: 'post',
@@ -52,6 +54,18 @@ function rebind() {
         if ($(this).css('opacity') == 1) {
             var expand = $(this).children('.expandContent').get(0);
             $(expand).fadeOut('fast');
+        }
+    });
+    
+    $('#addComment').dialog({
+        autoOpen: false,
+        height: 300,
+        width: 500,
+        modal: true,
+        buttons: {
+            "Add Comment": function() {
+                $( this ).dialog( "close" );
+            }
         }
     });
 }

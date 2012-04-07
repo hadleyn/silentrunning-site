@@ -10,4 +10,5 @@
             <?php echo $hiveContent; ?>
         </div>
         <div id="depthSlider"></div>
+        <?php echo $addCommentForm;?>
     </div>

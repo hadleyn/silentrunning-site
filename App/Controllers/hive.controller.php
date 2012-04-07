@@ -26,6 +26,7 @@ class hive extends HiveAuth {
     public function invoke() {
         $this->viewData['contentCreationForm'] = $this->bufferedControllerCall('createContentCreationForm');
         $this->viewData['hiveContent'] = $this->bufferedControllerCall('createHiveContents');
+        $this->viewData['addCommentForm'] = $this->bufferedControllerCall('createCommentForm');
         $this->loadView('hive');
     }
 
@@ -118,7 +119,7 @@ class hive extends HiveAuth {
         $content->y = Input::post('y');
         $content->storeCoordinates();
     }
-
+    
     /*
      * 
      * Begin protected subview creation methods
@@ -135,6 +136,10 @@ class hive extends HiveAuth {
         $hivemodel->partitionContent($startDepth);
         $this->viewData['hivemodel'] = $hivemodel;
         $this->loadView('hivecontents');
+    }
+    
+    protected function createCommentForm() {
+        $this->loadView('addcomment');
     }
 
 }

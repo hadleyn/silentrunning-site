@@ -56,6 +56,22 @@
     display: none;
 }
 
+.hiveContentBox .commentCount {
+    position: absolute;
+    height: 10px;
+    width: 20px;
+    right: 5px;
+    bottom: 5px;
+    border: solid 1px #CCC;
+    text-align: center;
+    font-size: 10px;
+    font-style: italic;
+}
+
+.hiveContentBox .commentCount span {
+    padding: 1px;
+}
+
 .hiveContentBox .contentOwner {
     font-weight: bold;
     font-size: 14px;

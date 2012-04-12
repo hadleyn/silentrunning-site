@@ -17,6 +17,7 @@ class content extends CoreModel {
 
     protected $contentid;
     protected $ownerid;
+    protected $parentid;
     protected $content_type;
     protected $content_data;
     protected $created;
@@ -47,6 +48,15 @@ class content extends CoreModel {
     {
         
     }
+    
+    public function childCount() {
+        $db = DB::instance();
+        $query = 'SELECT COUNT(*) AS c FROM content WHERE parentid=?';
+        $db->query($query, 'i', array($this->contentid));
+        $result = $db->fetchResult();
+        $db->cleanupConnection();
+        return $result['c'];
+    }
 
     public function getContent($id) {
         $db = DB::instance();
@@ -65,7 +75,7 @@ class content extends CoreModel {
                     FROM content 
                     LEFT JOIN content_coords 
                     ON content_coords.contentid = content.contentid AND content_coords.userid = ' . user::getCurrentUserID() . '
-                    WHERE (UNIX_TIMESTAMP(modified) <= '.$startTime.' AND UNIX_TIMESTAMP(modified) > '.$depth.') AND (ownerid=' . user::getCurrentUserID() . ' OR
+                    WHERE parentid = 0 AND (UNIX_TIMESTAMP(modified) <= '.$startTime.' AND UNIX_TIMESTAMP(modified) > '.$depth.') AND (ownerid=' . user::getCurrentUserID() . ' OR
                     ownerid = (SELECT relatedtouserid FROM users_related WHERE userid=' . user::getCurrentUserID() . ')) ORDER BY modified DESC';
         $db->query($query);
         $allContent = array();
@@ -85,8 +95,8 @@ class content extends CoreModel {
 
     public function insertContent() {
         $db = DB::instance();
-        $query = 'INSERT INTO content (ownerid, content_type, content_data, created, modified) VALUES (?, "'.TEXT.'", ?, NOW(), NOW())';
-        $db->query($query, array('i', 's'), array($this->ownerid, $this->content_data));
+        $query = 'INSERT INTO content (ownerid, parentid, content_type, content_data, created, modified) VALUES (?, ?, "'.TEXT.'", ?, NOW(), NOW())';
+        $db->query($query, array('i', 'i', 's'), array($this->ownerid, $this->parentid, $this->content_data));
     }
 
     public function storeCoordinates() {

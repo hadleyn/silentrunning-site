@@ -120,6 +120,28 @@ class hive extends HiveAuth {
         $content->storeCoordinates();
     }
     
+    public function addComment_ajax() {
+        $validator = new Validator();
+        $validator->addRule(new required(Input::post('comment'), 'comment'));
+        $this->messageHelper->pushError($validator->run());
+        $result['errors'] = '';
+        if ($this->messageHelper->hasErrors()) {
+            $result['errors'] = $this->messageHelper->showMessages(FALSE);
+        } else {
+            $content = new content();
+            $content->ownerid = $this->user->userid;
+            $content->content_data = Input::post('comment');
+            $content->parentid = Input::post('parentID');
+            try {
+                $content->insertContent();
+            } catch (Exception $e) {
+                $result['errors'] = $e->getMessage();
+            }
+        }
+        echo json_encode($result);
+        
+    }
+    
     /*
      * 
      * Begin protected subview creation methods

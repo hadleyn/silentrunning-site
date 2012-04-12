@@ -64,8 +64,25 @@ function rebind() {
         modal: true,
         buttons: {
             "Add Comment": function() {
-                $( this ).dialog( "close" );
+                submitComment(this);
             }
         }
+    });
+}
+
+function submitComment(dialog) {
+    $.ajax({
+       type: 'post',
+       dataType: 'json',
+       data: $('#commentForm').serialize(),
+       url: '/sr/hive/addComment',
+       success: function(data){
+           if (data.errors.length == 0) {
+                $('#comment').val('');
+                $(dialog).dialog('close');
+           } else {
+                $('#commentMessages').html(data.errors);
+           }
+       }
     });
 }

@@ -10,7 +10,7 @@
  *
  * @author smarkoski
  */
-class user extends CoreModel {
+class user extends CoreModel implements ialertsubscriber {
 
     protected $userid;
     protected $handle;
@@ -31,7 +31,7 @@ class user extends CoreModel {
         }
         return $userid;
     }
-    
+
     /**
      * Populate $this with the user with the handle provided.
      * 
@@ -110,11 +110,18 @@ class user extends CoreModel {
         $mysqli = $db->getMysqli();
         $mysqli->query("CREATE USER '$this->handle'@'%' IDENTIFIED BY '$this->password'");
         $mysqli->query("
-        CREATE DEFINER=`sr`@`%` PROCEDURE `silentrunning`.`".$this->handle."_user_select` ()
+        CREATE DEFINER=`sr`@`%` PROCEDURE `silentrunning`.`" . $this->handle . "_user_select` ()
         BEGIN
-            select * from users where userid=".$this->userid.";
+            select * from users where userid=" . $this->userid . ";
         END");
         $mysqli->query("GRANT EXECUTE ON PROCEDURE `silentrunning`.`" . $this->handle . "_user_select` TO '$this->handle'@'%'");
+    }
+
+    /**
+     * @param Alert $alert
+     */
+    public function processAlert($alert) {
+        
     }
 
 }

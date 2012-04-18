@@ -17,9 +17,9 @@ class hive extends HiveAuth {
     public function __construct() {
         parent::__construct();
         $headHelper = HeadHelper::getInstance();
-        $headHelper->addScript('content');
-
         $headHelper->addScript('hive');
+        $headHelper->addScript('content');
+        
         $headHelper->addCSS('hivestyle');
     }
 
@@ -91,6 +91,7 @@ class hive extends HiveAuth {
         } else {
             $content = new content();
             $content->ownerid = $this->user->userid;
+            $content->parentid = 0;
             $content->content_data = Input::post('content');
             try {
                 $content->insertContent();

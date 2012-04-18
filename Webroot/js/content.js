@@ -19,7 +19,6 @@ function addContent(){
               $('#contentErrors').html(data.errors);
           } else {
               refreshHiveContent();
-              rebind();
           }
       }
    });
@@ -32,6 +31,7 @@ function refreshHiveContent() {
      url: '/sr/hive/refreshContent',
      success: function(data){
          $('#hiveDisplay').html(data.hiveContent);
+         rebind();
      }
   });
 }

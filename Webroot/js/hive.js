@@ -83,6 +83,7 @@ function submitComment(dialog) {
            } else {
                 $('#commentMessages').html(data.errors);
            }
+           refreshHiveContent();
        }
     });
 }

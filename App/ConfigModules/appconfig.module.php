@@ -27,6 +27,7 @@ class appconfig implements ConfigModule {
         
         $this->databaseConfig($sxml);
         $this->valuesConfig($sxml);
+        $this->alertTypesConfig($sxml);
     }
     
     private function databaseConfig($sxml) {
@@ -40,6 +41,12 @@ class appconfig implements ConfigModule {
 
     private function valuesConfig($sxml) {
         foreach ($sxml->{$this->selfname}->values->value as $value) {
+            Configuration::write((string)$value['name'], (string)$value);
+        }
+    }
+    
+    private function alertTypesConfig($sxml) {
+        foreach ($sxml->{$this->selfname}->alertTypes->value as $value) {
             Configuration::write((string)$value['name'], (string)$value);
         }
     }

@@ -21,13 +21,14 @@ class tools extends HiveAuth {
 
     public function invoke() {
         $this->viewData['colonyLinksList'] = $this->bufferedControllerCall('createColonyLinksList');
+        $this->viewData['alertPreferences'] = $this->user->getAlertPreferences();
         $this->loadView('tools');
     }
 
-    
     /*
      * Ajax callbacks
      */
+
     public function createColonyLink_ajax() {
         $cryptor = new Cryptor();
         $colonyLink = new colonylink();
@@ -40,26 +41,39 @@ class tools extends HiveAuth {
         }
         $linkKey = $cryptor->createSecureString(array($expires, user::getCurrentUserID()), 'sha512');
         $colonyLink->createColonyLink($linkKey, $expires);
-        $result['link'] = 'http://'.HOST . BASEPATH . '/colony/addlink/' . $linkKey;
+        $result['link'] = 'http://' . HOST . BASEPATH . '/colony/addlink/' . $linkKey;
         $result['colonyLinksList'] = $this->bufferedControllerCall('createColonyLinksList');
         echo json_encode($result);
     }
-    
+
     public function deleteColonyLink_ajax() {
         $colonyLink = new colonylink();
         $colonyLink->deleteColonyLink(Input::post('linkid'));
-        
+    }
+
+    public function updateAlertPreference_ajax() {
+        $alertPreference = new alertpreference();
+        $alertPreference->userid = user::getCurrentUserID();
+        $alertPreference->alert_type = Input::post('preference');
+        if (Input::post('value') == 'true') {
+            $value = TRUE;
+        } else {
+            $value = FALSE;
+        }
+        $alertPreference->preference = $value;
+        $alertPreference->updateAlertPreference();
     }
 
     /*
      * Protected callbacks
      */
-    
+
     protected function createColonyLinksList() {
         $colonyLink = new colonylink();
         $this->viewData['colonyLinks'] = $colonyLink->getExistingColonyLinks();
         $this->loadView('colonylinkslist');
     }
+
 }
 
 ?>

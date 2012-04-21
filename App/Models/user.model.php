@@ -117,6 +117,21 @@ class user extends CoreModel implements ialertsubscriber {
         $mysqli->query("GRANT EXECUTE ON PROCEDURE `silentrunning`.`" . $this->handle . "_user_select` TO '$this->handle'@'%'");
     }
 
+    
+    public function getAlertPreferences() {
+        $db = DB::instance();
+        $query = 'SELECT * FROM alert_preferences WHERE userid = ? AND preference = 1';
+        $db->query($query, 'i', array($this->userid));
+        $preferences = array();
+        while ($resultRow = $db->fetchResult()) {
+            $alertPreference = new alertpreference();
+            $alertPreference->populate($resultRow);
+            $preferences[$alertPreference->alert_type] = $alertPreference;
+        }
+        return $preferences;
+    }
+            
+            
     /**
      * @param Alert $alert
      */

@@ -8,6 +8,10 @@ $(document).ready(function(){
     $('.deleteColonyLink').live('click', function(){
         deleteColonyLink(this.id); 
     });
+    
+    $('.alertPreference').live('click', function(){
+       updateAlertPreference(this); 
+    });
 });
 
 
@@ -34,5 +38,13 @@ function deleteColonyLink(linkid) {
                $('#colonyLink_'+linkid).remove();
            });
         }
+    });
+}
+
+function updateAlertPreference(elem) {
+   $.ajax({
+        type: 'post',
+        data: 'preference='+$(elem).val()+'&value='+$(elem).is(':checked'),
+        url: '/sr/tools/updateAlertPreference'
     });
 }

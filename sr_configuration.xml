@@ -41,6 +41,10 @@
             <value name="hive_layer_size">3</value> <!-- how many content bits do we show in a single hive layer -->
             <value name="auth_cookie_name">sr_user</value>
         </values>
+        
+        <alertTypes>
+            <value name="new_comment">new_comment</value>
+        </alertTypes>
 
         <database>
             <host>192.168.0.50</host> <!--Development-->

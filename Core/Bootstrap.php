@@ -8,6 +8,7 @@ require_once 'Core/Controllers/CoreController.php';
 require_once 'Core/Utilities/ConfigModule.php';
 require_once 'Core/Utilities/Configuration.php';
 require_once 'Core/Utilities/Loader.php';
+require_once 'Core/Controllers/MessageQueueController.php';
 
 
 /**
@@ -90,6 +91,10 @@ class Bootstrap {
 
     private function instantiateController() {
         $this->controllerFile = Configuration::read('controller_path') . $this->controller . '.controller.php';
+        
+        if ($this->controller == 'MessageQueue') {
+            $this->controllerFile = 'Core/Controllers/MessageQueueController.php';
+        }
 
         if (file_exists($this->controllerFile)) {
             $this->controllerObject = new $this->controller();

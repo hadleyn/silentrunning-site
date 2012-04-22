@@ -14,7 +14,7 @@
  *
  * @author smarkoski
  */
-class alert extends CoreModel implements Event {
+abstract class alert extends CoreModel implements Event {
     
     protected $alertid;
     protected $recipient;
@@ -23,16 +23,11 @@ class alert extends CoreModel implements Event {
     protected $url;
     protected $timestamp;
     
-    public function getAlertSubscribers()
-    {
-        
-    }
-    
-    protected function insertAlert()
+    public function insertAlert($recipient, $type, $message, $url)
     {
         $db = DB::instance();
-        $query = 'INSERT INTO alerts (recipient, type, message, url, timestamp) VALUES (?, ?, ?, ? NOW())';
-        $db->query($query, 'isss', array($this->recipient, $this->type, $this->message, $this->url));
+        $query = 'INSERT INTO alerts (recipient, type, message, url, timestamp) VALUES (?, ?, ?, ?, NOW())';
+        $db->query($query, 'i,s,s,s', array($recipient, $type, $message, $url));
     }
     
 }

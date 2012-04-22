@@ -19,6 +19,7 @@ class hive extends HiveAuth {
         $headHelper = HeadHelper::getInstance();
         $headHelper->addScript('hive');
         $headHelper->addScript('content');
+        $headHelper->addScript('alerts');
         
         $headHelper->addCSS('hivestyle');
     }
@@ -152,6 +153,13 @@ class hive extends HiveAuth {
         
     }
     
+    
+    public function getAlerts_ajax() {
+        $alerts = $this->user->getAlerts();
+        $result['alertIndicator'] = $this->bufferedControllerCall('createAlertIndicator', array($alerts));
+        echo json_encode($result);
+    }
+    
     /*
      * 
      * Begin protected subview creation methods
@@ -172,6 +180,11 @@ class hive extends HiveAuth {
     
     protected function createCommentForm() {
         $this->loadView('addcomment');
+    }
+    
+    protected function createAlertIndicator($alerts) {
+        $this->viewData['alerts'] = $alerts;
+        $this->loadView('alertindicator');
     }
 
 }

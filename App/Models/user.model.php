@@ -132,6 +132,12 @@ class user extends CoreModel implements ialertsubscriber {
     }
             
             
+    public function getAlerts() {
+        $alert = new alert();
+        $alerts = $alert->getAllAlertsByUserID($this->userid);
+        return $alerts;
+    }
+    
     /**
      * @param Alert $alert
      */

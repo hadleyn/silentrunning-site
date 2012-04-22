@@ -18,7 +18,8 @@ class MessageQueue extends CoreController {
         $qMessage->getNextMessage();
         
         if (method_exists($qMessage->msg_obj, $qMessage->msg_method)) {
-            call_user_func_array(array($qMessage->msg_obj, $qMessage->msg_method), $qMessage->msg_args);
+            $obj = new $qMessage->msg_obj();
+            call_user_func_array(array($obj, $qMessage->msg_method), $qMessage->msg_args);
         }
         
         //We don't care about errors here, delete the message

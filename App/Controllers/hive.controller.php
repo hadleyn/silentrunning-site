@@ -25,8 +25,10 @@ class hive extends HiveAuth {
     }
 
     public function invoke() {
+        $hivemodel = new hivemodel();
+        $hivemodel->partitionContent();
         $this->viewData['contentCreationForm'] = $this->bufferedControllerCall('createContentCreationForm');
-        $this->viewData['hiveContent'] = $this->bufferedControllerCall('createHiveContents');
+        $this->viewData['hiveContent'] = $this->bufferedControllerCall('createHiveContents', array($hivemodel));
         $this->viewData['addCommentForm'] = $this->bufferedControllerCall('createCommentForm');
         $this->loadView('hive');
     }
@@ -104,13 +106,17 @@ class hive extends HiveAuth {
     }
 
     public function refreshContent_ajax() {
-        $result['hiveContent'] = $this->bufferedControllerCall('createHiveContents');
+        $hivemodel = new hivemodel();
+        $hivemodel->partitionContent();
+        $result['hiveContent'] = $this->bufferedControllerCall('createHiveContents', array($hivemodel));
         echo json_encode($result);
     }
 
     public function updateHiveDepth_ajax() {
         $startDepth = Input::post('depth');
-        $result['newhive'] = $this->bufferedControllerCall('createHiveContents', array($startDepth));
+        $hivemodel = new hivemodel();
+        $hivemodel->partitionContent($startDepth);
+        $result['newhive'] = $this->bufferedControllerCall('createHiveContents', array($hivemodel));
         echo json_encode($result);
     }
 
@@ -160,6 +166,15 @@ class hive extends HiveAuth {
         echo json_encode($result);
     }
     
+    
+    public function showComments_ajax() {
+        $hivemodel = new hivemodel();
+        $parentContent = new content();
+        $parentContent->getContent(Input::post('parentid'));
+        $children = $parentContent->getContentChildren(Input::post('parentid'));
+//        $hivemodel->content =
+        $hivemodel->partitionContent();
+    }
     /*
      * 
      * Begin protected subview creation methods
@@ -170,11 +185,10 @@ class hive extends HiveAuth {
         $this->loadView('contentcreationform');
     }
 
-    protected function createHiveContents($startDepth=null) {
+    protected function createHiveContents($hive) {
 //        $textContent = new textcontent();
-        $hivemodel = new hivemodel();
-        $hivemodel->partitionContent($startDepth);
-        $this->viewData['hivemodel'] = $hivemodel;
+        
+        $this->viewData['hivemodel'] = $hive;
         $this->loadView('hivecontents');
     }
     

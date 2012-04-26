@@ -66,6 +66,7 @@
     text-align: center;
     font-size: 10px;
     font-style: italic;
+    cursor: pointer;
 }
 
 .hiveContentBox .commentCount span {

@@ -66,6 +66,19 @@ class content extends CoreModel {
         $db->cleanupConnection();
         $this->populate($result);
     }
+    
+    public function getContentChildren($id) {
+        $db = DB::instance();
+        $query = 'SELECT * FROM content LEFT JOIN content_ancestors ON content.contentid=content_ancestors.contentid WHERE ancestorid=?';
+        $db->query($query, array('i'), array($id));
+        $children = array();
+        while ($result = $db->fetchResult()) {
+            $content = new content();
+            $content->populate($result, array('ancestorid' => 'ancestorid'));
+            $children[] = $content;
+        }
+        return $children;
+    }       
 
     public function getAllContent($startDepth, $unit='days') {
         $db = DB::instance();
@@ -97,6 +110,9 @@ class content extends CoreModel {
         $db = DB::instance();
         $query = 'INSERT INTO content (ownerid, parentid, content_type, content_data, created, modified) VALUES (?, ?, "'.TEXT.'", ?, NOW(), NOW())';
         $db->query($query, array('i', 'i', 's'), array($this->ownerid, $this->parentid, $this->content_data));
+        $insertid = $db->insert_id;
+        $query = 'Insert into content_ancestors (contentid, ancestorid) (SELECT ?, ?) UNION (SELECT contentid, ancestorid from content_ancestors where contentid = ?)';
+        $db->query($query, array('i', 'i', 'i'), array($insertid, $this->parentid, $insertid));
     }
 
     public function storeCoordinates() {

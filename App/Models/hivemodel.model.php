@@ -17,14 +17,14 @@ class hivemodel extends CoreModel {
 
     protected $layers;
 //    protected $hiveContent;
-    protected $content;
+    protected $content; //an array of content
     protected $videoContent;
     protected $photoContent;
 
     public function __construct() {
         $this->layers = array();
 //        $this->hiveContent = array();
-        $this->content = new content();
+        $this->content = null;
     }
 
     public function reduceToDepth($depth) {
@@ -79,7 +79,12 @@ class hivemodel extends CoreModel {
         if (!isset($startDepth)) {
             $startDepth = 0;
         }
-        $allContent = $this->content->getAllContent($startDepth, 'hours');
+        if ($this->content == null) {
+            $this->content = new content();
+            $allContent = $this->content->getAllContent($startDepth, 'hours');
+        } else {
+            $allContent = $this->content;
+        }
         //$allVideoContent = ...
         //$allImageContent = ...
         

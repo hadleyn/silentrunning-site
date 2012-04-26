@@ -10,6 +10,9 @@ $(document).ready(function(){
             updateHiveDisplay(ui.value);
         }
     });
+    $('.commentCount').live('click', function(){
+       showComments(this); 
+    });
 });
 
 function updateHiveDisplay(value) {
@@ -83,6 +86,19 @@ function submitComment(dialog) {
            } else {
                 $('#commentMessages').html(data.errors);
            }
+           refreshHiveContent();
+       }
+    });
+}
+
+function showComments(clicked) {
+    var parentid = $($(clicked).parent('div')).attr('id');
+    $.ajax({
+       type: 'post',
+       dataType: 'json',
+       data: 'parentid='+parentid,
+       url: '/sr/hive/showComments',
+       success: function(data) {
            refreshHiveContent();
        }
     });

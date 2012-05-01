@@ -92,7 +92,7 @@ class hive extends HiveAuth {
         if ($this->messageHelper->hasErrors()) {
             $result['errors'] = $this->messageHelper->showMessages(FALSE);
         } else {
-            $content = new content();
+            $content = new textcontent();
             $content->ownerid = $this->user->userid;
             $content->parentid = 0;
             $content->content_data = Input::post('content');
@@ -143,7 +143,7 @@ class hive extends HiveAuth {
         if ($this->messageHelper->hasErrors()) {
             $result['errors'] = $this->messageHelper->showMessages(FALSE);
         } else {
-            $content = new content();
+            $content = new textcontent();
             $content->ownerid = $this->user->userid;
             $content->content_data = Input::post('comment');
             $content->parentid = Input::post('parentID');

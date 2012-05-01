@@ -67,13 +67,19 @@ class content extends CoreModel {
         $this->populate($result);
     }
     
-    public function getContentChildren($id) {
+    public function getContentAndChildren($id) {
         $db = DB::instance();
         $query = 'SELECT * FROM content LEFT JOIN content_ancestors ON content.contentid=content_ancestors.contentid WHERE ancestorid=?';
         $db->query($query, array('i'), array($id));
         $children = array();
         while ($result = $db->fetchResult()) {
-            $content = new content();
+            switch ($result['content_type']) {
+                case TEXT:
+                    $content = new textcontent();
+                    break;
+                default:
+                    $content = new content();
+            }
             $content->populate($result, array('ancestorid' => 'ancestorid'));
             $children[] = $content;
         }
@@ -112,7 +118,11 @@ class content extends CoreModel {
         $db->query($query, array('i', 'i', 's'), array($this->ownerid, $this->parentid, $this->content_data));
         $insertid = $db->insert_id;
         $query = 'Insert into content_ancestors (contentid, ancestorid) (SELECT ?, ?) UNION (SELECT contentid, ancestorid from content_ancestors where contentid = ?)';
-        $db->query($query, array('i', 'i', 'i'), array($insertid, $this->parentid, $insertid));
+       $parentid = $this->parentid;
+        if ($parentid == 0) {
+            $parentid = $insertid;
+        }
+        $db->query($query, array('i', 'i', 'i'), array($insertid, $parentid, $insertid));
     }
 
     public function storeCoordinates() {

@@ -171,9 +171,11 @@ class hive extends HiveAuth {
         $hivemodel = new hivemodel();
         $parentContent = new content();
         $parentContent->getContent(Input::post('parentid'));
-        $children = $parentContent->getContentChildren(Input::post('parentid'));
-//        $hivemodel->content =
+        $children = $parentContent->getContentAndChildren(Input::post('parentid'));
+        $hivemodel->content = $children;
         $hivemodel->partitionContent();
+        $result['hiveContent'] = $this->bufferedControllerCall('createHiveContents', array($hivemodel));
+        echo json_encode($result);
     }
     /*
      * 

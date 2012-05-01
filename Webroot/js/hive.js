@@ -11,7 +11,7 @@ $(document).ready(function(){
         }
     });
     $('.commentCount').live('click', function(){
-       showComments(this); 
+        showComments(this); 
     });
 });
 
@@ -75,31 +75,32 @@ function rebind() {
 
 function submitComment(dialog) {
     $.ajax({
-       type: 'post',
-       dataType: 'json',
-       data: $('#commentForm').serialize(),
-       url: '/sr/hive/addComment',
-       success: function(data){
-           if (data.errors.length == 0) {
+        type: 'post',
+        dataType: 'json',
+        data: $('#commentForm').serialize(),
+        url: '/sr/hive/addComment',
+        success: function(data){
+            if (data.errors.length == 0) {
                 $('#comment').val('');
                 $(dialog).dialog('close');
-           } else {
+            } else {
                 $('#commentMessages').html(data.errors);
-           }
-           refreshHiveContent();
-       }
+            }
+            refreshHiveContent();
+        }
     });
 }
 
 function showComments(clicked) {
     var parentid = $($(clicked).parent('div')).attr('id');
     $.ajax({
-       type: 'post',
-       dataType: 'json',
-       data: 'parentid='+parentid,
-       url: '/sr/hive/showComments',
-       success: function(data) {
-           refreshHiveContent();
-       }
+        type: 'post',
+        dataType: 'json',
+        data: 'parentid='+parentid,
+        url: '/sr/hive/showComments',
+        success: function(data) {
+            $('#hiveDisplay').html(data.hiveContent);
+            rebind();
+        }
     });
 }

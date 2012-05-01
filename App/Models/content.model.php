@@ -69,8 +69,9 @@ class content extends CoreModel {
     
     public function getContentAndChildren($id) {
         $db = DB::instance();
-        $query = 'SELECT * FROM content LEFT JOIN content_ancestors ON content.contentid=content_ancestors.contentid WHERE ancestorid=?';
-        $db->query($query, array('i'), array($id));
+        $query = 'SELECT content.contentid, content.parentid, ownerid, content_type, content_data, created, modified, x, y FROM content LEFT JOIN content_coords 
+                    ON content_coords.contentid = content.contentid AND content_coords.userid = ' . user::getCurrentUserID().' WHERE content.parentid=? OR content.contentid=?';
+        $db->query($query, 'i,i', array($id, $id));
         $children = array();
         while ($result = $db->fetchResult()) {
             switch ($result['content_type']) {
@@ -80,7 +81,7 @@ class content extends CoreModel {
                 default:
                     $content = new content();
             }
-            $content->populate($result, array('ancestorid' => 'ancestorid'));
+            $content->populate($result);
             $children[] = $content;
         }
         return $children;
@@ -90,7 +91,7 @@ class content extends CoreModel {
         $db = DB::instance();
         $startTime = strtotime('-'.$startDepth.' '.$unit);
         $depth = strtotime('-'.Configuration::read('default_hive_depth').' '.$unit, $startTime);
-        $query = 'SELECT content.contentid, ownerid, content_type, content_data, created, modified, x, y 
+        $query = 'SELECT content.contentid, content.parentid, ownerid, content_type, content_data, created, modified, x, y 
                     FROM content 
                     LEFT JOIN content_coords 
                     ON content_coords.contentid = content.contentid AND content_coords.userid = ' . user::getCurrentUserID() . '

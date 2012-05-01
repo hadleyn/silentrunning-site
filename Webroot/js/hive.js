@@ -37,7 +37,7 @@ function rebind() {
     
     $('.hiveContentBox').draggable({
         containment: 'parent'
-    }); 
+    });
     $( ".hiveContentBox" ).bind( "dragstop", function(event, ui) {
         $.ajax({
             type: 'post',
@@ -101,6 +101,25 @@ function showComments(clicked) {
         success: function(data) {
             $('#hiveDisplay').html(data.hiveContent);
             rebind();
+            $('.hiveContentBox').bind('drag', function(){
+               updateHiveGraphics(); 
+            });
+            updateHiveGraphics();
         }
+    });
+}
+
+function updateHiveGraphics() {
+    var c=document.getElementById("hiveGraphics");
+    c.width = c.width; //clear the graphics
+    var ctx=c.getContext("2d");
+    var rootX = $('.root').position().left + ($('.root').width()/2);
+    var rootY = $('.root').position().top + ($('.root').height()/2);
+    $('.child').each(function(){
+        var childX = $(this).position().left + ($(this).width()/2);
+        var childY = $(this).position().top + ($(this).height()/2);
+        ctx.moveTo(rootX,rootY);
+        ctx.lineTo(childX,childY);
+        ctx.stroke();
     });
 }

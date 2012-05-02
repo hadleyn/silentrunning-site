@@ -33,6 +33,13 @@ class newcommentalert extends alert {
         }
     }
 
+    /**
+     * The content that comes into this method will be the new content that was just
+     * added.
+     * 
+     * @param content $content
+     * @return user 
+     */
     public function getAlertSubscribers($content) {
         $subscribers = array();
         $parentContent = new Content();
@@ -48,12 +55,15 @@ class newcommentalert extends alert {
 
         //Now go up the chain adding any others
         while ($parentContent->parentid > 0) {
+            $currentContentID = $parentContent->parentid;
             $subscriber = new user();
             $subscriber->getUserByHandle($parentContent->ownerid);
             $prefs = $subscriber->getAlertPreferences();
             if (isset($prefs[$this->type])) {
                 $subscribers[] = $subscriber;
             }
+            $parentContent = new content();
+            $parentContent->getContent($currentContentID);
         }
         return $subscribers;
     }

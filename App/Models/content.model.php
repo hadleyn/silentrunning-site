@@ -28,10 +28,12 @@ class content extends CoreModel {
     protected $z;
     protected $scale;
     protected $styleString;
+    protected $isPseudoRoot; //a flag to let us know if this piece of content is the root in this context
 
     public function __construct() {
         $this->x = 0;
         $this->y = 0;
+        $this->isPseudoRoot = FALSE;
     }
 
     public function display() {
@@ -82,6 +84,9 @@ class content extends CoreModel {
                     $content = new content();
             }
             $content->populate($result);
+            if ($content->contentid == $id) {
+                $content->isPseudoRoot = TRUE;
+            }
             $children[] = $content;
         }
         return $children;

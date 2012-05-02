@@ -10,9 +10,7 @@ $(document).ready(function(){
             updateHiveDisplay(ui.value);
         }
     });
-    $('.commentCount').live('click', function(){
-        showComments(this); 
-    });
+    
 });
 
 function updateHiveDisplay(value) {
@@ -29,6 +27,11 @@ function updateHiveDisplay(value) {
 }
 
 function rebind() {
+    $('#hiveDisplay > *').unbind();
+    
+    $('.commentCount').live('click', function(){
+        showComments(this); 
+    });
     $('.expandContent').live('click', function(){
         var parentID = $(this).parent('.hiveContentBox').get(0).id;
         $('#parentID').val(parentID);
@@ -58,6 +61,10 @@ function rebind() {
             var expand = $(this).children('.expandContent').get(0);
             $(expand).fadeOut('fast');
         }
+    });
+    
+    $('.hiveContentBox').bind('drag', function(){
+        updateHiveGraphics(); 
     });
     
     $('#addComment').dialog({
@@ -100,11 +107,8 @@ function showComments(clicked) {
         url: '/sr/hive/showComments',
         success: function(data) {
             $('#hiveDisplay').html(data.hiveContent);
-            rebind();
-            $('.hiveContentBox').bind('drag', function(){
-               updateHiveGraphics(); 
-            });
             updateHiveGraphics();
+            rebind();
         }
     });
 }
@@ -113,13 +117,15 @@ function updateHiveGraphics() {
     var c=document.getElementById("hiveGraphics");
     c.width = c.width; //clear the graphics
     var ctx=c.getContext("2d");
-    var rootX = $('.root').position().left + ($('.root').width()/2);
-    var rootY = $('.root').position().top + ($('.root').height()/2);
-    $('.child').each(function(){
-        var childX = $(this).position().left + ($(this).width()/2);
-        var childY = $(this).position().top + ($(this).height()/2);
-        ctx.moveTo(rootX,rootY);
-        ctx.lineTo(childX,childY);
-        ctx.stroke();
-    });
+    if ($('.root').position()) {
+        var rootX = $('.root').position().left + ($('.root').width()/2);
+        var rootY = $('.root').position().top + ($('.root').height()/2);
+        $('.child').each(function(){
+            var childX = $(this).position().left + ($(this).width()/2);
+            var childY = $(this).position().top + ($(this).height()/2);
+            ctx.moveTo(rootX,rootY);
+            ctx.lineTo(childX,childY);
+            ctx.stroke();
+        });
+    }
 }

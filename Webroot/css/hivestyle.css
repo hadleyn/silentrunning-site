@@ -7,13 +7,20 @@
 */
 
 
-#hiveDisplay {
+#hiveDisplayWrapper {
     position: relative;
+    overflow: hidden;
     float: left;
     width: 900px;
-    min-height: 400px;
+    height: 400px;
     border: 1px solid #CCC;
     margin: 5px auto;
+}
+
+#hiveDisplay {
+    width: 5000px;
+    height: 5000px;
+    border: 1px solid #EEE;
 }
 
 #hiveGraphics {

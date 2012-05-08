@@ -1,3 +1,4 @@
+var scale = 1;
 $(document).ready(function(){
     rebind();
     $('#depthSlider').slider({
@@ -10,7 +11,14 @@ $(document).ready(function(){
             updateHiveDisplay(ui.value);
         }
     });
-    
+    var hiveDisplayWrapper = document.getElementById("hiveDisplayWrapper"); 
+    if (hiveDisplayWrapper.addEventListener)
+        hiveDisplayWrapper.addEventListener('mousewheel',function(event){
+            wheel(event);
+            return false;
+        }, false);
+
+//    window.onmousewheel = document.onmousewheel = wheel;
 });
 
 function updateHiveDisplay(value) {
@@ -28,6 +36,14 @@ function updateHiveDisplay(value) {
 
 function rebind() {
     $('#hiveDisplay > *').unbind();
+    
+    $('#hiveDisplay').draggable({
+        //        containment: [0,0,-4100, -5600] //this basically means the upper left corner can go all the way to 0, and as far up and left as the width of the pan-able area - the side of the view port
+        });
+    
+    //    $('#hiveDisplay').bind('mousewheel', function(evt){
+    //        console.log(evt);
+    //    });
     
     $('.commentCount').live('click', function(){
         showComments(this); 
@@ -129,3 +145,40 @@ function updateHiveGraphics() {
         });
     }
 }
+
+
+function handle(delta) {
+    console.log('mouse delta '+delta);
+    if (delta > 0) {
+        //zoom in
+        if (scale < 1) {
+            scale = scale * 1.05;
+        }
+    } else {
+    //zoom out
+        if (scale > 0) {
+            scale = scale * 0.95;
+        }
+    }
+    $('#hiveDisplay').css('transform', 'scale('+scale+')');
+    $('#hiveDisplay').css('-ms-transform', 'scale('+scale+')');
+    $('#hiveDisplay').css('-webkit-transform', 'scale('+scale+')');
+    $('#hiveDisplay').css('-o-transform', 'scale('+scale+')');
+    $('#hiveDisplay').css('-moz-transform', 'scale('+scale+')');
+}
+
+function wheel(event){
+    var delta = 0;
+    if (!event) event = window.event;
+    if (event.wheelDelta) {
+        delta = event.wheelDelta/120; 
+    } else if (event.detail) {
+        delta = -event.detail/3;
+    }
+    if (delta)
+        handle(delta);
+    if (event.preventDefault)
+        event.preventDefault();
+    event.returnValue = false;
+}
+

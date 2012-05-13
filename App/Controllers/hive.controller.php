@@ -20,7 +20,7 @@ class hive extends HiveAuth {
         $headHelper->addScript('hive');
         $headHelper->addScript('content');
         $headHelper->addScript('alerts');
-        
+
         $headHelper->addCSS('hivestyle');
     }
 
@@ -41,7 +41,7 @@ class hive extends HiveAuth {
         } catch (CookieDataIOException $e) {
             $this->messageHelper->pushError('Uh oh, something went wrong. Please verify that you have been logged out or try again');
         }
-        
+
         $this->redirect(Configuration::read('basepath'));
     }
 
@@ -115,6 +115,12 @@ class hive extends HiveAuth {
     public function updateHiveDepth_ajax() {
         $startDepth = Input::post('depth');
         $hivemodel = new hivemodel();
+        //Not so fast, do we already have hive content memorized?
+        try {
+            $hivemodel->content = $session->read('currentHiveContent');
+        } catch (SessionDataIOException $e) {
+            $hivemodel->content = null;
+        }
         $hivemodel->partitionContent($startDepth);
         $result['newhive'] = $this->bufferedControllerCall('createHiveContents', array($hivemodel));
         echo json_encode($result);
@@ -127,7 +133,7 @@ class hive extends HiveAuth {
         $content->y = Input::post('y');
         $content->storeCoordinates();
     }
-    
+
     /**
      * The add comment ajax callback. This functions almost identically to the
      * add content function, but it adds the content as a comment of another
@@ -150,23 +156,20 @@ class hive extends HiveAuth {
             try {
                 $content->insertContent();
                 $alert = new newcommentalert();
-                $alert->sendAlert($content);                
+                $alert->sendAlert($content);
             } catch (Exception $e) {
                 $result['errors'] = $e->getMessage();
             }
         }
         echo json_encode($result);
-        
     }
-    
-    
+
     public function getAlerts_ajax() {
         $alerts = $this->user->getAlerts();
         $result['alertIndicator'] = $this->bufferedControllerCall('createAlertIndicator', array($alerts));
         echo json_encode($result);
     }
-    
-    
+
     public function showComments_ajax() {
         $hivemodel = new hivemodel();
         $parentContent = new content();
@@ -175,8 +178,11 @@ class hive extends HiveAuth {
         $hivemodel->content = $children;
         $hivemodel->partitionContent();
         $result['hiveContent'] = $this->bufferedControllerCall('createHiveContents', array($hivemodel));
+        $session = new Session();
+        $session->write('currentHiveContent', $result['hiveContent'], TRUE);
         echo json_encode($result);
     }
+
     /*
      * 
      * Begin protected subview creation methods
@@ -189,15 +195,15 @@ class hive extends HiveAuth {
 
     protected function createHiveContents($hive) {
 //        $textContent = new textcontent();
-        
+
         $this->viewData['hivemodel'] = $hive;
         $this->loadView('hivecontents');
     }
-    
+
     protected function createCommentForm() {
         $this->loadView('addcomment');
     }
-    
+
     protected function createAlertIndicator($alerts) {
         $this->viewData['alerts'] = $alerts;
         $this->loadView('alertindicator');

@@ -30,7 +30,7 @@ class hivemodel extends CoreModel {
     public function reduceToDepth($depth) {
 //        $i = ;
     }
-    
+
     /**
      * Add a single piece of content to the hive
      * 
@@ -44,11 +44,11 @@ class hivemodel extends CoreModel {
 //        }
 //        $this->partitionContent();
 //    }
-    
+
     /**
      * This function partitions all the content into the layers. 
      */
-    public function partitionContent($startDepth=null) {
+    public function partitionContent($startDepth = null) {
         $layers = $this->calculateLayers($startDepth);
         //Now assign z indexes to the layers
         $maxZ = 30;
@@ -56,18 +56,19 @@ class hivemodel extends CoreModel {
         $scale = 1;
         foreach ($layers as $l) {
             foreach ($l as $lc) {
-                $lc->z = $maxZ;
-                $lc->opacity = $opacity;
-                $lc->scale = $scale;
+                if (!$lc->isPseudoRoot) {
+                    $lc->z = $maxZ;
+                    $lc->opacity = $opacity;
+                    $lc->scale = $scale;
+                }
                 $this->layers[] = $lc;
             }
             $maxZ--;
             $opacity = $opacity / 2; //the further back in time we go, the more faded the content is.
             $scale = $scale * 0.85; //the further back in time we go, the smaller the content gets
         }
-        
     }
-    
+
     /**
      * This function will take all the content within the hive and calculate 
      * how many layers we should use to show it.
@@ -87,11 +88,10 @@ class hivemodel extends CoreModel {
         }
         //$allVideoContent = ...
         //$allImageContent = ...
-        
+
         $layers = array_chunk($allContent, Configuration::read('hive_layer_size'));
-        
+
         return $layers;
-        
     }
 
 }

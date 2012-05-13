@@ -1,4 +1,4 @@
-<canvas id="hiveGraphics" width="1000" height="1000"></canvas>
+<canvas id="hiveGraphics" width="3000" height="1000"></canvas>
 <?php foreach ($hivemodel->layers as $content): ?>
     <div style="<?php echo $content->getStyleString();?>" class="hiveContentBox <?php if ($content->isPseudoRoot):?>root<?php else: ?>child<?php endif;?>" id="<?php echo $content->contentid; ?>">
         <div class="contentOwner"><a href="#"><?php echo $content->getOwner()->handle;?></a></div>

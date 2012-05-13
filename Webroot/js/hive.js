@@ -18,7 +18,6 @@ $(document).ready(function(){
             return false;
         }, false);
 
-//    window.onmousewheel = document.onmousewheel = wheel;
 });
 
 function updateHiveDisplay(value) {
@@ -58,7 +57,7 @@ function rebind() {
         containment: 'parent'
     });
     $( ".hiveContentBox" ).bind( "dragstop", function(event, ui) {
-        $.ajax({
+       $.ajax({
             type: 'post',
             dataType: 'json',
             data: 'x='+ui.position.left+'&y='+ui.position.top+'&id='+ui.helper[0].id,

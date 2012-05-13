@@ -72,7 +72,9 @@ class content extends CoreModel {
     public function getContentAndChildren($id) {
         $db = DB::instance();
         $query = 'SELECT content.contentid, content.parentid, ownerid, content_type, content_data, created, modified, x, y FROM content LEFT JOIN content_coords 
-                    ON content_coords.contentid = content.contentid AND content_coords.userid = ' . user::getCurrentUserID().' WHERE content.parentid=? OR content.contentid=?';
+                    ON content_coords.contentid = content.contentid AND content_coords.userid = ' . user::getCurrentUserID().' WHERE content.parentid=? OR content.contentid=?
+                        AND (ownerid=' . user::getCurrentUserID() . ' OR
+                    ownerid = (SELECT relatedtouserid FROM users_related WHERE userid=' . user::getCurrentUserID() . ')) ORDER BY modified DESC';
         $db->query($query, 'i,i', array($id, $id));
         $children = array();
         while ($result = $db->fetchResult()) {

@@ -79,7 +79,7 @@ function rebind() {
     });
     
     $('.hiveContentBox').bind('drag', function(){
-        updateHiveGraphics(); 
+//        updateHiveGraphics(); 
     });
     
     $('#addComment').dialog({
@@ -122,7 +122,7 @@ function showComments(clicked) {
         url: '/sr/hive/showComments',
         success: function(data) {
             $('#hiveDisplay').html(data.hiveContent);
-            updateHiveGraphics();
+//            updateHiveGraphics();
             rebind();
         }
     });
@@ -159,11 +159,11 @@ function handle(delta) {
             scale = scale * 0.95;
         }
     }
-    $('#hiveDisplay').css('transform', 'scale('+scale+')');
-    $('#hiveDisplay').css('-ms-transform', 'scale('+scale+')');
-    $('#hiveDisplay').css('-webkit-transform', 'scale('+scale+')');
-    $('#hiveDisplay').css('-o-transform', 'scale('+scale+')');
-    $('#hiveDisplay').css('-moz-transform', 'scale('+scale+')');
+//    $('#hiveDisplay').css('transform', 'scale('+scale+')');
+//    $('#hiveDisplay').css('-ms-transform', 'scale('+scale+')');
+//    $('#hiveDisplay').css('-webkit-transform', 'scale('+scale+')');
+//    $('#hiveDisplay').css('-o-transform', 'scale('+scale+')');
+//    $('#hiveDisplay').css('-moz-transform', 'scale('+scale+')');
 }
 
 function wheel(event){

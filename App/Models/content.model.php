@@ -136,12 +136,12 @@ class content extends CoreModel {
         return 'top: '.$this->y.'px; '.
                 'left: '.$this->x.'px; '.
                 'z-index: '.$this->z.'; '.
-                'opacity: '.$this->opacity.'; '.
-                'transform: scale('.$this->scale.'); '.
-                '-ms-transform: scale('.$this->scale.'); '.
-                '-webkit-transform: scale('.$this->scale.'); '.
-                '-o-transform: scale('.$this->scale.'); '.
-                '-moz-transform: scale('.$this->scale.');';
+                'opacity: '.$this->opacity.'; ';
+//                'transform: scale('.$this->scale.'); '.
+//                '-ms-transform: scale('.$this->scale.'); '.
+//                '-webkit-transform: scale('.$this->scale.'); '.
+//                '-o-transform: scale('.$this->scale.'); '.
+//                '-moz-transform: scale('.$this->scale.');';
     }
     
     public function getCenterX() {

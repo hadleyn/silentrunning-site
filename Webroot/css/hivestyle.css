@@ -36,12 +36,12 @@
     cursor: default;
     background-color: #EEE;
     font-size: 12px;
-    height: 125px;
-    width: 270px;
+/*    height: 125px;
+    width: 270px;*/
     overflow: hidden;
-    -moz-box-shadow: 1px 1px 3px #000000;
+/*    -moz-box-shadow: 1px 1px 3px #000000;
     -webkit-box-shadow: 1px 1px 3px #000000;
-    box-shadow: 1px 1px 3px #000000;
+    box-shadow: 1px 1px 3px #000000;*/
 }
 
 .expandContent {

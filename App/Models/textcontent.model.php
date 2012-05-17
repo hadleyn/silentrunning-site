@@ -28,7 +28,7 @@ class textcontent extends content {
     }
 
     public function display() {
-        echo $this->content_data;
+        echo '<text class="contentOwner" x="0" y="30">'.$this->content_data.'</text>';
     }
 
 }

@@ -115,6 +115,7 @@ class hive extends HiveAuth {
     public function updateHiveDepth_ajax() {
         $startDepth = Input::post('depth');
         $hivemodel = new hivemodel();
+        $session = new Session();
         //Not so fast, do we already have hive content memorized?
         try {
             $hivemodel->content = $session->read('currentHiveContent');

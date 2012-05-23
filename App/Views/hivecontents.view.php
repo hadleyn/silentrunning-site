@@ -5,7 +5,7 @@
         <g>
         <rect width="270" height="125" style="fill: #EEE;"/>
         <a xlink:href="#">
-            <text class="expandContent" x="250" y="0"></text>
+            <text class="addComment" x="190" y="15">add comment</text>
         </a>
         <a xlink:href="#">
             <text class="contentOwner" x="0" y="15"><?php echo $content->getOwner()->handle; ?></text>

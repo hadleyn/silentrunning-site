@@ -47,8 +47,8 @@ function rebind() {
     $('.commentCount').live('click', function(){
         showComments(this); 
     });
-    $('.expandContent').live('click', function(){
-        var parentID = $(this).parent('.hiveContentBox').get(0).id;
+    $('.addComment').live('click', function(){
+        var parentID = $(this).parents('.hiveContentBox').get(0).id;
         $('#parentID').val(parentID);
         $("#addComment").dialog( "open" );
     });
@@ -66,16 +66,21 @@ function rebind() {
     });
     $('.hiveContentBox').hover(function() {
         //mouse in
-        if ($(this).css('opacity') == 1) {
-            var expand = $(this).children('.expandContent').get(0);
-            $(expand).fadeIn('fast');
-        }
+        var expand = $(this).find('.addComment').get(0);
+        console.log(expand);
+        $(expand).animate({opacity: 1}, 200);
+//        if ($(this).css('opacity') == 1) {
+//            var expand = $(this).children('.expandContent').get(0);
+//            $(expand).fadeIn('fast');
+//        }
     }, function() {
         //mouse out
-        if ($(this).css('opacity') == 1) {
-            var expand = $(this).children('.expandContent').get(0);
-            $(expand).fadeOut('fast');
-        }
+        var expand = $(this).find('.addComment').get(0);
+        $(expand).animate({opacity: 0}, 200);
+//        if ($(this).css('opacity') == 1) {
+//            var expand = $(this).children('.expandContent').get(0);
+//            $(expand).fadeOut('fast');
+//        }
     });
     
     $('.hiveContentBox').bind('drag', function(){

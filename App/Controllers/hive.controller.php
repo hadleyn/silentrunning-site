@@ -117,11 +117,11 @@ class hive extends HiveAuth {
         $hivemodel = new hivemodel();
         $session = new Session();
         //Not so fast, do we already have hive content memorized?
-        try {
-            $hivemodel->content = $session->read('currentHiveContent');
-        } catch (SessionDataIOException $e) {
-            $hivemodel->content = null;
-        }
+//        try {
+//            $hivemodel->content = $session->read('currentHiveContent');
+//        } catch (SessionDataIOException $e) {
+//            $hivemodel->content = null;
+//        }
         $hivemodel->partitionContent($startDepth);
         $result['newhive'] = $this->bufferedControllerCall('createHiveContents', array($hivemodel));
         echo json_encode($result);
@@ -179,8 +179,8 @@ class hive extends HiveAuth {
         $hivemodel->content = $children;
         $hivemodel->partitionContent();
         $result['hiveContent'] = $this->bufferedControllerCall('createHiveContents', array($hivemodel));
-        $session = new Session();
-        $session->write('currentHiveContent', $result['hiveContent'], TRUE);
+//        $session = new Session();
+//        $session->write('currentHiveContent', $result['hiveContent'], TRUE);
         echo json_encode($result);
     }
 

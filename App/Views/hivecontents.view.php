@@ -1,13 +1,19 @@
 <!--<canvas id="hiveGraphics" width="3000" height="1000"></canvas>-->
 <?php foreach ($hivemodel->layers as $content): ?>
-    <div style="<?php echo $content->getStyleString(); ?>" class="hiveContentBox">
+    <div id="<?php echo $content->contentid; ?>" style="<?php echo $content->getStyleString(); ?>" class="hiveContentBox">
         <svg width="270" height="125" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink">
         <g>
         <rect width="270" height="125" style="fill: #EEE;"/>
         <a xlink:href="#">
+            <text class="expandContent" x="250" y="0"></text>
+        </a>
+        <a xlink:href="#">
             <text class="contentOwner" x="0" y="15"><?php echo $content->getOwner()->handle; ?></text>
         </a>
         <?php $content->display(); ?>
+        <a xlink:href="#">
+            <text class="commentCount" x="250" y="115"><?php echo $content->childCount(); ?></text>
+        </a>
         </g>
         </svg>
     </div>

@@ -1,4 +1,7 @@
 <!--<canvas id="hiveGraphics" width="3000" height="1000"></canvas>-->
+<svg id="hiveGraphics" width="3000" height="1000" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+</svg>
 <?php foreach ($hivemodel->layers as $content): ?>
     <div id="<?php echo $content->contentid; ?>" style="<?php echo $content->getStyleString(); ?>" class="hiveContentBox <?php if ($content->isPseudoRoot): ?>root<?php else: ?>child<?php endif; ?>">
         <svg width="270" height="125" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink">

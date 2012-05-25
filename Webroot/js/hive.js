@@ -57,7 +57,7 @@ function rebind() {
         containment: 'parent'
     });
     $( ".hiveContentBox" ).bind( "dragstop", function(event, ui) {
-       $.ajax({
+        $.ajax({
             type: 'post',
             dataType: 'json',
             data: 'x='+ui.position.left+'&y='+ui.position.top+'&id='+ui.helper[0].id,
@@ -66,26 +66,27 @@ function rebind() {
     });
     $('.hiveContentBox').hover(function() {
         //mouse in
-        var expand = $(this).find('.addComment').get(0);
-        console.log(expand);
-        $(expand).animate({opacity: 1}, 200);
-//        if ($(this).css('opacity') == 1) {
-//            var expand = $(this).children('.expandContent').get(0);
-//            $(expand).fadeIn('fast');
-//        }
+        
+        if ($(this).css('opacity') == 1) {
+            var expand = $(this).find('.addComment').get(0);
+            $(expand).animate({
+                opacity: 1
+            }, 200);
+        }
     }, function() {
         //mouse out
-        var expand = $(this).find('.addComment').get(0);
-        $(expand).animate({opacity: 0}, 200);
-//        if ($(this).css('opacity') == 1) {
-//            var expand = $(this).children('.expandContent').get(0);
-//            $(expand).fadeOut('fast');
-//        }
+        
+        if ($(this).css('opacity') == 1) {
+            var expand = $(this).find('.addComment').get(0);
+            $(expand).animate({
+                opacity: 0
+            }, 200);
+        }
     });
     
     $('.hiveContentBox').bind('drag', function(){
-//        updateHiveGraphics(); 
-    });
+        //        updateHiveGraphics(); 
+        });
     
     $('#addComment').dialog({
         autoOpen: false,
@@ -127,7 +128,7 @@ function showComments(clicked) {
         url: '/sr/hive/showComments',
         success: function(data) {
             $('#hiveDisplay').html(data.hiveContent);
-//            updateHiveGraphics();
+            //            updateHiveGraphics();
             rebind();
         }
     });
@@ -159,7 +160,7 @@ function handle(delta) {
             scale = scale * 1.05;
         }
     } else {
-    //zoom out
+        //zoom out
         if (scale > 0) {
             scale = scale * 0.95;
         }

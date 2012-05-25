@@ -119,7 +119,7 @@ function submitComment(dialog) {
 }
 
 function showComments(clicked) {
-    var parentid = $($(clicked).parent('div')).attr('id');
+    var parentid = $($(clicked).parents('div')).attr('id');
     $.ajax({
         type: 'post',
         dataType: 'json',

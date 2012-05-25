@@ -139,12 +139,16 @@ function showComments(clicked) {
 }
 
 var node = null;
+var drawNodes = [];
 function updateHiveGraphics(svg) {
-    
-    console.log(svg);
     //    var c=document.getElementById("hiveGraphics");
     //    c.width = c.width; //clear the graphics
     //    var ctx=c.getContext("2d");
+    //Clear the graphics
+    $.each(drawNodes, function(){
+       $(this).remove(); 
+    });
+    drawNodes = [];
     if ($('.root').position()) {
         var rootX = $('.root').position().left + ($('.root').width()/2);
         var rootY = $('.root').position().top + ($('.root').height()/2);
@@ -154,11 +158,11 @@ function updateHiveGraphics(svg) {
             //            ctx.moveTo(rootX,rootY);
             //            ctx.lineTo(childX,childY);
             //            ctx.stroke();
-            $(node).remove();
             node = svg.line(rootX, rootY, childX, childY, {
                 stroke: "blue", 
                 strokeWidth: 1
             });
+            drawNodes[drawNodes.length] = node; 
         });
     }
 }

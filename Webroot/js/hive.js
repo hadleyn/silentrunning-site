@@ -126,7 +126,7 @@ function showComments(clicked) {
     $.ajax({
         type: 'post',
         dataType: 'json',
-        data: 'parentid='+parentid,
+        data: 'parentid='+parentid+'&startDepth='+ $('#depthSlider').slider('value'),
         url: '/sr/hive/showComments',
         success: function(data) {
             $('#hiveDisplay').html(data.hiveContent);

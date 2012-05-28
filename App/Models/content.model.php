@@ -46,11 +46,10 @@ class content extends CoreModel {
         $db->query($query, array('i'), array($id));
     }
 
-    public function updateContent($id)
-    {
+    public function updateContent($id) {
         
     }
-    
+
     public function childCount() {
         $db = DB::instance();
         $query = 'SELECT COUNT(*) AS c FROM content WHERE parentid=?';
@@ -68,48 +67,55 @@ class content extends CoreModel {
         $db->cleanupConnection();
         $this->populate($result);
     }
-    
-    public function getContentAndChildren($id) {
+
+    public function getContentAndChildren($id, $startDepth) {
         $db = DB::instance();
-        $query = 'SELECT content.contentid, content.parentid, ownerid, content_type, content_data, created, modified, x, y FROM content LEFT JOIN content_coords 
-                    ON content_coords.contentid = content.contentid AND content_coords.userid = ' . user::getCurrentUserID().' WHERE content.parentid=? OR content.contentid=?
-                        AND (ownerid=' . user::getCurrentUserID() . ' OR
-                    ownerid = (SELECT relatedtouserid FROM users_related WHERE userid=' . user::getCurrentUserID() . ')) ORDER BY modified DESC';
+        $query = 'SELECT content.contentid FROM content WHERE content.parentid=? OR content.contentid=? ORDER BY modified DESC';
         $db->query($query, 'i,i', array($id, $id));
-        $children = array();
-        while ($result = $db->fetchResult()) {
-            switch ($result['content_type']) {
+        $contentIDs = array();
+        while ($resultRow = $db->fetchResult()){
+            $contentIDs[] = $resultRow['contentid'];
+        }
+        $content = $this->getAllContent($startDepth, 'days', 'content.contentid IN ('.implode(',', $contentIDs).')');
+        $count = count($content);
+        for ($i = 0; $i < $count; $i++) {
+            if ($content[$i]->contentid == $id) {
+                $content[$i]->isPseudoRoot = TRUE;
+            }
+        }
+        return $content;
+    }
+
+    /**
+     *
+     * @param type $startDepth
+     * @param type $unit
+     * @param type $inList The inlist default is just parentid=0. You can replace this with "something IN (some, list, of, things)"
+     * @return \content 
+     */
+    public function getAllContent($startDepth, $unit = 'days', $inList='parentid = 0') {
+        $db = DB::instance();
+        $startTime = strtotime('-' . $startDepth . ' ' . $unit);
+        $depth = strtotime('-' . Configuration::read('default_hive_depth') . ' ' . $unit, $startTime);
+        $query = 'SELECT content.contentid, content.parentid, ownerid, content_type, content_data, created, modified, x, y 
+                    FROM content
+                    LEFT JOIN content_coords 
+                    ON content_coords.contentid = content.contentid AND content_coords.userid = ' . user::getCurrentUserID() . '
+                    WHERE '.$inList.' AND (UNIX_TIMESTAMP(modified) <= ' . $startTime . ' AND UNIX_TIMESTAMP(modified) > ' . $depth . ') AND (ownerid=' . user::getCurrentUserID() . ' OR
+                    ownerid = (SELECT relatedtouserid FROM users_related WHERE userid=' . user::getCurrentUserID() . ')) ORDER BY modified DESC';
+        $db->query($query);
+        $allContent = array();
+        while ($resultRow = $db->fetchResult()) {
+            switch ($resultRow['content_type']) {
                 case TEXT:
                     $content = new textcontent();
                     break;
                 default:
                     $content = new content();
             }
-            $content->populate($result);
-            if ($content->contentid == $id) {
-                $content->isPseudoRoot = TRUE;
-            }
-            $children[] = $content;
-        }
-        return $children;
-    }       
+            $content->populate($resultRow);
 
-    public function getAllContent($startDepth, $unit='days') {
-        $db = DB::instance();
-        $startTime = strtotime('-'.$startDepth.' '.$unit);
-        $depth = strtotime('-'.Configuration::read('default_hive_depth').' '.$unit, $startTime);
-        $query = 'SELECT content.contentid, content.parentid, ownerid, content_type, content_data, created, modified, x, y 
-                    FROM content 
-                    LEFT JOIN content_coords 
-                    ON content_coords.contentid = content.contentid AND content_coords.userid = ' . user::getCurrentUserID() . '
-                    WHERE parentid = 0 AND (UNIX_TIMESTAMP(modified) <= '.$startTime.' AND UNIX_TIMESTAMP(modified) > '.$depth.') AND (ownerid=' . user::getCurrentUserID() . ' OR
-                    ownerid = (SELECT relatedtouserid FROM users_related WHERE userid=' . user::getCurrentUserID() . ')) ORDER BY modified DESC';
-        $db->query($query);
-        $allContent = array();
-        while ($resultRow = $db->fetchResult()) {
-            $tc = new textcontent();
-            $tc->populate($resultRow);
-            $allContent[] = $tc;
+            $allContent[] = $content;
         }
         return $allContent;
     }
@@ -131,23 +137,23 @@ class content extends CoreModel {
         $query = 'INSERT INTO content_coords (userid, contentid, hash, x, y) VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE x=?, y=?';
         $db->query($query, array('i', 'i', 's', 'i', 'i', 'i', 'i'), array($userid, $this->contentid, $hash, $this->x, $this->y, $this->x, $this->y));
     }
-    
+
     public function getStyleString() {
-        return 'top: '.$this->y.'px; '.
-                'left: '.$this->x.'px; '.
-                'z-index: '.$this->z.'; '.
-                'opacity: '.$this->opacity.'; ';
+        return 'top: ' . $this->y . 'px; ' .
+                'left: ' . $this->x . 'px; ' .
+                'z-index: ' . $this->z . '; ' .
+                'opacity: ' . $this->opacity . '; ';
 //                'transform: scale('.$this->scale.'); '.
 //                '-ms-transform: scale('.$this->scale.'); '.
 //                '-webkit-transform: scale('.$this->scale.'); '.
 //                '-o-transform: scale('.$this->scale.'); '.
 //                '-moz-transform: scale('.$this->scale.');';
     }
-    
+
     public function getCenterX() {
         return ($this->x + 270) / 2;
     }
-    
+
     public function getCenterY() {
         return ($this->y + 125) / 2;
     }

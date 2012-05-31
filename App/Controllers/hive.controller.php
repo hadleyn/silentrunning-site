@@ -116,6 +116,7 @@ class hive extends HiveAuth {
         $startDepth = Input::post('depth');
         $hivemodel = new hivemodel();
         $session = new Session();
+        $content = new content();
         //Not so fast, do we already have hive content memorized?
 //        try {
 //            $hivemodel->content = $session->read('currentHiveContent');
@@ -180,7 +181,7 @@ class hive extends HiveAuth {
         $hivemodel->partitionContent();
         $result['hiveContent'] = $this->bufferedControllerCall('createHiveContents', array($hivemodel));
 //        $session = new Session();
-//        $session->write('currentHiveContent', $result['hiveContent'], TRUE);
+//        $session->write('currentHiveContent', $hivemodel->getCurrentIDList(), TRUE);
         echo json_encode($result);
     }
 

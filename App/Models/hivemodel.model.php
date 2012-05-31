@@ -16,34 +16,28 @@
 class hivemodel extends CoreModel {
 
     protected $layers;
-//    protected $hiveContent;
     protected $content; //an array of content
     protected $videoContent;
     protected $photoContent;
 
     public function __construct() {
         $this->layers = array();
-//        $this->hiveContent = array();
         $this->content = null;
     }
 
-    public function reduceToDepth($depth) {
-//        $i = ;
-    }
-
     /**
-     * Add a single piece of content to the hive
+     *The purpose of this function is to generate a list of content IDs based on
+     * what the hive model currently contains.
      * 
-     * @param content $content 
+     * @return array An array of IDs 
      */
-//    public function addContent($content) {
-//        if (is_array($content)) {
-//            $this->hiveContent = array_merge($this->hiveContent, $content);
-//        } else {
-//            $this->hiveContent[] = $content;
-//        }
-//        $this->partitionContent();
-//    }
+    public function getCurrentIDList(){
+        $result = array();
+        foreach ($this->content as $c){
+            $result[] = $c->contentid;
+        }
+        return $result;
+    }
 
     /**
      * This function partitions all the content into the layers. 
@@ -59,7 +53,7 @@ class hivemodel extends CoreModel {
                 if (!$lc->isPseudoRoot) {
                     $lc->z = $maxZ;
                     $lc->opacity = $opacity;
-                    $lc->scale = $scale;
+//                    $lc->scale = $scale;
                 }
                 $this->layers[] = $lc;
             }

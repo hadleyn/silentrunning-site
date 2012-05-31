@@ -155,9 +155,6 @@ function updateHiveGraphics(svg) {
         $('.child').each(function(){
             var childX = $(this).position().left + ($(this).width()/2);
             var childY = $(this).position().top + ($(this).height()/2);
-            //            ctx.moveTo(rootX,rootY);
-            //            ctx.lineTo(childX,childY);
-            //            ctx.stroke();
             node = svg.line(rootX, rootY, childX, childY, {
                 stroke: "blue", 
                 strokeWidth: 1

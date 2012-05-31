@@ -76,7 +76,7 @@ class content extends CoreModel {
         while ($resultRow = $db->fetchResult()){
             $contentIDs[] = $resultRow['contentid'];
         }
-        $content = $this->getAllContent($startDepth, 'days', 'content.contentid IN ('.implode(',', $contentIDs).')');
+        $content = $this->getAllContent($startDepth, 'hours', $contentIDs);
         $count = count($content);
         for ($i = 0; $i < $count; $i++) {
             if ($content[$i]->contentid == $id) {
@@ -93,7 +93,10 @@ class content extends CoreModel {
      * @param type $inList The inlist default is just parentid=0. You can replace this with "something IN (some, list, of, things)"
      * @return \content 
      */
-    public function getAllContent($startDepth, $unit = 'days', $inList='parentid = 0') {
+    public function getAllContent($startDepth, $unit = 'hours', $inList='parentid = 0') {
+        if (is_array($inList)) {
+            $inList = 'content.contentid IN ('.implode(',', $inList).')';
+        }
         $db = DB::instance();
         $startTime = strtotime('-' . $startDepth . ' ' . $unit);
         $depth = strtotime('-' . Configuration::read('default_hive_depth') . ' ' . $unit, $startTime);
@@ -119,7 +122,7 @@ class content extends CoreModel {
         }
         return $allContent;
     }
-
+    
     public function getOwner() {
         $user = new User();
         $user->getUserByHandle($this->ownerid);

@@ -38,6 +38,7 @@
             <value name="error_div_class">sr_errors</value>
             <value name="message_div_class">sr_messages</value>
             <value name="default_hive_depth">480</value> <!-- the depth of the hive, in days -->
+            <value name="default_depth_unit">hours</value>
             <value name="hive_layer_size">3</value> <!-- how many content bits do we show in a single hive layer -->
             <value name="auth_cookie_name">sr_user</value>
         </values>

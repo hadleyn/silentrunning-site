@@ -44,10 +44,12 @@ function rebind() {
     //        console.log(evt);
     //    });
     
-    $('.commentCount').live('click', function(){
+    $('.commentCount').live('click', function(evt){
+        evt.preventDefault();
         showComments(this); 
     });
-    $('.addComment').live('click', function(){
+    $('.addComment').live('click', function(evt){
+        evt.preventDefault();
         var parentID = $(this).parents('.hiveContentBox').get(0).id;
         $('#parentID').val(parentID);
         $("#addComment").dialog( "open" );
@@ -113,20 +115,19 @@ function submitComment(dialog) {
             if (data.errors.length == 0) {
                 $('#comment').val('');
                 $(dialog).dialog('close');
+                showCommentsByID($('#parentID').val());
             } else {
                 $('#commentMessages').html(data.errors);
             }
-            refreshHiveContent();
         }
     });
 }
 
-function showComments(clicked) {
-    var parentid = $($(clicked).parents('div')).attr('id');
+function showCommentsByID(id) {
     $.ajax({
         type: 'post',
         dataType: 'json',
-        data: 'parentid='+parentid+'&startDepth='+ $('#depthSlider').slider('value'),
+        data: 'parentid='+id,
         url: '/sr/hive/showComments',
         success: function(data) {
             $('#hiveDisplay').html(data.hiveContent);
@@ -134,8 +135,14 @@ function showComments(clicked) {
                 onLoad: updateHiveGraphics
             });
             rebind();
+            $('#depthSlider').slider( "option", "disabled", true );
         }
     });
+}
+
+function showComments(clicked) {
+    var parentid = $($(clicked).parents('div')).attr('id');
+    showCommentsByID(parentid);
 }
 
 var node = null;

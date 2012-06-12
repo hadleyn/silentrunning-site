@@ -39,6 +39,13 @@ class hivemodel extends CoreModel {
         return $result;
     }
 
+    
+    public function setCommentLayers() {
+        foreach ($this->content as $c) {
+            $this->layers[] = $c;
+        }
+    }
+    
     /**
      * This function partitions all the content into the layers. 
      */

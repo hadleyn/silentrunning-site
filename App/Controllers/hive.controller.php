@@ -176,9 +176,10 @@ class hive extends HiveAuth {
         $hivemodel = new hivemodel();
         $parentContent = new content();
         $parentContent->getContent(Input::post('parentid'));
-        $children = $parentContent->getContentAndChildren(Input::post('parentid'), Input::post('startDepth'));
+        $children = $parentContent->getContentAndChildren(Input::post('parentid'), 0);
         $hivemodel->content = $children;
-        $hivemodel->partitionContent();
+//        $hivemodel->partitionContent(); //Let's not partition comments
+        $hivemodel->setCommentLayers();
         $result['hiveContent'] = $this->bufferedControllerCall('createHiveContents', array($hivemodel));
 //        $session = new Session();
 //        $session->write('currentHiveContent', $hivemodel->getCurrentIDList(), TRUE);

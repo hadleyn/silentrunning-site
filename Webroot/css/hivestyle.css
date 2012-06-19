@@ -98,3 +98,8 @@
     height: 10px;
     background-color: black;
 }
+
+#contentTextarea {
+    width: 880px;
+    height: 50px;
+}

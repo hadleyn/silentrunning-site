@@ -1,6 +1,25 @@
 var scale = 1;
 $(document).ready(function(){
     rebind();
+    
+    $('.closeComments').live('click', function(evt){
+        evt.preventDefault();
+        var parentID = $(this).parents('.hiveContentBox').get(0).id;
+        closeComments(parentID);
+    });
+    
+    $('.commentCount').live('click', function(evt){
+        evt.preventDefault();
+        showComments(this); 
+    });
+    
+    $('.addComment').live('click', function(evt){
+        evt.preventDefault();
+        var parentID = $(this).parents('.hiveContentBox').get(0).id;
+        $('#parentID').val(parentID);
+        $("#addComment").dialog( "open" );
+    });
+    
     $('#depthSlider').slider({
         orientation: 'vertical',
         min: 0,
@@ -34,7 +53,7 @@ function updateHiveDisplay(value) {
 }
 
 function rebind() {
-    $('#hiveDisplay > *').unbind();
+    $('#hiveDisplay *').unbind();
     
     $('#hiveDisplay').draggable({
         //        containment: [0,0,-4100, -5600] //this basically means the upper left corner can go all the way to 0, and as far up and left as the width of the pan-able area - the side of the view port
@@ -43,17 +62,6 @@ function rebind() {
     //    $('#hiveDisplay').bind('mousewheel', function(evt){
     //        console.log(evt);
     //    });
-    
-    $('.commentCount').live('click', function(evt){
-        evt.preventDefault();
-        showComments(this); 
-    });
-    $('.addComment').live('click', function(evt){
-        evt.preventDefault();
-        var parentID = $(this).parents('.hiveContentBox').get(0).id;
-        $('#parentID').val(parentID);
-        $("#addComment").dialog( "open" );
-    });
     
     $('.hiveContentBox').draggable({
         containment: 'parent'
@@ -66,6 +74,26 @@ function rebind() {
             url: '/sr/hive/updateContentCoords'
         });
     });
+    
+    
+    $('.hiveContentBox').bind('drag', function(){
+        $('#hiveGraphics').svg({
+            onLoad: updateHiveGraphics
+        }); 
+    });
+    
+    $('#addComment').dialog({
+        autoOpen: false,
+        height: 300,
+        width: 500,
+        modal: true,
+        buttons: {
+            "Add Comment": function() {
+                submitComment(this);
+            }
+        }
+    });
+    
     $('.hiveContentBox').hover(function() {
         //mouse in
         
@@ -85,24 +113,6 @@ function rebind() {
             }, 200);
         }
     });
-    
-    $('.hiveContentBox').bind('drag', function(){
-        $('#hiveGraphics').svg({
-            onLoad: updateHiveGraphics
-        }); 
-    });
-    
-    $('#addComment').dialog({
-        autoOpen: false,
-        height: 300,
-        width: 500,
-        modal: true,
-        buttons: {
-            "Add Comment": function() {
-                submitComment(this);
-            }
-        }
-    }); 
 }
 
 function submitComment(dialog) {
@@ -153,7 +163,7 @@ function updateHiveGraphics(svg) {
     //    var ctx=c.getContext("2d");
     //Clear the graphics
     $.each(drawNodes, function(){
-       $(this).remove(); 
+        $(this).remove(); 
     });
     drawNodes = [];
     if ($('.root').position()) {
@@ -205,5 +215,25 @@ function wheel(event){
     if (event.preventDefault)
         event.preventDefault();
     event.returnValue = false;
+}
+
+function closeComments(parentID) {
+    $.ajax({
+        type: 'post',
+        dataType: 'json',
+        data: 'parentID='+parentID+'&depth='+$('#depthSlider').slider('value'),
+        url: '/sr/hive/closeComments',
+        success: function(data) {
+            console.log(data);
+            $('#hiveDisplay').html(data.newhive);
+            $('#hiveGraphics').svg({
+                onLoad: updateHiveGraphics
+            });
+            rebind();
+            if (data.atRoot == 'yes') {
+                $('#depthSlider').slider( "option", "disabled", false );
+            }
+        }
+    });
 }
 

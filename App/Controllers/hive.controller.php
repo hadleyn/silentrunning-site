@@ -125,6 +125,7 @@ class hive extends HiveAuth {
 //        }
         $hivemodel->partitionContent($startDepth);
         $result['newhive'] = $this->bufferedControllerCall('createHiveContents', array($hivemodel));
+        $result['atRoot'] = 'yes';
         echo json_encode($result);
     }
 
@@ -186,6 +187,24 @@ class hive extends HiveAuth {
         echo json_encode($result);
     }
 
+    public function closeComments_ajax() {
+        $hivemodel = new hivemodel();
+        $content = new content();
+        $content->getContent(Input::post('parentID'));
+        if ($content->parentid != 0) {
+            $parentContent = new Content();
+            $parentContent->getContent($content->parentid);
+            $children = $parentContent->getContentAndChildren($content->parentid, 0);
+            $hivemodel->content = $children;
+            $hivemodel->setCommentLayers();
+            $result['newhive'] = $this->bufferedControllerCall('createHiveContents', array($hivemodel));
+            $result['atRoot'] = 'no';
+            echo json_encode($result);
+        } else {
+            $this->updateHiveDepth_ajax(); //no more layers above us, go back to the default
+        }
+    }
+    
     /*
      * 
      * Begin protected subview creation methods

@@ -56,8 +56,8 @@ function rebind() {
     $('#hiveDisplay *').unbind();
     
     $('#hiveDisplay').draggable({
-        //        containment: [0,0,-4100, -5600] //this basically means the upper left corner can go all the way to 0, and as far up and left as the width of the pan-able area - the side of the view port
-        });
+        //containment: [0,0,-4100, -5600] //this basically means the upper left corner can go all the way to 0, and as far up and left as the width of the pan-able area - the side of the view port
+    });
     
     //    $('#hiveDisplay').bind('mousewheel', function(evt){
     //        console.log(evt);

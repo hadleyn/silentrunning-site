@@ -1,5 +1,5 @@
 <!--<canvas id="hiveGraphics" width="3000" height="1000"></canvas>-->
-<svg id="hiveGraphics" width="3000" height="1000" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg id="hiveGraphics" width="5000" height="5000" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink">
 
 </svg>
 <?php foreach ($hivemodel->layers as $content): ?>

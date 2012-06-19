@@ -11,16 +11,19 @@
     position: relative;
     overflow: hidden;
     float: left;
-    width: 900px;
-    height: 400px;
+    width: 1000px;
+    height: 500px;
     border: 1px solid #CCC;
-    margin: 5px auto;
+    margin: 0 auto;
 }
 
 #hiveDisplay {
-    width: 3000px;
-    height: 1000px;
+    width: 5000px;
+    height: 5000px;
     border: 1px solid #EEE;
+    position: absolute;
+    top: -1000px;
+    left: -1000px;
 }
 
 #hiveGraphics {

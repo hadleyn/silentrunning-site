@@ -1,4 +1,3 @@
-<!--<canvas id="hiveGraphics" width="3000" height="1000"></canvas>-->
 <svg id="hiveGraphics" width="5000" height="5000" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink">
 
 </svg>
@@ -7,6 +6,11 @@
         <svg width="270" height="125" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink">
             <g>
                 <rect width="270" height="125" style="fill: #EEE;"/>
+                <?php if (User::getCurrentUserID() == $content->ownerid):?>
+                <a xlink:href="#">
+                    <text class="deleteContent" x="120" y="15">delete</text>
+                </a>
+                <?php endif; ?>
                 <a xlink:href="#">
                     <text class="addComment" x="190" y="15">add comment</text>
                 </a>
@@ -26,11 +30,4 @@
             </g>
         </svg>
     </div>
-    <!--    <div style="<?php echo $content->getStyleString(); ?>" class="hiveContentBox <?php if ($content->isPseudoRoot): ?>root<?php else: ?>child<?php endif; ?>" id="<?php echo $content->contentid; ?>">
-            <div class="contentOwner"><a href="#"><?php echo $content->getOwner()->handle; ?></a></div>
-            <div class="contentModified"><?php echo date('Y-m-d h:i:s', strtotime($content->modified)); ?></div>
-            <div class="expandContent"></div>
-    <?php $content->display(); ?>
-            <div class="commentCount"><span><?php echo $content->childCount(); ?></span></div>
-        </div>-->
 <?php endforeach; ?>

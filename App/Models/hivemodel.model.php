@@ -82,8 +82,7 @@ class hivemodel extends CoreModel {
             $startDepth = 0;
         }
         if ($this->content == null) {
-            $this->content = new content();
-            $allContent = $this->content->getAllContent($startDepth, 'hours');
+            $allContent = content::getAllContent($startDepth, 'hours');
         } else {
             $allContent = $this->content;
         }

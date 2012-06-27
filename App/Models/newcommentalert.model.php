@@ -42,8 +42,7 @@ class newcommentalert extends alert {
      */
     public function getAlertSubscribers($content) {
         $subscribers = array();
-        $parentContent = new Content();
-        $parentContent->getContent($content->parentid);
+        $parentContent = content::getContent($content->parentid);
 
         //Do the first one
         $subscriber = new user();
@@ -62,8 +61,7 @@ class newcommentalert extends alert {
             if (isset($prefs[$this->type])) {
                 $subscribers[] = $subscriber;
             }
-            $parentContent = new content();
-            $parentContent->getContent($currentContentID);
+            $parentContent = content::getContent($currentContentID);
         }
         return $subscribers;
     }

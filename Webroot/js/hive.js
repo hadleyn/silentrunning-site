@@ -20,6 +20,12 @@ $(document).ready(function(){
         $("#addComment").dialog( "open" );
     });
     
+    $('.deleteContent').live('click', function(evt){
+        evt.preventDefault();
+        var contentID = $(this).parents('.hiveContentBox').get(0).id;
+        deleteContent(contentID);
+    });
+    
     $('#depthSlider').slider({
         orientation: 'vertical',
         min: 0,
@@ -57,7 +63,7 @@ function rebind() {
     
     $('#hiveDisplay').draggable({
         //containment: [0,0,-4100, -5600] //this basically means the upper left corner can go all the way to 0, and as far up and left as the width of the pan-able area - the side of the view port
-    });
+        });
     
     //    $('#hiveDisplay').bind('mousewheel', function(evt){
     //        console.log(evt);
@@ -98,7 +104,7 @@ function rebind() {
         //mouse in
         
         if ($(this).css('opacity') == 1) {
-            var expand = $(this).find('.addComment').get(0);
+            var expand = $(this).find('.addComment, .deleteContent');
             $(expand).animate({
                 opacity: 1
             }, 200);
@@ -107,7 +113,7 @@ function rebind() {
         //mouse out
         
         if ($(this).css('opacity') == 1) {
-            var expand = $(this).find('.addComment').get(0);
+            var expand = $(this).find('.addComment, .deleteContent');
             $(expand).animate({
                 opacity: 0
             }, 200);
@@ -225,6 +231,25 @@ function closeComments(parentID) {
         url: '/sr/hive/closeComments',
         success: function(data) {
             console.log(data);
+            $('#hiveDisplay').html(data.newhive);
+            $('#hiveGraphics').svg({
+                onLoad: updateHiveGraphics
+            });
+            rebind();
+            if (data.atRoot == 'yes') {
+                $('#depthSlider').slider( "option", "disabled", false );
+            }
+        }
+    });
+}
+
+function deleteContent(contentID) {
+    $.ajax({
+        type: 'post',
+        dataType: 'json',
+        data: 'contentID='+contentID+'&depth='+$('#depthSlider').slider('value'),
+        url: '/sr/hive/deleteContent',
+        success: function(data) {
             $('#hiveDisplay').html(data.newhive);
             $('#hiveGraphics').svg({
                 onLoad: updateHiveGraphics

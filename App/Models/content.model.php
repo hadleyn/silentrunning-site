@@ -13,7 +13,7 @@ define('VIDEO', 'VIDEO');
  *
  * @author smarkoski
  */
-class content extends CoreModel {
+abstract class content extends CoreModel {
 
     protected $contentid;
     protected $ownerid;
@@ -36,47 +36,44 @@ class content extends CoreModel {
         $this->isPseudoRoot = FALSE;
     }
 
-    public function display() {
-        //should be overridden
-    }
+    abstract public function display();
 
-    public function deleteContent($id) {
+    public static function deleteContent($id) {
         $db = DB::instance();
         $query = 'DELETE FROM content where contentid=?';
         $db->query($query, array('i'), array($id));
     }
 
-    public function updateContent($id) {
-        
-    }
+    abstract public function updateContent($id);
 
-    public function childCount() {
-        $db = DB::instance();
-        $query = 'SELECT COUNT(*) AS c FROM content WHERE parentid=?';
-        $db->query($query, 'i', array($this->contentid));
-        $result = $db->fetchResult();
-        $db->cleanupConnection();
-        return $result['c'];
-    }
+    abstract public function insertContent();
 
-    public function getContent($id) {
+    public static function getContent($id) {
         $db = DB::instance();
-        $query = 'SELECT * FROM content WHERE contentid=? AND content_type="' . TEXT . '"';
+        $query = 'SELECT * FROM content WHERE contentid=?';
         $db->query($query, array('i'), array($id));
         $result = $db->fetchResult();
         $db->cleanupConnection();
-        $this->populate($result);
+        switch ($result['content_type']) {
+            case TEXT:
+                $content = new textcontent();
+                break;
+            default:
+                $content = null;
+        }
+        $content->populate($result);
+        return $content;
     }
 
-    public function getContentAndChildren($id, $startDepth) {
+    public static function getContentAndChildren($id, $startDepth) {
         $db = DB::instance();
         $query = 'SELECT content.contentid FROM content WHERE content.parentid=? OR content.contentid=? ORDER BY modified DESC';
         $db->query($query, 'i,i', array($id, $id));
         $contentIDs = array();
-        while ($resultRow = $db->fetchResult()){
+        while ($resultRow = $db->fetchResult()) {
             $contentIDs[] = $resultRow['contentid'];
         }
-        $content = $this->getAllContent($startDepth, 'hours', $contentIDs);
+        $content = self::getAllContent($startDepth, 'hours', $contentIDs);
         $count = count($content);
         for ($i = 0; $i < $count; $i++) {
             if ($content[$i]->contentid == $id) {
@@ -93,9 +90,9 @@ class content extends CoreModel {
      * @param type $inList The inlist default is just parentid=0. You can replace this with "something IN (some, list, of, things)"
      * @return \content 
      */
-    public function getAllContent($startDepth, $unit = 'hours', $inList='parentid = 0') {
+    public static function getAllContent($startDepth, $unit = 'hours', $inList = 'parentid = 0') {
         if (is_array($inList)) {
-            $inList = 'content.contentid IN ('.implode(',', $inList).')';
+            $inList = 'content.contentid IN (' . implode(',', $inList) . ')';
         }
         $db = DB::instance();
         $startTime = strtotime('-' . $startDepth . ' ' . $unit);
@@ -104,7 +101,7 @@ class content extends CoreModel {
                     FROM content
                     LEFT JOIN content_coords 
                     ON content_coords.contentid = content.contentid AND content_coords.userid = ' . user::getCurrentUserID() . '
-                    WHERE '.$inList.' AND (UNIX_TIMESTAMP(modified) <= ' . $startTime . ' AND UNIX_TIMESTAMP(modified) > ' . $depth . ') AND (ownerid=' . user::getCurrentUserID() . ' OR
+                    WHERE ' . $inList . ' AND (UNIX_TIMESTAMP(modified) <= ' . $startTime . ' AND UNIX_TIMESTAMP(modified) > ' . $depth . ') AND (ownerid=' . user::getCurrentUserID() . ' OR
                     ownerid = (SELECT relatedtouserid FROM users_related WHERE userid=' . user::getCurrentUserID() . ')) ORDER BY modified DESC';
         $db->query($query);
         $allContent = array();
@@ -114,7 +111,7 @@ class content extends CoreModel {
                     $content = new textcontent();
                     break;
                 default:
-                    $content = new content();
+                    $content = null;
             }
             $content->populate($resultRow);
 
@@ -122,15 +119,11 @@ class content extends CoreModel {
         }
         return $allContent;
     }
-    
+
     public function getOwner() {
         $user = new User();
         $user->getUserByHandle($this->ownerid);
         return $user;
-    }
-
-    public function insertContent() {
-        
     }
 
     public function storeCoordinates() {
@@ -159,6 +152,15 @@ class content extends CoreModel {
 
     public function getCenterY() {
         return ($this->y + 125) / 2;
+    }
+    
+    public function childCount() {
+        $db = DB::instance();
+        $query = 'SELECT COUNT(*) AS c FROM content WHERE parentid=?';
+        $db->query($query, 'i', array($this->contentid));
+        $result = $db->fetchResult();
+        $db->cleanupConnection();
+        return $result['c'];
     }
 
 }

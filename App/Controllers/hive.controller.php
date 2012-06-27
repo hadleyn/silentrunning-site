@@ -115,8 +115,6 @@ class hive extends HiveAuth {
     public function updateHiveDepth_ajax() {
         $startDepth = Input::post('depth');
         $hivemodel = new hivemodel();
-        $session = new Session();
-        $content = new content();
         //Not so fast, do we already have hive content memorized?
 //        try {
 //            $hivemodel->content = $session->read('currentHiveContent');
@@ -130,8 +128,7 @@ class hive extends HiveAuth {
     }
 
     public function updateContentCoords_ajax() {
-        $content = new content();
-        $content->getContent(Input::post('id'));
+        $content = content::getContent(Input::post('id'));
         $content->x = Input::post('x');
         $content->y = Input::post('y');
         $content->storeCoordinates();
@@ -175,25 +172,20 @@ class hive extends HiveAuth {
 
     public function showComments_ajax() {
         $hivemodel = new hivemodel();
-        $parentContent = new content();
-        $parentContent->getContent(Input::post('parentid'));
+        $parentContent = content::getContent(Input::post('parentid'));
         $children = $parentContent->getContentAndChildren(Input::post('parentid'), 0);
         $hivemodel->content = $children;
 //        $hivemodel->partitionContent(); //Let's not partition comments
         $hivemodel->setCommentLayers();
         $result['hiveContent'] = $this->bufferedControllerCall('createHiveContents', array($hivemodel));
-//        $session = new Session();
-//        $session->write('currentHiveContent', $hivemodel->getCurrentIDList(), TRUE);
         echo json_encode($result);
     }
 
     public function closeComments_ajax() {
         $hivemodel = new hivemodel();
-        $content = new content();
-        $content->getContent(Input::post('parentID'));
+        $content = content::getContent(Input::post('parentID'));
         if ($content->parentid != 0) {
-            $parentContent = new Content();
-            $parentContent->getContent($content->parentid);
+            $parentContent = content::getContent($content->parentid);
             $children = $parentContent->getContentAndChildren($content->parentid, 0);
             $hivemodel->content = $children;
             $hivemodel->setCommentLayers();
@@ -204,7 +196,24 @@ class hive extends HiveAuth {
             $this->updateHiveDepth_ajax(); //no more layers above us, go back to the default
         }
     }
-    
+
+    public function deleteContent_ajax() {
+        $hivemodel = new hivemodel();
+        $content = content::getContent(Input::post('contentID'));
+        content::deleteContent(Input::post('contentID'));
+        if ($content->parentid != 0) {
+            $parentContent = content::getContent($content->parentid);
+            $children = $parentContent->getContentAndChildren($content->parentid, 0);
+            $hivemodel->content = $children;
+            $hivemodel->setCommentLayers();
+            $result['newhive'] = $this->bufferedControllerCall('createHiveContents', array($hivemodel));
+            $result['atRoot'] = 'no';
+            echo json_encode($result);
+        } else {
+            $this->updateHiveDepth_ajax();
+        }
+    }
+
     /*
      * 
      * Begin protected subview creation methods

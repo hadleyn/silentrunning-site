@@ -38,12 +38,12 @@ class Cryptor {
     public function createSecureString($value, $method='md5'){
         $temp = '';
         if (is_array($value)){
-            $temp = implode('~~', $value);
+            $temp = implode('::', $value);
         } else {
             $temp = $value;
         }
         $hash = hash_hmac($method, $temp, $this->secretKey);
-        $result = urlencode(base64_encode($temp.'~~'.$hash));
+        $result = base64_encode($temp.'::'.$hash);
         
         return $result;
     }
@@ -55,10 +55,10 @@ class Cryptor {
      * @param type $method The hashing method to use. Default is md5
      */
     public function verifySecureString($secureString, $method='md5'){
-        $temp = base64_decode(urldecode($secureString));
-        $pieces = explode('~~', $temp);
+        $temp = base64_decode($secureString);
+        $pieces = explode('::', $temp);
         $hash = array_pop($pieces);
-        $data = implode('~~', $pieces);
+        $data = implode('::', $pieces);
         
         return (hash_hmac($method, $data, $this->secretKey) == $hash);
     }
@@ -70,8 +70,8 @@ class Cryptor {
      * @return array The array of strings in the secure hash 
      */
     public function getSecureData($secureString) {
-        $temp = base64_decode(urldecode($secureString));
-        $pieces = explode('~~', $temp);
+        $temp = base64_decode($secureString);
+        $pieces = explode('::', $temp);
         array_pop($pieces); //remove the hash
         return $pieces;
     }

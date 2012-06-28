@@ -52,7 +52,7 @@ class hivemodel extends CoreModel {
     public function partitionContent($startDepth = null) {
         $layers = $this->calculateLayers($startDepth);
         //Now assign z indexes to the layers
-        $maxZ = 30;
+        $maxZ = 150;
         $opacity = 1;
         $scale = 1;
         foreach ($layers as $l) {
@@ -63,8 +63,10 @@ class hivemodel extends CoreModel {
 //                    $lc->scale = $scale;
                 }
                 $this->layers[] = $lc;
-            }
             $maxZ--;
+            
+            }
+            
             $opacity = $opacity / 2; //the further back in time we go, the more faded the content is.
             $scale = $scale * 0.85; //the further back in time we go, the smaller the content gets
         }

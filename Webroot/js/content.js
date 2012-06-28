@@ -9,10 +9,12 @@ $(document).ready(function(){
 });
 
 function addContent(){
+   var xpos = $('#hiveDisplay').position().left;
+   var ypos = $('#hiveDisplay').position().top;
    $.ajax({
       type: 'post',
       dataType: 'json',
-      data: $('#contentCreationForm').serialize(),
+      data: $('#contentCreationForm').serialize()+'&hiveTop='+ypos+'&hiveLeft='+xpos,
       url: '/sr/hive/createContent',
       success: function(data){
           if (data.errors.length > 0){

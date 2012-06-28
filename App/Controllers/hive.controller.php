@@ -13,6 +13,11 @@
 class hive extends HiveAuth {
 
 //    protected $user;
+    
+    const HIVE_WIDTH = 5000;
+    const HIVE_HEIGHT = 5000;
+    const VIEWPORT_WIDTH = 1000;
+    const VIEWPORT_HEIGHT = 500;
 
     public function __construct() {
         parent::__construct();
@@ -96,6 +101,9 @@ class hive extends HiveAuth {
             $content->ownerid = $this->user->userid;
             $content->parentid = 0;
             $content->content_data = Input::post('content');
+            $content->x = abs(Input::post('hiveLeft')) + self::VIEWPORT_WIDTH / 2;
+            $content->y = abs(Input::post('hiveTop')) + self::VIEWPORT_HEIGHT / 2;
+            $content->z = 10;
             try {
                 $content->insertContent();
             } catch (Exception $e) {

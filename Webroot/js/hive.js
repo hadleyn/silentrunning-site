@@ -122,10 +122,12 @@ function rebind() {
 }
 
 function submitComment(dialog) {
+    var xpos = $('#hiveDisplay').position().left;
+    var ypos = $('#hiveDisplay').position().top;
     $.ajax({
         type: 'post',
         dataType: 'json',
-        data: $('#commentForm').serialize(),
+        data: $('#commentForm').serialize()+'&hiveTop='+ypos+'&hiveLeft='+xpos,
         url: '/sr/hive/addComment',
         success: function(data){
             if (data.errors.length == 0) {

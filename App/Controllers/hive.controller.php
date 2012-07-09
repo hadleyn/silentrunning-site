@@ -161,6 +161,8 @@ class hive extends HiveAuth {
             $content->ownerid = $this->user->userid;
             $content->content_data = Input::post('comment');
             $content->parentid = Input::post('parentID');
+            $content->x = abs(Input::post('hiveLeft')) + self::VIEWPORT_WIDTH / 2;
+            $content->y = abs(Input::post('hiveTop')) + self::VIEWPORT_HEIGHT / 2;
             try {
                 $content->insertContent();
                 $alert = new newcommentalert();

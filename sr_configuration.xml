@@ -45,6 +45,7 @@
         
         <alertTypes>
             <value name="new_comment">new_comment</value>
+            <value name="orphaned_content">orphaned_content</value>
         </alertTypes>
 
         <database>

@@ -59,6 +59,7 @@ class hive extends HiveAuth {
             $this->redirect(Configuration::read('basepath'));
         } else {
             $this->precontroller();
+            $this->generateLoginAlerts();
         }
     }
 
@@ -248,6 +249,21 @@ class hive extends HiveAuth {
     protected function createAlertIndicator($alerts) {
         $this->viewData['alerts'] = $alerts;
         $this->loadView('alertindicator');
+    }
+    
+    
+    /*
+     * Begin private utility methods
+     */
+    
+    private function generateLoginAlerts() {
+        $orphanedContent = content::getOrphanedContent();
+        if (count($orphanedContent) > 0) {
+            foreach ($orphanedContent as $oc) {
+                $alert = new orphanedcontentalert();
+                $alert->sendAlert($oc);
+            }
+        }
     }
 
 }

@@ -38,6 +38,25 @@ abstract class content extends CoreModel {
 
     abstract public function display();
 
+    public static function getOrphanedContent() {
+        $db = DB::instance();
+        $query = 'SELECT * FROM content AS mycontent WHERE mycontent.ownerid=? AND mycontent.parentid != 0 AND NOT EXISTS (SELECT * FROM content WHERE content.contentid = mycontent.parentid)';
+        $db->query($query, array('i'), array(user::getCurrentUserID()));
+        $orphanedContent = array();
+        while ($result = $db->fetchResult()) {
+            switch ($result['content_type']) {
+                case TEXT:
+                    $content = new textcontent();
+                    break;
+                default:
+                    $content = null;
+            }
+            $content->populate($result);
+            $orphanedContent[] = $content;
+        }
+        return $orphanedContent;
+    }
+
     public static function deleteContent($id) {
         $db = DB::instance();
         $query = 'DELETE FROM content where contentid=?';
@@ -153,7 +172,7 @@ abstract class content extends CoreModel {
     public function getCenterY() {
         return ($this->y + 125) / 2;
     }
-    
+
     public function childCount() {
         $db = DB::instance();
         $query = 'SELECT COUNT(*) AS c FROM content WHERE parentid=?';

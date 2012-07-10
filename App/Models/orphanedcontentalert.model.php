@@ -21,11 +21,16 @@ class orphanedcontentalert extends alert {
      * @param content $content 
      */
     public function sendAlert($content) {
-        $qMessage = new QMessage();
-        $qMessage->msg_obj = 'orphanedcommentalert';
-        $qMessage->msg_method = 'insertAlert';
-        $qMessage->msg_args = array($content->ownerid, $this->type, 'One of your comments has been orphaned!', '');
-        $qMessage->queueMessage();
+        $subscriber = new user();
+        $subscriber->getUserByHandle(user::getCurrentUserID());
+        $alertPreferences = $subscriber->getAlertPreferences();
+        if (isset($alertPreferences[$this->type])) {
+            $qMessage = new QMessage();
+            $qMessage->msg_obj = 'orphanedcontentalert';
+            $qMessage->msg_method = 'insertAlert';
+            $qMessage->msg_args = array($content->ownerid, $this->type, 'One of your comments has been orphaned!', '/orphancontent#cid' . $content->contentid);
+            $qMessage->queueMessage();
+        }
     }
 
 }

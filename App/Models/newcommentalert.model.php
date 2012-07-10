@@ -28,7 +28,7 @@ class newcommentalert extends alert {
             $qMessage = new QMessage();
             $qMessage->msg_obj = 'newcommentalert';
             $qMessage->msg_method = 'insertAlert';
-            $qMessage->msg_args = array($s->userid, $this->type, $commenter->handle . ' has posted a comment on your content!', '');
+            $qMessage->msg_args = array($s->userid, $this->type, $commenter->handle . ' has posted a comment on your content!', '/hive/cid/'.$content->parentid);
             $qMessage->queueMessage();
         }
     }

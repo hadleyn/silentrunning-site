@@ -14,4 +14,8 @@
             <input type="checkbox" <?php if (isset($alertPreferences[Configuration::read('new_comment')])):?> checked="checked" <?php endif;?> class="alertPreference" name="newComment" id="newComment" value="<?php echo Configuration::read('new_comment'); ?>"/>
             <label for="newComment">Alerts for new comments on content.</label>
         </p>
+        <p>
+            <input type="checkbox" <?php if (isset($alertPreferences[Configuration::read('orphaned_content')])):?> checked="checked" <?php endif;?> class="alertPreference" name="orphanedContent" id="orphanedContent" value="<?php echo Configuration::read('orphaned_content'); ?>"/>
+            <label for="orphanedContent">Alerts for orphaned content.</label>
+        </p>
     </div>

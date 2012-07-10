@@ -5,17 +5,13 @@
  * and open the template in the editor.
  */
 
-
-
-
-
 /**
  * Description of alert
  *
  * @author smarkoski
  */
 class alert extends CoreModel implements Event {
-    
+
     protected $alertid;
     protected $recipient;
     protected $type;
@@ -23,14 +19,17 @@ class alert extends CoreModel implements Event {
     protected $url;
     protected $read;
     protected $timestamp;
-    
-    public function insertAlert($recipient, $type, $message, $url)
-    {
-        $db = DB::instance();
-        $query = 'INSERT INTO alerts (recipient, type, message, url, `read`, timestamp) VALUES (?, ?, ?, ?, 0, NOW())';
-        $db->query($query, 'i,s,s,s', array($recipient, $type, $message, $url));
+    protected $hash;
+
+    public function insertAlert($recipient, $type, $message, $url) {
+        if (!$this->alertExists()) {
+            $db = DB::instance();
+            $hash = md5($this->recipient . $this->type . $this->message . $this->url);
+            $query = 'INSERT INTO alerts (recipient, type, message, url, `read`, timestamp, hash) VALUES (?, ?, ?, ?, 0, NOW(), ?)';
+            $db->query($query, 'i,s,s,s,s', array($recipient, $type, $message, $url, $hash));
+        }
     }
-    
+
     public function getAllAlertsByUserID($id) {
         $db = DB::instance();
         $query = 'SELECT * FROM alerts WHERE recipient=? ORDER BY timestamp DESC';
@@ -43,7 +42,19 @@ class alert extends CoreModel implements Event {
         }
         return $alerts;
     }
-    
+
+    private function alertExists() {
+        $db = DB::instance();
+        $hash = md5($this->recipient . $this->type . $this->message . $this->url);
+        $query = 'SELECT COUNT(*) AS c FROM alerts WHERE hash=?';
+        $db->query($query, 's', array($hash));
+        $result = $db->fetchResult();
+        if ($result['c'] > 0) {
+            return TRUE;
+        }
+        return FALSE;
+    }
+
 }
 
 ?>

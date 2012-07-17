@@ -32,7 +32,7 @@ class alert extends CoreModel implements Event {
 
     public function getAllAlertsByUserID($id) {
         $db = DB::instance();
-        $query = 'SELECT * FROM alerts WHERE recipient=? ORDER BY timestamp DESC';
+        $query = 'SELECT * FROM alerts WHERE recipient=? AND `read`=0 ORDER BY timestamp DESC';
         $db->query($query, 'i', array($id));
         $alerts = array();
         while ($result = $db->fetchResult()) {

@@ -11,7 +11,7 @@
                     <ul>
                         <li><div id="menuLeftBlock"></div><a href="<?php echo BASEPATH; ?>/hive" title="hive">Hive</a></li>
                         <?php if ($userLoggedIn): ?>
-                            <li><a href="<?php echo BASEPATH; ?>/about" title="about">comm link</a><div id="alertIndicator"></div></li>
+                            <li><a href="<?php echo BASEPATH; ?>/comms" title="about">comm link</a><div id="alertIndicator"></div></li>
                             <li><a href="<?php echo BASEPATH; ?>/tools" title="tools">tools</a></li>
                             <li><a href="<?php echo BASEPATH; ?>/hive/logout">exit</a></li>
                         <?php endif; ?>

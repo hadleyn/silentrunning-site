@@ -93,6 +93,7 @@
     color: black;
     position: relative;
     top: -57px;
+    cursor: default;
 }
 
 .alertIndicatorIcon.fiveGroup {

@@ -1,6 +1,10 @@
 $(document).ready(function(){
-//    setInterval("getAlerts()", 5000);
     getAlerts();
+    
+    $('.alertLink').click(function(evt){
+       evt.preventDefault();
+       readAlert(this);
+    });
 });
 
 function getAlerts() {
@@ -15,4 +19,17 @@ function getAlerts() {
            console.log(data);
        }
     });
+}
+
+function readAlert(alertLink) {
+   var alertid = $(alertLink).attr('id');
+   var alertURL = $(alertLink).attr('href');
+   $.ajax({
+      type: 'post',
+      data: 'alertID='+alertid,
+      url: '/sr/comms/viewAlert',
+      success: function(){
+          window.location = alertURL;
+      }
+   });
 }

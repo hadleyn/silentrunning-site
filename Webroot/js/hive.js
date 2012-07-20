@@ -1,7 +1,9 @@
 var scale = 1;
 $(document).ready(function(){
     rebind();
-    
+    $('#hiveGraphics').svg({
+        onLoad: updateHiveGraphics
+    });
     $('.closeComments').live('click', function(evt){
         evt.preventDefault();
         var parentID = $(this).parents('.hiveContentBox').get(0).id;

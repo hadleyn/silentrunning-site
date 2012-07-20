@@ -11,9 +11,8 @@
  * @author smarkoski
  */
 class hive extends HiveAuth {
-
 //    protected $user;
-    
+
     const HIVE_WIDTH = 5000;
     const HIVE_HEIGHT = 5000;
     const VIEWPORT_WIDTH = 1000;
@@ -32,6 +31,24 @@ class hive extends HiveAuth {
     public function invoke() {
         $hivemodel = new hivemodel();
         $hivemodel->partitionContent();
+        $this->viewData['contentCreationForm'] = $this->bufferedControllerCall('createContentCreationForm');
+        $this->viewData['hiveContent'] = $this->bufferedControllerCall('createHiveContents', array($hivemodel));
+        $this->viewData['addCommentForm'] = $this->bufferedControllerCall('createCommentForm');
+        $this->loadView('hive');
+    }
+    
+    /**
+     * This method is the invoker for showing a comment. It expects to get the parent ID
+     * of the content that has the content
+     * 
+     * @param int $parentid 
+     */
+    public function cid_invoke($parentID) {
+        $hivemodel = new hivemodel();
+        $parentContent = content::getContent($parentID);
+        $children = $parentContent->getContentAndChildren($parentID, 0);
+        $hivemodel->content = $children;
+        $hivemodel->setCommentLayers();
         $this->viewData['contentCreationForm'] = $this->bufferedControllerCall('createContentCreationForm');
         $this->viewData['hiveContent'] = $this->bufferedControllerCall('createHiveContents', array($hivemodel));
         $this->viewData['addCommentForm'] = $this->bufferedControllerCall('createCommentForm');
@@ -250,12 +267,11 @@ class hive extends HiveAuth {
         $this->viewData['alerts'] = $alerts;
         $this->loadView('alertindicator');
     }
-    
-    
+
     /*
      * Begin private utility methods
      */
-    
+
     private function generateLoginAlerts() {
         $orphanedContent = content::getOrphanedContent();
         if (count($orphanedContent) > 0) {

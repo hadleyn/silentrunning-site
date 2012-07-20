@@ -42,6 +42,12 @@ class alert extends CoreModel implements Event {
         }
         return $alerts;
     }
+    
+    public function markAlertAsRead($alertid){
+        $db = DB::instance();
+        $query = 'UPDATE alerts SET `read`=1 WHERE alertid=?';
+        $db->query($query, 'i', array($alertid));
+    }
 
     private function alertExists() {
         $db = DB::instance();

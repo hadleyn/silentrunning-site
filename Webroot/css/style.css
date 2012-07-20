@@ -51,6 +51,11 @@ a {
     color: #FF3000;
 }
 
+hr {
+    border: none;
+    border-bottom: 1px dashed #EB1D1D;
+}
+
 img {
     float:left;
     padding-top: 10px;
@@ -293,4 +298,28 @@ a:hover {
 .delete:active {
     position: relative;
     top: 1px;
+}
+
+#alertIndicator {
+    height: 20px;
+    position: relative;
+    top: 35px;
+    width: 140px;
+}
+
+.alertIndicatorIcon {
+    width: 5px;
+    height: 10px;
+    color: black;
+    position: relative;
+    top: -57px;
+    cursor: default;
+}
+
+.alertIndicatorIcon.fiveGroup {
+    color: blue;
+}
+
+.alertIndicatorIcon.tenGroup {
+    color: blueviolet;
 }

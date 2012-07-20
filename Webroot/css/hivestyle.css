@@ -80,30 +80,6 @@
     height: 400px;
 }
 
-#alertIndicator {
-    height: 20px;
-    position: relative;
-    top: 35px;
-    width: 140px;
-}
-
-.alertIndicatorIcon {
-    width: 5px;
-    height: 10px;
-    color: black;
-    position: relative;
-    top: -57px;
-    cursor: default;
-}
-
-.alertIndicatorIcon.fiveGroup {
-    color: blue;
-}
-
-.alertIndicatorIcon.tenGroup {
-    color: blueviolet;
-}
-
 #contentTextarea {
     width: 880px;
     height: 50px;

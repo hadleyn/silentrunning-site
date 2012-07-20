@@ -21,10 +21,11 @@ class alert extends CoreModel implements Event {
     protected $timestamp;
     protected $hash;
 
-    public function insertAlert($recipient, $type, $message, $url) {
-        if (!$this->alertExists()) {
+    public function insertAlert($recipient, $type, $message, $url, $commenterid) {
+        $hash = md5($recipient . $type . $message . $url . $commenterid);
+        if (!$this->alertExists($hash)) {
             $db = DB::instance();
-            $hash = md5($this->recipient . $this->type . $this->message . $this->url);
+            
             $query = 'INSERT INTO alerts (recipient, type, message, url, `read`, timestamp, hash) VALUES (?, ?, ?, ?, 0, NOW(), ?)';
             $db->query($query, 'i,s,s,s,s', array($recipient, $type, $message, $url, $hash));
         }
@@ -42,16 +43,15 @@ class alert extends CoreModel implements Event {
         }
         return $alerts;
     }
-    
-    public function markAlertAsRead($alertid){
+
+    public function markAlertAsRead($alertid) {
         $db = DB::instance();
         $query = 'UPDATE alerts SET `read`=1 WHERE alertid=?';
         $db->query($query, 'i', array($alertid));
     }
 
-    private function alertExists() {
+    private function alertExists($hash) {
         $db = DB::instance();
-        $hash = md5($this->recipient . $this->type . $this->message . $this->url);
         $query = 'SELECT COUNT(*) AS c FROM alerts WHERE hash=?';
         $db->query($query, 's', array($hash));
         $result = $db->fetchResult();

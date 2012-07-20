@@ -28,7 +28,7 @@ class newcommentalert extends alert {
             $qMessage = new QMessage();
             $qMessage->msg_obj = 'newcommentalert';
             $qMessage->msg_method = 'insertAlert';
-            $qMessage->msg_args = array($s->userid, $this->type, $commenter->handle . ' has posted a comment on your content!', '/hive/cid/'.$content->parentid);
+            $qMessage->msg_args = array($s->userid, $this->type, $commenter->handle . ' has posted a comment on your content!', '/hive/cid/'.$content->parentid, $commenter->userid);
             $qMessage->queueMessage();
         }
     }
@@ -48,7 +48,7 @@ class newcommentalert extends alert {
         $subscriber = new user();
         $subscriber->getUserByHandle($parentContent->ownerid);
         $prefs = $subscriber->getAlertPreferences();
-        if (isset($prefs[$this->type])) {
+        if (isset($prefs[$this->type]) && $parentContent->ownerid != user::getCurrentUserID()) {
             $subscribers[] = $subscriber;
         }
 
@@ -58,7 +58,7 @@ class newcommentalert extends alert {
             $subscriber = new user();
             $subscriber->getUserByHandle($parentContent->ownerid);
             $prefs = $subscriber->getAlertPreferences();
-            if (isset($prefs[$this->type])) {
+            if (isset($prefs[$this->type]) && $parentContent->ownerid != user::getCurrentUserID()) {
                 $subscribers[] = $subscriber;
             }
             $parentContent = content::getContent($currentContentID);

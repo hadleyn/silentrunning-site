@@ -21,6 +21,9 @@ class comms extends HiveAuth {
     public function invoke() {
         $alert = new alert();
         $this->viewData['alerts'] = $alert->getAllAlertsByUserID(user::getCurrentUserID()); 
+        if (count($this->viewData['alerts']) == 0) {
+            $this->messageHelper->pushMessage('Sorry, you don\'t have any alerts at this time!');
+        }
         $this->loadView('alerts');
     }
     

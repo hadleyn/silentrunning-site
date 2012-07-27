@@ -32,6 +32,16 @@ class orphanedcontentalert extends alert {
             $qMessage->queueMessage();
         }
     }
+    
+    public function insertAlert($recipient, $type, $message, $url) {
+        $hash = md5($recipient . $type . $message . $url);
+        if (!$this->alertExists($hash)) {
+            $db = DB::instance();
+            
+            $query = 'INSERT INTO alerts (recipient, type, message, url, `read`, timestamp) VALUES (?, ?, ?, ?, 0, NOW())';
+            $db->query($query, 'i,s,s,s,s', array($recipient, $type, $message, $url));
+        }
+    }
 
 }
 

@@ -10,7 +10,7 @@
                     <input type="submit" value="authenticate"/>
                 </form>
             </div>
-<!--            <div id="registerform">
+            <div id="registerform">
                 <form method="post" action="hive/register">
                     <input type="text" id="registerHandle" name="registerHandle" placeholder="handle"/>
                     <input type="password" id="registerPassword" name="registerPassword" placeholder="password"/>
@@ -24,6 +24,6 @@
                     <input type="submit" id="registerSubmit" value="Register"/>
                 </form>
 
-            </div>-->
+            </div>
         </div>
     </div>

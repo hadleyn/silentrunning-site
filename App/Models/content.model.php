@@ -121,7 +121,7 @@ abstract class content extends CoreModel {
                     LEFT JOIN content_coords 
                     ON content_coords.contentid = content.contentid AND content_coords.userid = ' . user::getCurrentUserID() . '
                     WHERE ' . $inList . ' AND (UNIX_TIMESTAMP(modified) <= ' . $startTime . ' AND UNIX_TIMESTAMP(modified) > ' . $depth . ') AND (ownerid=' . user::getCurrentUserID() . ' OR
-                    ownerid = (SELECT relatedtouserid FROM users_related WHERE userid=' . user::getCurrentUserID() . ')) ORDER BY modified DESC';
+                    EXISTS (SELECT relatedtouserid FROM users_related WHERE userid=' . user::getCurrentUserID() . ' AND relatedtouserid=content.ownerid)) ORDER BY modified DESC';
         $db->query($query);
         $allContent = array();
         while ($resultRow = $db->fetchResult()) {
@@ -175,7 +175,7 @@ abstract class content extends CoreModel {
 
     public function childCount() {
         $db = DB::instance();
-        $query = 'SELECT COUNT(*) AS c FROM content WHERE parentid=?';
+        $query = 'SELECT COUNT(*) AS c FROM content WHERE parentid=? AND EXISTS (SELECT relatedtouserid FROM users_related WHERE userid=' . user::getCurrentUserID() . ' AND relatedtouserid=content.ownerid OR content.ownerid=' . user::getCurrentUserID() . ')';
         $db->query($query, 'i', array($this->contentid));
         $result = $db->fetchResult();
         $db->cleanupConnection();

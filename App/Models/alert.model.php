@@ -50,7 +50,7 @@ class alert extends CoreModel implements Event {
         $db->query($query, 'i', array($alertid));
     }
 
-    private function alertExists($hash) {
+    protected function alertExists($hash) {
         $db = DB::instance();
         $query = 'SELECT COUNT(*) AS c FROM alerts WHERE hash=?';
         $db->query($query, 's', array($hash));

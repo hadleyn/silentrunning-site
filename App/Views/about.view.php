@@ -15,6 +15,14 @@
             silentrunning to be something we can all understand and that protects the interests
             of the users (that's you!).
         </p>
+	<h4>Ads</h4>
+	<p>
+	    One of the biggest things I dislike about sites like Facebook (and a rapidly growning portion of the rest of the web)
+	    are the constant attempts to hammer us with advertisments. Social media should be a place where friends can chat, laugh,
+	    hang out and be themselves without being harrassed with ads. There is something inherently disturbing about combing over
+	    your data and the data of your friends to personally target ads to you. I don't know how this site will keep itself
+	    funded (out of my own pocket most likely) but I promise it will never have a single advertisement.
+	</p>
         <h4>Mission</h4>
         <p>
         <ol>

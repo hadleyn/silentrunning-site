@@ -24,6 +24,19 @@
     position: absolute;
     top: -1000px;
     left: -1000px;
+    -webkit-transform-origin: 0 0;  /* Chrome, Safari */
+    -moz-transform-origin: 0 0;     /* Firefox */
+    -o-transform-origin: 0 0;       /* Opera */
+    -ms-transform-origin: 0 0;      /* Internet Explorer */
+    transform-origin: 0 0;
+}
+
+.hiveGraphicGroup {
+/*    -webkit-transform-origin: 0 0;   Chrome, Safari 
+    -moz-transform-origin: 0 0;      Firefox 
+    -o-transform-origin: 0 0;        Opera 
+    -ms-transform-origin: 0 0;       Internet Explorer 
+    transform-origin: 0 0;*/
 }
 
 #hiveGraphics {
@@ -34,17 +47,17 @@
 
 .hiveContentBox {
     position: absolute;
-    border: 1px solid #DDD;
-    padding: 5px;
+    /*    border: 1px solid #DDD;*/
+    /*    padding: 5px;*/
     cursor: default;
-    background-color: #EEE;
+    /*    background-color: #EEE;*/
     font-size: 12px;
-/*    height: 125px;
-    width: 270px;*/
+    /*    height: 125px;
+        width: 270px;*/
     overflow: hidden;
-/*    -moz-box-shadow: 1px 1px 3px #000000;
-    -webkit-box-shadow: 1px 1px 3px #000000;
-    box-shadow: 1px 1px 3px #000000;*/
+    /*    -moz-box-shadow: 1px 1px 3px #000000;
+        -webkit-box-shadow: 1px 1px 3px #000000;
+        box-shadow: 1px 1px 3px #000000;*/
 }
 
 .addComment, .deleteContent {

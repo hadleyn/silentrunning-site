@@ -52,17 +52,18 @@ class newcommentalert extends alert {
             $subscribers[] = $subscriber;
         }
 
-        //Now go up the chain adding any others
-        while ($parentContent->parentid > 0) {
-            $currentContentID = $parentContent->parentid;
-            $subscriber = new user();
-            $subscriber->getUserByHandle($parentContent->ownerid);
-            $prefs = $subscriber->getAlertPreferences();
-            if (isset($prefs[$this->type]) && $parentContent->ownerid != user::getCurrentUserID()) {
-                $subscribers[] = $subscriber;
-            }
-            $parentContent = content::getContent($currentContentID);
-        }
+        //The way comments work, I don't think I actually want to be doing this
+//        //Now go up the chain adding any others
+//        while ($parentContent->parentid > 0) {
+//            $currentContentID = $parentContent->parentid;
+//            $subscriber = new user();
+//            $subscriber->getUserByHandle($parentContent->ownerid);
+//            $prefs = $subscriber->getAlertPreferences();
+//            if (isset($prefs[$this->type]) && $parentContent->ownerid != user::getCurrentUserID()) {
+//                $subscribers[] = $subscriber;
+//            }
+//            $parentContent = content::getContent($currentContentID);
+//        }
         return $subscribers;
     }
 

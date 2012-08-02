@@ -33,7 +33,8 @@ class HeaderBuilder implements Task {
         $this->headHelper->addCSS('jquery.svg');
         $this->headHelper->addScript('https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js', 0, TRUE);
         $this->headHelper->addScript('jquerysvg/jquery.svg.min', 1);
-        $this->headHelper->addScript('jquery-ui-1.8.18.custom.min', 2);
+        $this->headHelper->addScript('jquerysvg/jquery.svganim.min', 2);
+        $this->headHelper->addScript('jquery-ui-1.8.18.custom.min', 3);
         $this->headHelper->addCSS('custom-theme/jquery-ui');
         $this->headHelper->addScript('menu');
     }

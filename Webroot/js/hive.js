@@ -1,4 +1,3 @@
-var scale = 1;
 $(document).ready(function(){
     rebind();
     $('#hiveGraphics').svg({
@@ -40,9 +39,8 @@ $(document).ready(function(){
     });
     var hiveDisplayWrapper = document.getElementById("hiveDisplayWrapper"); 
     if (hiveDisplayWrapper.addEventListener)
-        hiveDisplayWrapper.addEventListener('mousewheel',function(event){
+        hiveDisplayWrapper.addEventListener('DOMMouseScroll',function(event){
             wheel(event);
-            return false;
         }, false);
 
 });
@@ -191,7 +189,7 @@ function updateHiveGraphics(svg) {
     }
 }
 
-
+var scale = 1;
 function handle(delta) {
     console.log('mouse delta '+delta);
     if (delta > 0) {
@@ -205,11 +203,20 @@ function handle(delta) {
             scale = scale * 0.95;
         }
     }
-//    $('#hiveDisplay').css('transform', 'scale('+scale+')');
-//    $('#hiveDisplay').css('-ms-transform', 'scale('+scale+')');
-//    $('#hiveDisplay').css('-webkit-transform', 'scale('+scale+')');
-//    $('#hiveDisplay').css('-o-transform', 'scale('+scale+')');
-//    $('#hiveDisplay').css('-moz-transform', 'scale('+scale+')');
+    if (scale >= 1) {
+        scale = 1;
+        $('.hiveContentBox').draggable('enable');
+    } else {
+        $('.hiveContentBox').draggable('disable'); 
+    }
+    //    $('#hiveDisplay').animate({
+    //        svgTransform: 'scale('+scale+')'
+    //    }, 20);
+    $('#hiveDisplay').css('transform', 'scale('+scale+')');
+    $('#hiveDisplay').css('-ms-transform', 'scale('+scale+')');
+    $('#hiveDisplay').css('-webkit-transform', 'scale('+scale+')');
+    $('#hiveDisplay').css('-o-transform', 'scale('+scale+')');
+    $('#hiveDisplay').css('-moz-transform', 'scale('+scale+')');
 }
 
 function wheel(event){

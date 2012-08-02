@@ -41,7 +41,7 @@ class textcontent extends content {
             while (isset($words[0]) && strlen($line) + strlen($words[0]) + 1 < self::LINE_LENGTH) {
                 $line .= ' ' . array_shift($words);
             }
-            $echo .= '<tspan x="0" dy="12">' . $line . '</tspan>';
+            $echo .= '<tspan x="10" dy="12">' . $line . '</tspan>';
         }
         echo $echo . '</text>';
     }
